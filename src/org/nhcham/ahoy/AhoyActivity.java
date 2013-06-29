@@ -22,20 +22,20 @@ import org.nhcham.ahoy.AhoyService;
 
 public class AhoyActivity extends Activity implements OnClickListener 
 {
-	private static final String TAG = "AhoyActivity";
+    private static final String TAG = "AhoyActivity";
     
-	LinearLayout messagesLayout, messagesLayoutInactive;
-	TextView currentBroadcast, previouslySeenHeader;
+    LinearLayout messagesLayout, messagesLayoutInactive;
+    TextView currentBroadcast, previouslySeenHeader;
     EditText editText;
     ProgressBar broadcastSpinner;
-	String statusMessage;
-	Set<View> messageViews;
-	
-	AhoyService ahoyService;
-	boolean boundService;
-	
-	UpdateReceiver updateReceiver;
-	
+    String statusMessage;
+    Set<View> messageViews;
+    
+    AhoyService ahoyService;
+    boolean boundService;
+    
+    UpdateReceiver updateReceiver;
+    
     private class UpdateReceiver extends BroadcastReceiver 
     {
         AhoyActivity ahoyActivity;
@@ -54,13 +54,13 @@ public class AhoyActivity extends Activity implements OnClickListener
     };
     
     @Override
-	public void onCreate(Bundle savedInstanceState) 
-	{
+    public void onCreate(Bundle savedInstanceState) 
+    {
         Log.d(TAG, "onCreate()");
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
-		
+        
         messagesLayout = (LinearLayout) findViewById(R.id.messagesLayout);
         messagesLayoutInactive = (LinearLayout) findViewById(R.id.messagesLayoutInactive);
         currentBroadcast = (TextView) findViewById(R.id.currentBroadcast);
@@ -119,9 +119,9 @@ public class AhoyActivity extends Activity implements OnClickListener
         }
     };
 
-	@Override
-	public void onStop() 
-	{
+    @Override
+    public void onStop() 
+    {
         Log.d(TAG, "onStop()");
         super.onStop();
         if (boundService)
@@ -129,8 +129,8 @@ public class AhoyActivity extends Activity implements OnClickListener
             unbindService(serviceConnetion);
             boundService = false;
         }
-	}
-	
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -172,7 +172,7 @@ public class AhoyActivity extends Activity implements OnClickListener
     }
     
     public void onClick(View view) 
-	{
+    {
         // check whether it's a message that got clicked
         if (messageViews.contains(view))
         {
@@ -242,7 +242,7 @@ public class AhoyActivity extends Activity implements OnClickListener
                 }
             });
         }
-	}
+    }
 
     public void handleUpdate(Intent intent)
     {
