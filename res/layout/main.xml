@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/mainLayout">
+ 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Currently broadcasting:"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:paddingTop="3dp"
+        android:paddingBottom="7dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:background="@drawable/header"
+        />
+        
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/entry"
+        android:paddingTop="2dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp">
+
+        <TextView
+            android:id="@+id/currentBroadcast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(nothing)"
+            android:layout_centerVertical="true" 
+            />
+            
+        <ImageButton 
+            android:layout_width="42sp"
+            android:layout_height="42sp" 
+            android:id="@+id/buttonBroadcastMessage"
+            android:scaleType="fitCenter"
+            android:src="@drawable/content_edit" 
+            android:layout_alignParentRight="true" 
+            android:layout_centerVertical="true" 
+            />
+                
+        <ImageButton 
+            android:layout_width="42sp"
+            android:layout_height="42sp" 
+            android:id="@+id/buttonStopBroadcast"
+            android:scaleType="fitCenter"
+            android:src="@drawable/navigation_cancel" 
+            android:layout_toLeftOf="@+id/buttonBroadcastMessage"
+            android:layout_centerVertical="true" 
+            />
+            
+        <ProgressBar
+            android:id="@+id/broadcastSpinner"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_toLeftOf="@id/buttonStopBroadcast"
+            android:layout_alignBottom="@id/currentBroadcast" 
+            android:layout_centerVertical="true" 
+            />
+
+    </RelativeLayout>
+    
+    <ScrollView 
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+        
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Nearby messages:"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:paddingTop="3dp"
+                android:paddingBottom="7dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:background="@drawable/header"
+                />
+            
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/messagesLayout" />
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Previously seen messages:"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:paddingTop="3dp"
+                android:paddingBottom="7dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:background="@drawable/header"
+                android:id="@+id/previouslySeenHeader"
+                />
+            
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/messagesLayoutInactive" />
+            
+        </LinearLayout>
+        
+    </ScrollView>
+
+</LinearLayout>

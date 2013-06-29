@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="org.nhcham.ahoy" android:versionCode="1" android:versionName="1.0">
+  <application android:icon="@drawable/icon" android:label="@string/app_name">
+    <service android:name=".AhoyService" />
+    <activity 
+        android:name=".AhoyActivity" 
+        android:label="@string/app_name"
+        android:clearTaskOnLaunch="true"
+        android:launchMode="singleTop">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <receiver android:name=".WiFiScanReceiver">
+      <intent-filter>
+        <action android:name="org.nhcham.ahoy" />
+      </intent-filter>
+    </receiver>
+  </application>
+  <uses-sdk android:minSdkVersion="8" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+  <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+</manifest>
