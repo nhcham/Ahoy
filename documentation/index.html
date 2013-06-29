@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<link href='styles.css' rel='stylesheet' type='text/css' />
+<link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,400,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Pathway+Gothic+One' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400italic,700' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<div id='main'>
+<div id='header' style='position: relative;'>
+<div style='position: absolute; bottom: 2.5em;'>
+<h1>Ahoy!</h1>
+<em>An Android App for local, broadcast-style communication.</em>
+</div>
+</div>
+
+<div id='content'>
+<p>
+Considering the <a href='http://en.wikipedia.org/wiki/Edward_Snowden'>recent 
+confirmations</a> regarding the 
+<a href='http://en.wikipedia.org/wiki/Nineteen_Eighty-Four'>Orwellian environment</a>
+Internet-based communication is apparently happening in, it's time to think about 
+alternative ways of communication which do not involve the Internet. 
+With current technology in place, which alternatives are there?
+</p>
+
+<!--
+<h2>The ways of the internet</h2>
+
+While offering a multitude of advantages, Internet-based communication is generally 
+subject to a couple of restrictions:
+
+<ul>
+
+<li>
+Relying on <a href='https://en.wikipedia.org/wiki/Internet_service_provider'>ISPs</a>, 
+communication can be <b>traced back to the individual user</b> at a later time. <br />
+This means you may have to justify your communication actions at any point in the 
+future, possibly in a different context. Uncovering a wrong which your country is 
+involved in? You might think again.
+</li>
+
+<li>
+Attribution is even easier when <b>a user account is required</b> to communicate, as 
+is the case with Skype, Facebook, Google+, etc.
+</li>
+
+<li>
+Internet-based communication uses <b>infrastructure which is in control of the 
+government</b>. While this is not a problem <i>per se</i>, there have been several 
+recent incidents where a government decided to disable communication. 
+</li>
+
+</ul>
+-->
+
+<h2>Local, broadcast-style communication</h2>
+
+<p>
+<b>Ahoy!</b> is an App which allows for local, broadcast-style communication 
+using WiFi access point names (more specifically: 
+<a href='http://en.wikipedia.org/wiki/SSID#Service_set_identification_.28SSID.29'>
+SSIDs</a>). 
+The App runs in the background, keeps looking for nearby WiFi access points, filters out 
+messages and notifies the user whenever a new message is found.
+In addition to that, the user may specify a message for broadcasting and the App will 
+take care of setting up a WiFi hotspot with a corresponding SSID representing the message.
+</p>
+
+<p>
+While this approach allows for very short messages only &ndash; so short, in fact, 
+that it makes Tweets look verbose in comparison &ndash; it has a number of 
+interesting properties:
+</p>
+
+<ul>
+<li>Communication is <b>inherently local</b>. 
+This means that when you go somewhere, and there's a message in the air, it refers 
+to where you currently are. 
+Relevance is defined by where you are right now, not by who you're following on 
+Twitter, which Facebook groups you're in, or who's in your Google+ Circles.</li>
+<li>Communication is <b>anonymous</b>.</li>
+<li>Messages <b>do not travel</b> accross the Internet, therefore:</li>
+<ul>
+<li>Messages <b>can not be monitored</b> from far away.</li>
+<li>Broadcasting messages is <b>robust towards Internet blackouts</b>. 
+<br />
+However, broadcasting can be inhibited locally using a WiFi jammer.</li>
+<li>Broadcasting messages is <b>free</b>.</li>
+</ul>
+<li>There are <b>no accounts</b> or personal information.</li>
+<li>Messages are <b>volatile</b>.</li>
+<li>The entire idea is probably <b>non-marketable</b>.</li>
+</ul>
+
+<h2>Download the App</h2>
+
+<img src='APK_format_icon.png' style='width: 48px; height: 48px;' />
+
+<p>
+If your prefer to compile things yourself or want to help improve the software, get the <a href='https://github.com/nhcham/Ahoy'>source code</a> on GitHub.
+</p>
+
+<h2>Questions and answers</h2>
+
+<dl>
+<dt>
+How big is the range?
+</dt>
+<dd>
+A normal WiFi adapter can be recognized up to 100 feet (30 meters) away when used outside.
+</dd>
+<dt>
+That's not very far!
+</dt>
+<dd>
+And that's not a question. However, you can increase the range of a message by 
+repeating it: click the message and press the button on the right 
+(<img src='social_share.png' style='margin-left: 0.2em; margin-right: 0.2em; height: 16px; background-color: #eee; border: 1px solid #aaa; border-radius: 3px; position: relative; top: 3px;'/>)
+to repeat the message. If the same message is detected several times, the number is 
+indicated on top of the signal level indicator:<br />
+<img src='message-counts.png' style='margin-top: 0.2em; border-radius: 4px;' />
+</dd>
+<dt>
+Isn't it a risk having your WiFi hotspot activated all the time while broadcasting 
+a message?
+</dt>
+<dd>
+No, it's not. When you broadcast a message, your WiFi hotspot gets secured with a 
+random key, and the key is changed once per minute.
+</dd>
+<dt>
+Why can't some special characters be entered? What about non-English speaking countries?
+</dt>
+<dd>
+As of today, SSIDs must consist of printable ASCII characters (mostly a-z, A-Z, 0-9 and 
+a couple of special characters). A handful of special characters are not allowed and on
+top of that, some mobile phones cut off SSIDs after certain characters.
+</dd>
+</dl>
+
+<h2>Technical details</h2>
+
+</div>
+</div>
+
+</body>
+</html>

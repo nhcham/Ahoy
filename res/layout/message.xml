@@ -37,7 +37,11 @@
                 android:textSize="10sp"
                 android:textColor="#ffffff"
                 android:paddingBottom="1sp"
-                android:paddingRight="2sp"
+                android:paddingRight="3sp"
+                android:shadowColor="#a0000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="3"
                 android:text="" />
                 
         </RelativeLayout>

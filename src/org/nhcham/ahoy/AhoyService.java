@@ -204,7 +204,7 @@ public class AhoyService extends Service {
                 if (notificationMessages.size() > 0)
                 {
                     // show notification
-                    String text = TextUtils.join(" / ", notificationMessages);
+                    String text = TextUtils.join(" +++ ", notificationMessages);
                     Notification note = new Notification(R.drawable.notification_icon, text, System.currentTimeMillis());
                     String detail = String.format("discovered %d message%s", notificationMessages.size(), notificationMessages.size() == 1 ? "" : "s");
                     Intent intent2 = new Intent(service, AhoyActivity.class);
