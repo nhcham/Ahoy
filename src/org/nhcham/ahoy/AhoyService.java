@@ -5,6 +5,7 @@ import android.content.*;
 import android.net.wifi.*;
 import android.net.wifi.WifiManager.*;
 import android.os.*;
+import android.text.TextUtils;
 import android.util.*;
 import android.widget.*;
 import java.lang.*;
@@ -22,7 +23,11 @@ public class AhoyService extends Service {
     final static String TAG = "AhoyService";
     
     // after 3 minutes, a message is considered gone ( = no more active)
-    final static long ACTIVE_TIMEOUT = 180; 
+    final static long ACTIVE_TIMEOUT = 3 * 60; 
+
+    // if a message re-appears after 10 minutes of absence, a new
+    // notification is shown for the message
+    final static long RE_NOTIFY_TIMEOUT = 10 * 60; 
 
     Thread serviceThread = null;
     IBinder binder = new LocalBinder();
@@ -143,6 +148,7 @@ public class AhoyService extends Service {
             List<ScanResult> results = wifiManagerEx.getScanResults();
             if (results != null)
             {
+                List<String> notificationMessages = new ArrayList<String>();
                 synchronized(messageHash) 
                 {
                     final long currentTime = System.currentTimeMillis();
@@ -176,28 +182,36 @@ public class AhoyService extends Service {
                             else
                                 messageHash.get(message).put("count", messageHash.get(message).get("count") + 1);
                                 
+                            if (messageHash.get(message).containsKey("lastSeen"))
+                            {
+                                long previouslyLastSeen = messageHash.get(message).get("lastSeen");
+                                if (currentTime - previouslyLastSeen >= RE_NOTIFY_TIMEOUT * 1000)
+                                    showNotification = true;
+                            }
+                                
                             messageHash.get(message).put("lastSeen", currentTime);
                             messageHash.get(message).put("active", new Long(1));
                             messageHash.get(message).put("level", new Long(Math.max(result.level, messageHash.get(message).get("level"))));
 
                             if (showNotification)
-                            {
-                                // show notification
-                                Notification note = new Notification(R.drawable.icon, message, System.currentTimeMillis());
-//                                 PendingIntent intent2 = PendingIntent.getActivity(service, 0, new Intent("AhoyActivity"), 0);
-                                String detail = String.format("discovered %s", formatTime(messageHash.get(message).get("firstSeen")));
-                                Intent intent2 = new Intent(service, AhoyActivity.class);
-                                intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                note.setLatestEventInfo(service, message, detail, PendingIntent.getActivity(service.getBaseContext(), 0, intent2, PendingIntent.FLAG_CANCEL_CURRENT));
-                                note.flags = Notification.FLAG_AUTO_CANCEL;
-//                                 note.setLatestEventInfo(service, message, detail, intent2);
-                                notificationManager.notify(messageHash.get(message).get("index").intValue(), note);
-                            }
+                                notificationMessages.add(message);
                         }
                         // TODO: purge old entries
                     }
                     intent.putExtra("messageHash", messageHash);
                     sendBroadcast(intent);
+                }
+                if (notificationMessages.size() > 0)
+                {
+                    // show notification
+                    String text = TextUtils.join(" / ", notificationMessages);
+                    Notification note = new Notification(R.drawable.notification_icon, text, System.currentTimeMillis());
+                    String detail = String.format("discovered %d message%s", notificationMessages.size(), notificationMessages.size() == 1 ? "" : "s");
+                    Intent intent2 = new Intent(service, AhoyActivity.class);
+                    intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    note.setLatestEventInfo(service, text, detail, PendingIntent.getActivity(service.getBaseContext(), 0, intent2, PendingIntent.FLAG_CANCEL_CURRENT));
+                    note.flags = Notification.FLAG_AUTO_CANCEL;
+                    notificationManager.notify(0, note);
                 }
             }
             
