@@ -5,6 +5,8 @@ import android.content.*;
 import android.net.wifi.*;
 import android.net.wifi.WifiManager.*;
 import android.os.*;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.text.TextUtils;
 import android.util.*;
 import android.widget.*;
@@ -97,7 +99,7 @@ public class AhoyService extends Service {
             ahoyService.gotScanResults();
         }
     }
-    
+
     private class ServiceThread implements Runnable {
     
         final static String TAG = "AhoyServiceThread";
@@ -107,6 +109,8 @@ public class AhoyService extends Service {
         WifiLock wifiLock = null;
         WifiScanReceiver scanReceiver;
         NotificationManager notificationManager;
+        PowerManager powerManager;
+        WakeLock wakeLock;
         SecureRandom secureRandom;
         
         String desiredBroadcastMessage = null;
@@ -116,13 +120,15 @@ public class AhoyService extends Service {
         boolean originalWifiEnabled = false;
         boolean originalWifiApEnabled = false;
         WifiConfiguration originalWifiConfiguration = null;
-    
+
         ServiceThread(AhoyService _service)
         {
             service = _service;
             wifiManagerEx = new WifiManagerExtended(_service);
             scanReceiver = new WifiScanReceiver(_service);
             notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AhoyService");
             secureRandom = new SecureRandom();
         }
         
@@ -256,6 +262,8 @@ public class AhoyService extends Service {
         
         public void _broadcastMessage(final String message)
         {
+            if (!wakeLock.isHeld())
+                wakeLock.acquire();
             desiredBroadcastMessage = message;
             showSpinner = true;
             Intent intent = new Intent("AhoyActivityUpdate");
@@ -266,6 +274,8 @@ public class AhoyService extends Service {
         
         public void _stopBroadcast()
         {
+            if (wakeLock.isHeld())
+                wakeLock.release();
             desiredBroadcastMessage = null;
             showSpinner = true;
             Intent intent = new Intent("AhoyActivityUpdate");
@@ -295,10 +305,10 @@ public class AhoyService extends Service {
         
         public void run()
         {
-            // save WiFi state, so we can reset it on exit
-            originalWifiEnabled = wifiManagerEx.isWifiEnabled();
+            // save WiFi state, so we can restore it on exit
             originalWifiApEnabled = wifiManagerEx.isWifiApEnabled();
             originalWifiConfiguration = wifiManagerEx.getWifiApConfiguration();
+            originalWifiEnabled = wifiManagerEx.isWifiEnabled();
             
             wifiLock = wifiManagerEx.wifiManager().createWifiLock(WifiManager.WIFI_MODE_FULL, "AhoyService");
             wifiLock.acquire();
@@ -358,10 +368,17 @@ public class AhoyService extends Service {
             unregisterReceiver(scanReceiver);
             wifiLock.release();
             
-            // reset WiFi configuration
-            Log.d(TAG, "Resetting WiFi configuration...");
+            // restore WiFi configuration
+            Log.d(TAG, "Restoring WiFi configuration...");
 //             Log.d(TAG, String.format("WiFi: %b, WiFiAP: %b, AP config: %s", originalWifiEnabled, originalWifiApEnabled, originalWifiConfiguration.toString()));
+            wifiManagerEx.setWifiEnabled(originalWifiEnabled);
+            wifiManagerEx.setWifiApConfiguration(originalWifiConfiguration);
+            wifiManagerEx.setWifiApEnabled(originalWifiConfiguration, originalWifiApEnabled);
             
+            // release wake lock if still held
+            if (wakeLock.isHeld())
+                wakeLock.release();
+
             stopSelf();
         }
     };
