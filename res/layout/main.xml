@@ -90,6 +90,17 @@
                 android:background="@drawable/header"
                 />
             
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="(none)"
+                android:paddingTop="3dp"
+                android:paddingBottom="7dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:id="@+id/noMessagesIndicator"
+                />
+            
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical" 
             android:layout_width="fill_parent"

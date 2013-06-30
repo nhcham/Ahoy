@@ -67,6 +67,7 @@ h1, h2 {
     margin-left: 0;
     margin-right: 0;
     padding-left: 1em;
+    padding-right: 1em;
     background-color: #fafafa;
     border: 1px solid #aaa;
     border-top: 1px solid #fafafa;
@@ -74,4 +75,12 @@ h1, h2 {
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
     z-index: 1;
+}
+
+tt {
+    background-color: #eee;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
 }

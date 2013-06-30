@@ -10,18 +10,15 @@ public class ApMessageFilter
     
     public static String ssidToMessage(final String s)
     {
-        return s;
-        /*
+//         return s;
         if (s.startsWith("`"))
             return s.substring(1);
         else
             return null;
-        */
     }
     
     public static String messageToSsid(final String s)
     {
-        /*
         if (s.length() < 30)
         {
             try
@@ -32,7 +29,6 @@ public class ApMessageFilter
             } catch (UnsupportedEncodingException e) { }
         }
         return "`" + s;
-        */
-        return s;
+//         return s;
     }
 };

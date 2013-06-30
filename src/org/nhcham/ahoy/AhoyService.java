@@ -33,7 +33,7 @@ public class AhoyService extends Service {
     IBinder binder = new LocalBinder();
     
     private enum ServiceCommand {
-        NONE, SHUTDOWN, NEW_BROADCAST, STOP_BROADCAST, QUERY_STATE
+        NONE, SHUTDOWN, NEW_BROADCAST, STOP_BROADCAST, QUERY_STATE, GOT_SCAN_RESULTS, PERFORM_SCAN
     }
     
     private class ServiceCommandWithOption {
@@ -67,7 +67,7 @@ public class AhoyService extends Service {
     }
     
     public static Thread performOnBackgroundThread(final Runnable runnable) {
-        Log.d(TAG, "Now launching background thread...");
+        Log.d(TAG, "Now launching service thread...");
         final Thread t = new Thread() {
             @Override
             public void run() {
@@ -83,18 +83,18 @@ public class AhoyService extends Service {
     
     private class WifiScanReceiver extends BroadcastReceiver 
     {
-        ServiceThread serviceThread;
+        AhoyService ahoyService;
 
-        public WifiScanReceiver(ServiceThread _serviceThread) 
+        public WifiScanReceiver(AhoyService _ahoyService)
         {
             super();
-            serviceThread = _serviceThread;
+            ahoyService = _ahoyService;
         }
 
         @Override
         public void onReceive(Context c, Intent intent) 
         {
-            serviceThread.receivedScanResults();
+            ahoyService.gotScanResults();
         }
     }
     
@@ -113,37 +113,21 @@ public class AhoyService extends Service {
         HashMap<String, HashMap<String, Long> > messageHash = new HashMap<String, HashMap<String, Long> >();
         boolean showSpinner = false;
         
+        boolean originalWifiEnabled = false;
+        boolean originalWifiApEnabled = false;
+        WifiConfiguration originalWifiConfiguration = null;
+    
         ServiceThread(AhoyService _service)
         {
             service = _service;
             wifiManagerEx = new WifiManagerExtended(_service);
-            scanReceiver = new WifiScanReceiver(this);
+            scanReceiver = new WifiScanReceiver(_service);
             notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             secureRandom = new SecureRandom();
         }
         
-        public void broadcastState()
+        public void _receivedScanResults()
         {
-            Intent intent = new Intent("AhoyActivityUpdate");
-            
-            intent.putExtra("messageHash", messageHash);
-            
-            if (wifiManagerEx.isWifiApEnabled())
-            {
-                WifiConfiguration config = wifiManagerEx.getWifiApConfiguration();
-                intent.putExtra("currentlyBroadcasting", ApMessageFilter.ssidToMessage(config.SSID));
-            }
-            else
-                intent.putExtra("currentlyBroadcasting", (String)null);
-                
-            intent.putExtra("showSpinner", showSpinner);
-            
-            sendBroadcast(intent);
-        }
-        
-        public void receivedScanResults()
-        {
-            // TODO: this should be mutexed
             Log.d(TAG, "--------------------------GOT NEW SCAN RESULTS------------------------");
             List<ScanResult> results = wifiManagerEx.getScanResults();
             if (results != null)
@@ -254,9 +238,8 @@ public class AhoyService extends Service {
             sendBroadcast(intent2);
         }
         
-        public void update()
+        public void _update()
         {
-            // TODO: this should be mutexed
             Log.d(TAG, "updating state...");
             
             // switch off AP if it's on
@@ -271,40 +254,77 @@ public class AhoyService extends Service {
             Log.d(TAG, String.format("startScan() == %b", result));
         }
         
-        public void broadcastMessage(final String message)
+        public void _broadcastMessage(final String message)
         {
-            // TODO: this should be mutexed
             desiredBroadcastMessage = message;
             showSpinner = true;
             Intent intent = new Intent("AhoyActivityUpdate");
             intent.putExtra("showSpinner", showSpinner);
             sendBroadcast(intent);
+            _update();
         }
         
-        public void stopBroadcast()
+        public void _stopBroadcast()
         {
-            // TODO: this should be mutexed
             desiredBroadcastMessage = null;
             showSpinner = true;
             Intent intent = new Intent("AhoyActivityUpdate");
             intent.putExtra("showSpinner", showSpinner);
             sendBroadcast(intent);
+            _update();
+        }
+        
+        public void _broadcastState()
+        {
+            Intent intent = new Intent("AhoyActivityUpdate");
+            
+            intent.putExtra("messageHash", messageHash);
+            
+            if (wifiManagerEx.isWifiApEnabled())
+            {
+                WifiConfiguration config = wifiManagerEx.getWifiApConfiguration();
+                intent.putExtra("currentlyBroadcasting", ApMessageFilter.ssidToMessage(config.SSID));
+            }
+            else
+                intent.putExtra("currentlyBroadcasting", (String)null);
+                
+            intent.putExtra("showSpinner", showSpinner);
+            
+            sendBroadcast(intent);
         }
         
         public void run()
         {
+            // save WiFi state, so we can reset it on exit
+            originalWifiEnabled = wifiManagerEx.isWifiEnabled();
+            originalWifiApEnabled = wifiManagerEx.isWifiApEnabled();
+            originalWifiConfiguration = wifiManagerEx.getWifiApConfiguration();
+            
             wifiLock = wifiManagerEx.wifiManager().createWifiLock(WifiManager.WIFI_MODE_FULL, "AhoyService");
             wifiLock.acquire();
             
+            Log.d(TAG, "Registering scanReceiver");
             registerReceiver(scanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+            
+            _update();
             while (true)
             {
-                try 
-                {
-                    boolean shutdown = false;
-                    while (commandQueue.size() > 0)
+                
+                long timeoutDuration = (long)((secureRandom.nextDouble() * 10.0 + 25.0) * 1000.0);
+                // if we're currently broadcasting a message, wait longer
+                if (desiredBroadcastMessage != null)
+                    timeoutDuration *= 2;
+                    
+                Log.d(TAG, String.format("Now waiting for at most %1.2f seconds...", (float)timeoutDuration / 1000.0));
+                boolean shutdown = false;
+                
+                do {
+                    ServiceCommandWithOption commandWithOption = null;
+                    try {
+                        commandWithOption = commandQueue.poll(timeoutDuration, TimeUnit.MILLISECONDS);
+                    } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+                    if (commandWithOption != null)
                     {
-                        ServiceCommandWithOption commandWithOption = commandQueue.take();
                         ServiceCommand command = commandWithOption.command;
                         if (command == ServiceCommand.SHUTDOWN)
                         {
@@ -314,28 +334,33 @@ public class AhoyService extends Service {
                         else if (command == ServiceCommand.NEW_BROADCAST)
                         {
                             final String message = (String)commandWithOption.option;
-                            broadcastMessage(message);
+                            _broadcastMessage(message);
                         }
                         else if (command == ServiceCommand.STOP_BROADCAST)
-                            stopBroadcast();
+                            _stopBroadcast();
                         else if (command == ServiceCommand.QUERY_STATE)
-                            broadcastState();
+                            _broadcastState();
+                        else if (command == ServiceCommand.GOT_SCAN_RESULTS)
+                            _receivedScanResults();
+                        else if (command == ServiceCommand.PERFORM_SCAN)
+                            _update();
                     }
-                    if (shutdown)
-                        break;
-                    
-                    update();
-                    
-                    int sleepDuration = (int)((secureRandom.nextDouble() * 10.0 + 25.0) * 1000.0);
-                    // if we're currently broadcasting a message, sleep longer
-                    if (desiredBroadcastMessage != null)
-                        sleepDuration *= 2;
-                    Log.d(TAG, String.format("Now sleeping for %1.2f seconds...", (float)sleepDuration / 1000.0));
-                    Thread.sleep(sleepDuration);
-                } catch (InterruptedException e) { }
+                    else
+                    {
+                        // this was a timeout, re-scan for messages
+                        _update();
+                    }
+                } while (commandQueue.size() > 0);
+                if (shutdown)
+                    break;
             }
+            Log.d(TAG, "Unregistering scanReceiver");
             unregisterReceiver(scanReceiver);
             wifiLock.release();
+            
+            // reset WiFi configuration
+            Log.d(TAG, "Resetting WiFi configuration...");
+//             Log.d(TAG, String.format("WiFi: %b, WiFiAP: %b, AP config: %s", originalWifiEnabled, originalWifiApEnabled, originalWifiConfiguration.toString()));
             
             stopSelf();
         }
@@ -361,15 +386,19 @@ public class AhoyService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "service destroyed");
-        super.onDestroy();
         if (serviceThread != null)
         {
             try {
                 commandQueue.put(new ServiceCommandWithOption(ServiceCommand.SHUTDOWN));
-            } catch (InterruptedException e) { }
-            serviceThread.interrupt();
+            } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            // wait until service thread has finished
+            try {
+                serviceThread.join();
+            } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+            Log.d(TAG, "service thread has finished, shutting down service...");
             serviceThread = null;
         }
+        super.onDestroy();
     }
     
     public void broadcastMessage(final String message)
@@ -377,8 +406,7 @@ public class AhoyService extends Service {
         Log.d(TAG, "Broadcasting message: " + message);
         try {
             commandQueue.put(new ServiceCommandWithOption(ServiceCommand.NEW_BROADCAST, message));
-        } catch (InterruptedException e) { }
-        serviceThread.interrupt();
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     public void stopBroadcast()
@@ -386,8 +414,7 @@ public class AhoyService extends Service {
         Log.d(TAG, "Stopping broadcast");
         try {
             commandQueue.put(new ServiceCommandWithOption(ServiceCommand.STOP_BROADCAST));
-        } catch (InterruptedException e) { }
-        serviceThread.interrupt();
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
     
     public void queryState()
@@ -395,8 +422,23 @@ public class AhoyService extends Service {
         Log.d(TAG, "Querying state");
         try {
             commandQueue.put(new ServiceCommandWithOption(ServiceCommand.QUERY_STATE));
-        } catch (InterruptedException e) { }
-        serviceThread.interrupt();
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    }
+    
+    public void gotScanResults()
+    {
+        Log.d(TAG, "Got scan results");
+        try {
+            commandQueue.put(new ServiceCommandWithOption(ServiceCommand.GOT_SCAN_RESULTS));
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    }
+    
+    public void performScan()
+    {
+        Log.d(TAG, "Performing scan");
+        try {
+            commandQueue.put(new ServiceCommandWithOption(ServiceCommand.PERFORM_SCAN));
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
     
     public String formatTime(long time)

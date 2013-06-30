@@ -25,7 +25,7 @@ public class AhoyActivity extends Activity implements OnClickListener
     private static final String TAG = "AhoyActivity";
     
     LinearLayout messagesLayout, messagesLayoutInactive;
-    TextView currentBroadcast, previouslySeenHeader;
+    TextView currentBroadcast, previouslySeenHeader, noMessagesIndicator;
     EditText editText;
     ProgressBar broadcastSpinner;
     String statusMessage;
@@ -66,6 +66,7 @@ public class AhoyActivity extends Activity implements OnClickListener
         currentBroadcast = (TextView) findViewById(R.id.currentBroadcast);
         broadcastSpinner = (ProgressBar) findViewById(R.id.broadcastSpinner);
         previouslySeenHeader = (TextView) findViewById(R.id.previouslySeenHeader);
+        noMessagesIndicator = (TextView) findViewById(R.id.noMessagesIndicator);
         
         findViewById(R.id.buttonBroadcastMessage).setOnClickListener(this);
         findViewById(R.id.buttonStopBroadcast).setOnClickListener(this);
@@ -82,9 +83,7 @@ public class AhoyActivity extends Activity implements OnClickListener
         Log.d(TAG, "onStart()");
         super.onStart();
         Intent intent = new Intent(this, AhoyService.class);
-        bindService(intent, serviceConnetion, BIND_AUTO_CREATE);
-        if (ahoyService != null)
-            ahoyService.queryState();
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
     }
     
     @Override
@@ -93,6 +92,11 @@ public class AhoyActivity extends Activity implements OnClickListener
         Log.d(TAG, "onResume()");
         super.onResume();
         registerReceiver(updateReceiver, new IntentFilter("AhoyActivityUpdate"));
+        if (ahoyService != null)
+        {
+            ahoyService.queryState();
+            ahoyService.performScan();
+        }
     }
     
     @Override
@@ -103,7 +107,7 @@ public class AhoyActivity extends Activity implements OnClickListener
         unregisterReceiver(updateReceiver);
     }
     
-    ServiceConnection serviceConnetion = new ServiceConnection() 
+    ServiceConnection serviceConnection = new ServiceConnection() 
     {
         public void onServiceConnected(ComponentName name, IBinder service)
         {
@@ -126,7 +130,7 @@ public class AhoyActivity extends Activity implements OnClickListener
         super.onStop();
         if (boundService)
         {
-            unbindService(serviceConnetion);
+            unbindService(serviceConnection);
             boundService = false;
         }
     }
@@ -185,7 +189,7 @@ public class AhoyActivity extends Activity implements OnClickListener
                 v.findViewById(R.id.buttonShareMessage).setVisibility(which);
             }
         }
-        if (view.getId() == R.id.buttonShareMessage)
+        else if (view.getId() == R.id.buttonShareMessage)
         {
             View parent = (View)view.getParent();
             if (parent != null)
@@ -201,7 +205,7 @@ public class AhoyActivity extends Activity implements OnClickListener
                 
             }
         }
-        if (view.getId() == R.id.buttonBroadcastMessage)
+        else if (view.getId() == R.id.buttonBroadcastMessage)
         {
             InputFilter ssidFilter = new InputFilter() 
             {
@@ -376,6 +380,7 @@ public class AhoyActivity extends Activity implements OnClickListener
                 java.util.Collections.sort(keys, new MessageComparator(messageHash));
                 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+                boolean seenSomethingActive = false;
                 boolean seenSomethingInactive = false;
                 for (String message: keys)
                 {
@@ -409,6 +414,7 @@ public class AhoyActivity extends Activity implements OnClickListener
                     }
                     else
                     {
+                        seenSomethingActive = true;
                         ((TextView)t.findViewById(R.id.details)).setText("first seen " + formatDuration((currentTime - messageHash.get(message).get("firstSeen")) / 1000));
                         messagesLayout.addView(t);
                     }
@@ -417,6 +423,7 @@ public class AhoyActivity extends Activity implements OnClickListener
                     t.findViewById(R.id.buttonShareMessage).setOnClickListener(this);
                 }
                 previouslySeenHeader.setVisibility(seenSomethingInactive ? View.VISIBLE : View.GONE);
+                noMessagesIndicator.setVisibility(seenSomethingActive ? View.GONE : View.VISIBLE);
             }
         }
     }
