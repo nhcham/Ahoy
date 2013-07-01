@@ -24,12 +24,12 @@ public class AhoyService extends Service {
 
     final static String TAG = "AhoyService";
     
-    // after 3 minutes, a message is considered gone ( = no more active)
-    final static long ACTIVE_TIMEOUT = 3 * 60; 
+    // after 5 minutes, a message is considered gone ( = no more active)
+    final static long ACTIVE_TIMEOUT = 5 * 60;
 
-    // if a message re-appears after 10 minutes of absence, a new
+    // if a message re-appears after 60 minutes of absence, a new
     // notification is shown for the message
-    final static long RE_NOTIFY_TIMEOUT = 10 * 60; 
+    final static long RE_NOTIFY_TIMEOUT = 60 * 60;
 
     Thread serviceThread = null;
     IBinder binder = new LocalBinder();
