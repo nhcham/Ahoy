@@ -1,3 +1,1 @@
-h2. Local, broadcast-style communication
-
-For more information, see "http://ahoy.nhcham.org":http://ahoy.nhcham.org.
+More information can be found at "http://ahoy.nhcham.org":http://ahoy.nhcham.org.
