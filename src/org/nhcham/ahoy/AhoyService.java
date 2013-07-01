@@ -373,7 +373,8 @@ public class AhoyService extends Service {
 //             Log.d(TAG, String.format("WiFi: %b, WiFiAP: %b, AP config: %s", originalWifiEnabled, originalWifiApEnabled, originalWifiConfiguration.toString()));
             wifiManagerEx.setWifiEnabled(originalWifiEnabled);
             wifiManagerEx.setWifiApConfiguration(originalWifiConfiguration);
-            wifiManagerEx.setWifiApEnabled(originalWifiConfiguration, originalWifiApEnabled);
+            // Better don't re-start the AP if it was enabled. Just restore the configuration.
+//             wifiManagerEx.setWifiApEnabled(originalWifiConfiguration, originalWifiApEnabled);
             
             // release wake lock if still held
             if (wakeLock.isHeld())
