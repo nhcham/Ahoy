@@ -3,7 +3,7 @@
 require 'fileutils'
 
 commitCount = `git rev-list --count HEAD`.to_i
-versionTag = `git describe --dirty`
+versionTag = `git describe --dirty`.strip
 puts "Version code: #{commitCount}, version name: #{versionTag}"
 
 FileUtils::rm_rf('_release_build') if File::exists?('_release_build')
