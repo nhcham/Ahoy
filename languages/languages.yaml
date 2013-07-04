@@ -77,6 +77,8 @@ deu:
         - German
         - Deutsch
     link: http://corpora.uni-leipzig.de/downloads/deu_news_2010_100K-text.tar.gz
+    alphabet: [[A, Z], [a, z], ['0', '9'], 'ÄÖÜäöüß']
+    prefix: [[A, Z], [a, z]]
 ell:
     names:
         - Modern Greek
@@ -86,6 +88,8 @@ eng:
     names:
         - English
     link: http://corpora.uni-leipzig.de/downloads/eng_news_2010_100K-text.tar.gz
+    alphabet: [[A, Z], [a, z], ['0', '9']]
+    prefix: [[A, Z], [a, z]]
 epo:
     names:
         - Esperanto
@@ -307,6 +311,7 @@ rus:
         - Russian
         - Русский язык
     link: http://corpora.uni-leipzig.de/downloads/rus_news_2010_100K-text.tar.gz
+#     alphabet: [['0', '9'], "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"]
 slk:
     names:
         - Slovak

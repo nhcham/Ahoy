@@ -27,3 +27,4 @@ Dir::chdir('..')
 
 FileUtils::mv("_release_build/bin/Ahoy-#{versionTag}.apk", ".")
 FileUtils::rm_rf('_release_build') 
+puts "Successfully built APK / version code: #{commitCount}, version name: #{versionTag}."
