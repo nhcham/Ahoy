@@ -1,0 +1,413 @@
+afr:
+    names:
+        - Afrikaans
+    link: http://corpora.uni-leipzig.de/downloads/afr_newscrawl_2011_100K-text.tar.gz
+als:
+    names:
+        - Tosk
+    link: http://corpora.uni-leipzig.de/downloads/als_wikipedia_2007_30K-text.tar.gz
+ara:
+    names:
+        - Arabic
+        - العربية
+    link: http://corpora.uni-leipzig.de/downloads/ara_news_2005-2009_100K-text.tar.gz
+azj:
+    names:
+        - Azerbaijani
+        - Azeri
+        - Azəri
+        - آذری
+    link: http://corpora.uni-leipzig.de/downloads/azj_wikipedia_2007_10K-text.tar.gz
+bak:
+    names:
+        - Bashkir
+        - башҡорт теле
+        - başqort tele
+    link: http://corpora.uni-leipzig.de/downloads/bak_newscrawl_2011_100K-text.tar.gz
+bel:
+    names:
+        - Belarusian
+        - беларуская мова
+    link: http://corpora.uni-leipzig.de/downloads/bel_newscrawl_2011_100K-text.tar.gz
+bos:
+    names:
+        - Standard Bosnian
+        - босански
+    link: http://corpora.uni-leipzig.de/downloads/bos_newscrawl_2011_100K-text.tar.gz
+bre:
+    names:
+        - Breton
+        - Brezhoneg
+    link: http://corpora.uni-leipzig.de/downloads/bre_wikipedia_2007_30K-text.tar.gz
+bul:
+    names:
+        - Bulgarian
+        - български език
+        - bălgarski ezik
+    link: http://corpora.uni-leipzig.de/downloads/bul_news_2007_100K-text.tar.gz
+cat:
+    names:
+        - Catalan
+        - català
+    link: http://corpora.uni-leipzig.de/downloads/cat_newscrawl_2011_100K-text.tar.gz
+ceb:
+    names: 
+        - Cebuano
+        - Binisaya
+    link: http://corpora.uni-leipzig.de/downloads/ceb_newscrawl_2011_10K-text.tar.gz
+ces:
+    names:
+        - Czech
+        - čeština
+        - český
+    link: http://corpora.uni-leipzig.de/downloads/ces_newscrawl_2011_100K-text.tar.gz
+cym:
+    names:
+        - Welsh
+        - Cymraeg
+        - y Gymraeg
+    link: http://corpora.uni-leipzig.de/downloads/cym_wikipedia_2007_30K-text.tar.gz
+dan:
+    names:
+        - Danish
+        - dansk
+    link: http://corpora.uni-leipzig.de/downloads/dan_newscrawl_2011_100K-text.tar.gz
+deu:
+    names:
+        - German
+        - Deutsch
+    link: http://corpora.uni-leipzig.de/downloads/deu_news_2010_100K-text.tar.gz
+ell:
+    names:
+        - Modern Greek
+        - νέα ελληνικά
+    link: http://corpora.uni-leipzig.de/downloads/ell_wikipedia_2007_100K-text.tar.gz
+eng:
+    names:
+        - English
+    link: http://corpora.uni-leipzig.de/downloads/eng_news_2010_100K-text.tar.gz
+epo:
+    names:
+        - Esperanto
+    link: http://corpora.uni-leipzig.de/downloads/epo_wikipedia_2007_100K-text.tar.gz
+est:
+    names:
+        - Estonian
+        - eesti keel
+    link: http://corpora.uni-leipzig.de/downloads/est_newscrawl_2011_100K-text.tar.gz
+eus:
+    names:
+        - Basque
+        - Euskara
+    link: http://corpora.uni-leipzig.de/downloads/eus_web_2002_100K-text.tar.gz
+fas:
+    names:
+        - Persian
+        - فارسی
+    link: http://corpora.uni-leipzig.de/downloads/fas_newscrawl_2011_100K-text.tar.gz
+fin:
+    names:
+        - Finnish
+        - Suomen kieli
+    link: http://corpora.uni-leipzig.de/downloads/fin_news_2007_100K-text.tar.gz
+fra:
+    names:
+        - French
+        - français
+    link: http://corpora.uni-leipzig.de/downloads/fra_news_2010_100K-text.tar.gz
+gom:
+    names:
+        - Konkani
+        - कोंकणी
+        - Konknni
+        - ಕೊಂಕಣಿ
+        - കൊങ്കണി
+    link: http://corpora.uni-leipzig.de/downloads/gom_newscrawl_2011_30K-text.tar.gz
+guj:
+    names:
+        - Gujarati
+        - ગુજરાતી
+    link: http://corpora.uni-leipzig.de/downloads/guj_newscrawl_2011_100K-text.tar.gz
+heb:
+    names:
+        - Hebrew
+        - עִבְרִית
+    link: http://corpora.uni-leipzig.de/downloads/heb_newscrawl_2011_100K-text.tar.gz
+hin:
+    names:
+        - Hindi
+        - मानक हिन्दी
+    link: http://corpora.uni-leipzig.de/downloads/hin_newscrawl_2011_100K-text.tar.gz
+hrv:
+    names:
+        - Croatian
+        - hrvatski
+    link: http://corpora.uni-leipzig.de/downloads/hrv_wikipedia_2007_100K-text.tar.gz
+ido:
+    names: 
+        - Ido
+    link: http://corpora.uni-leipzig.de/downloads/ido_wikipedia_2007_30K-text.tar.gz
+ind:
+    names:
+        - Indonesian
+        - Bahasa Indonesia
+    link: http://corpora.uni-leipzig.de/downloads/ind_newscrawl_2012_100K-text.tar.gz
+isl:
+    names:
+        - Icelandic
+        - íslenska
+    link: http://corpora.uni-leipzig.de/downloads/isl_newscrawl_2011_100K-text.tar.gz
+ita:
+    names:
+        - Italian
+        - Italiano
+    link: http://corpora.uni-leipzig.de/downloads/ita_news_2010_100K-text.tar.gz
+jpn:
+    names:
+        - Japanese
+        - 日本語
+    link: http://corpora.uni-leipzig.de/downloads/jpn_news_2005-2008_100K-text.tar.gz
+kal:
+    names:
+        - Greenlandic
+        - Kalaallisut
+    link: http://corpora.uni-leipzig.de/downloads/kal_newscrawl_2011_30K-text.tar.gz
+kat:
+    names: 
+        - Georgian
+        - ქართული ენა
+    link: http://corpora.uni-leipzig.de/downloads/kat_newscrawl_2011_100K-text.tar.gz
+kaz:
+    names:
+        - Kazakh
+        - қазақ тілі
+        - قازاق تىلى‎
+    link: http://corpora.uni-leipzig.de/downloads/kaz_wikipedia_2010_100K-text.tar.gz
+kir:
+    names:
+        - Kyrgyz
+        - Кыргызча
+        - قىرعىز تىلى
+        - Kırgızça
+    link: http://corpora.uni-leipzig.de/downloads/kir_newscrawl_2011_100K-text.tar.gz
+kor:
+    names:
+        - Korean
+        - 한국어
+        - 조선말
+    link: http://corpora.uni-leipzig.de/downloads/kor_news_2007_300K-text.tar.gz
+kur:
+    names:
+        - Kurdish
+        - كوردی
+        - Kurdî
+        - Kurdí
+        - Кöрди
+    link: http://corpora.uni-leipzig.de/downloads/kur_newscrawl_2011_30K-text.tar.gz
+lat:
+    names:
+        - Latin
+        - Lingua latina
+    link: http://corpora.uni-leipzig.de/downloads/lat_wikipedia_2007_30K-text.tar.gz
+lav:
+    names:
+        - Latvian
+        - latviešu valoda
+    link: http://corpora.uni-leipzig.de/downloads/lav_wikipedia_2007_30K-text.tar.gz
+lit:
+    names:
+        - Lithuanian
+        - lietuvių kalba
+    link: http://corpora.uni-leipzig.de/downloads/lit_newscrawl_2011_100K-text.tar.gz
+ltz:
+    names:
+        - Luxembourgish
+        - Lëtzebuergesch
+    link: http://corpora.uni-leipzig.de/downloads/ltz_wikipedia_2007_30K-text.tar.gz
+lus:
+    names:
+        - Mizo
+    link: http://corpora.uni-leipzig.de/downloads/lus_newscrawl_2011_30K-text.tar.gz
+mal:
+    names:
+        - Malayalam
+        - മലയാളം
+    link: http://corpora.uni-leipzig.de/downloads/mal_newscrawl_2011_100K-text.tar.gz
+mar:
+    names: 
+        - Marathi
+        - मराठी
+    link: http://corpora.uni-leipzig.de/downloads/mar_newscrawl_2011_100K-text.tar.gz
+mkd:
+    names:
+        - Macedonian
+        - Македонски јазик
+    link: http://corpora.uni-leipzig.de/downloads/mkd_newscrwal_2011_100K-text.tar.gz
+mlg:
+    names:
+        - Malagasy
+    link: http://corpora.uni-leipzig.de/downloads/mlg_web_2012_30K-text.tar.gz
+mlt:
+    names:
+        - Maltese
+        - Malti
+    link: http://corpora.uni-leipzig.de/downloads/mlt_newscrawl_2011_10K-text.tar.gz
+mon:
+    names:
+        - Mongolian
+        - Монгол хэл
+    link: http://corpora.uni-leipzig.de/downloads/mon_news_2011_30K-text.tar.gz
+mri:
+    names:
+        - Māori
+    link: http://corpora.uni-leipzig.de/downloads/mri_web_2011_100K-text.tar.gz
+msa:
+    names:
+        - Malay
+        - بهاس ملايو
+    link: http://corpora.uni-leipzig.de/downloads/msa_newscrawl_2011_100K-text.tar.gz
+nep:
+    names:
+        - Nepali
+        - नेपाली
+    link: http://corpora.uni-leipzig.de/downloads/nep_news_2010_100K-text.tar.gz
+new:
+    names:
+        - Nepal Bhasa
+        - नेपाल भाषा
+    link: http://corpora.uni-leipzig.de/downloads/new_wikipedia_2009_10K-text.tar.gz
+nno:
+    names:
+        - Norwegian Nynorsk
+        - norsk
+        - nynorsk
+    link: http://corpora.uni-leipzig.de/downloads/nno_wikipedia_2007_100K-text.tar.gz
+nob:
+    names:
+        - Norwegian Bokmål
+        - norsk
+        - bokmål
+    link: http://corpora.uni-leipzig.de/downloads/nob_news_2007_100K-text.tar.gz
+oci:
+    names:
+        - Occitan
+    link: http://corpora.uni-leipzig.de/downloads/oci_wikipedia_2007_10K-text.tar.gz
+pol:
+    names:
+        - Polish
+        - język polski
+    link: http://corpora.uni-leipzig.de/downloads/pol_news_2008_100K-text.tar.gz
+por:
+    names:
+        - Portuguese
+        - português
+    link: http://corpora.uni-leipzig.de/downloads/por_newscrawl_2011_100K-text.tar.gz
+rus:
+    names:
+        - Russian
+        - Русский язык
+    link: http://corpora.uni-leipzig.de/downloads/rus_news_2010_100K-text.tar.gz
+slk:
+    names:
+        - Slovak
+        - slovenčina
+    link: http://corpora.uni-leipzig.de/downloads/slk_wikipedia_2007_100K-text.tar.gz
+slv:
+    names:
+        - Slovene
+        - slovenščina
+    link: http://corpora.uni-leipzig.de/downloads/slv_newscrawl_2011_100K-text.tar.gz
+som:
+    names:
+        - Somali
+        - Af-Soomaali
+        - اللغة الصومالية
+    link: http://corpora.uni-leipzig.de/downloads/som_newscrawl_2011_100K-text.tar.gz
+spa:
+    names:
+        - Spanish
+        - español
+        - castellano
+    link: http://corpora.uni-leipzig.de/downloads/spa_newscrawl_2011_100K-text.tar.gz
+srp:
+    names:
+        - Standard Serbian
+        - српски srpski
+    link: http://corpora.uni-leipzig.de/downloads/srp_wikipedia_2010_100K-text.tar.gz
+swa:
+    names:
+        - Swahili
+        - Kiswahili
+    link: http://corpora.uni-leipzig.de/downloads/swa_newscrawl_2011_10K-text.tar.gz
+swe:
+    names:
+        - Swedish
+        - svenska
+    link: http://corpora.uni-leipzig.de/downloads/swe_news_2007_100K-text.tar.gz
+tam:
+    names:
+        - Tamil
+        - தமிழ்
+    link: http://corpora.uni-leipzig.de/downloads/tam_newscrawl_2011_100K-text.tar.gz
+tat:
+    names:
+        - Tatar
+        - татар теле
+        - tatar tele
+        - تاتار تيلی
+    link: http://corpora.uni-leipzig.de/downloads/tat_news_2005-2011_100K-text.tar.gz
+tel:
+    names:
+        - Telugu
+        - తెలుగు
+    link: http://corpora.uni-leipzig.de/downloads/tel_newscrawl_2011_100K-text.tar.gz
+tgk:
+    names:
+        - Tajik
+        - тоҷикӣ
+        - تاجیکی‎
+        - tojikī
+    link: http://corpora.uni-leipzig.de/downloads/tgk_newscrawl_2011_100K-text.tar.gz
+tgl:
+    names:
+        - Tagalog
+    link: http://corpora.uni-leipzig.de/downloads/tgl_newscrwal_2011_100K-text.tar.gz
+tha:
+    names:
+        - Thai
+        - Siamese
+        - ภาษาไทย
+    link: http://corpora.uni-leipzig.de/downloads/tha_newscrawl_2011_100K-text.tar.gz
+tur:
+    names:
+        - Turkish
+        - Türkçe
+    link: http://corpora.uni-leipzig.de/downloads/tur_news_2005_100K-text.tar.gz
+ukr:
+    names:
+        - Ukrainian
+        - українська мова
+    link: http://corpora.uni-leipzig.de/downloads/ukr_wikipedia_2010_100K-text.tar.gz
+urd:
+    names:
+        - Urdū
+        - اُردُو
+    link: http://corpora.uni-leipzig.de/downloads/urd_newscrawl_2011_100K-text.tar.gz
+uzb:
+    names:
+        - Uzbek
+        - Oʻzbek
+        - Ўзбек
+        - اوزبیک
+    link: http://corpora.uni-leipzig.de/downloads/uzb_newscrawl_2011_100K-text.tar.gz
+vie:
+    names:
+        - Vietnamese
+        - Tiếng Việt
+    link: http://corpora.uni-leipzig.de/downloads/vie_newscrwal_2011_100K-text.tar.gz
+zho:
+    names:
+        - Chinese
+        - 汉语
+        - 漢語
+    link: http://corpora.uni-leipzig.de/downloads/zho_news_2007-2009_100K-text.tar.gz
