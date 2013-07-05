@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 
+'''
+ftp://ftp.unicode.org/Public/3.0-Update/UnicodeData-3.0.0.html
+L Letter
+M Mark
+N Number
+P Punctuation
+S Symbol
+Z Separator
+O Other
+'''
+
 import glob
 import heapq
 import math
@@ -17,6 +28,7 @@ SPACE = chr(0x20)
 
 wrote_example_sentences = 0
 original_bit_length_per_char = None
+had_important_defined = True
     
 catnames = dict()
 catnames['Lu'] = 'Letter, uppercase'
@@ -88,8 +100,10 @@ def huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet_size, prefixes, al
         #result.append([ci1, ci2, word_offset])
         
     # add position-independent bigram prefix keys
-    if ci1 in prefixes and ci2 in prefixes:
-        result.append([ci1, ci2, -1])
+    global had_important_defined
+    if had_important_defined:
+        if ci1 in prefixes and ci2 in prefixes:
+            result.append([ci1, ci2, -1])
         
     ## add position-dependent monogram prefix keys
     #if word_offset >= 0 and word_offset < extra_slots and ci1 in prefixes:
@@ -562,14 +576,14 @@ def build(lang, languages, extra_slots):
             font_color = '#000'
             if (char_map[c] < 10):
                 font_color = '#aaa'
-            fout.write("<div title='%s' class='cb' style='color: %s; background-color: %s;'>%s</div>" % (name, font_color, color, c))
+            fout.write("<div title='%s' class='cb%s' style='color: %s; background-color: %s;'>%s</div>\n" % (name, ' important' if c in safe_alphabet else (' ignored' if c in ignored else ''), font_color, color, c))
         fout.write("\n")
         
-    fout = open('report-%s.html' % lang, 'w')
+    fout = open('html/report-%s.html' % lang, 'w')
     fout.write("<html>\n")
     fout.write("<meta http-equiv='content-type' content='text/html; charset=utf-8'>\n");
     fout.write("<head>\n")
-    fout.write("<link rel='stylesheet' type='text/css' href='styles.css' />\n");
+    fout.write("<link rel='stylesheet' type='text/css' href='css/styles.css' />\n");
     fout.write("</head>\n")
     fout.write("<body>\n")
     fout.write("<h1>Language pack for [%s] (%s)</h1>" % (lang, ' / '.join(languages[lang]['names'])))
@@ -590,21 +604,26 @@ def build(lang, languages, extra_slots):
         
     #print(''.join(sorted(list(char_map.keys()))))
 
-    write_char_table()
-        
     alphabet = set(char_map.keys())
     
     if not 'important' in languages[lang]:
+        global had_important_defined
+        had_important_defined = False
         print("There are no important characters defined, so we're using everything we can find...")
         print("Warning: This will make the language pack much bigger.")
         languages[lang]['important'] = ''.join(sorted(list(char_map.keys())))
+        
+    ignored = set()
+    if 'ignore' in languages[lang]:
+        for c in languages[lang]['ignore']:
+            ignored.add(c)
     
     safe_alphabet = set()
     safe_alphabet.add(SPACE)
     
     for c in "0123456789":
         safe_alphabet.add(c)
-    for c in ".?!,-'/@:+*=&%#":
+    for c in ".?!,-'/@:+*=&%#$()\"":
         safe_alphabet.add(c)
         
     for x in languages[lang]['important']:
@@ -614,8 +633,10 @@ def build(lang, languages, extra_slots):
         else:
             for c in x:
                 safe_alphabet.add(c)
-
+                
+    ignored -= safe_alphabet
     alphabet |= safe_alphabet
+    alphabet -= ignored
     
     # [SAFE ALPHABET STARTING WITH SPACE][ESCAPE][REMAINING ALPHABET]
     temp = []
@@ -631,8 +652,10 @@ def build(lang, languages, extra_slots):
     
     prefixes = list()
     if USE_PREFIXES:
-        prefixes = [alphabet_lookup[_] for _ in alphabet if _ not in [SPACE, ESCAPE]]
+        prefixes = [alphabet_lookup[_] for _ in alphabet if _ not in [SPACE, ESCAPE] and _ in safe_alphabet]
     
+    write_char_table()
+        
     #print("Alphabet has %d characters: [%s]" % (len(alphabet), ''.join(alphabet)))
     #print("A total of %d prefixes are defined: [%s]" % (len(prefixes), ''.join([alphabet[_] for _ in prefixes])))
     print("Alphabet has %d characters, %d of which are highly important." % (len(alphabet), len(safe_alphabet)))

@@ -3,3 +3,4 @@ bin
 gen
 _release_build
 languages/_downloads
+html/*.html

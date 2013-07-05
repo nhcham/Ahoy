@@ -1,0 +1,39 @@
+body {
+    font-family: sans;
+    font-size: 10pt;
+}
+
+.cb {
+    font-family: monospace;
+    display: inline-block;
+    font-size: 12pt;
+    border: 1px solid #888;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    text-align: center;
+    vertical-align: middle;
+    margin-right: -3px;
+    margin-bottom: 1px;
+}
+
+.important {
+    background-image: url(important.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.ignored {
+    background-image: url(ignored.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
+
+h1, h2 {
+    border-bottom: 1px solid #888;
+    padding-bottom: 0.2em;
+}

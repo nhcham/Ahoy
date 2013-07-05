@@ -78,7 +78,7 @@ deu:
         - German
         - Deutsch
     link: http://corpora.uni-leipzig.de/downloads/deu_news_2010_100K-text.tar.gz
-    important: [[A, Z], [a, z], 'ÄÖÜäöüß']
+    important: [[A, Z], [a, z], 'ÄÖÜäöüß€']
 ell:
     names:
         - Modern Greek
