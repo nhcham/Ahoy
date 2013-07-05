@@ -2,15 +2,39 @@ afr:
     names:
         - Afrikaans
     link: http://corpora.uni-leipzig.de/downloads/afr_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
 als:
     names:
         - Tosk
     link: http://corpora.uni-leipzig.de/downloads/als_wikipedia_2007_30K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Arabic
+        - script:Armenian
+        - script:Cyrillic
+        - script:Devanagari
+        - script:Greek
+        - script:Han
+        - script:Hebrew
+        - script:Hiragana
+        - script:Kannada
+        - script:Katakana
+        - script:Syriac
 ara:
     names:
         - Arabic
         - العربية
     link: http://corpora.uni-leipzig.de/downloads/ara_news_2005-2009_100K-text.tar.gz
+    important:
+        - probable:Arabic
+        - probable:Common
+    ignore:
+        - script:Cyrillic
+        - script:Latin
+    supplement:
+        - script:Arabic
 azj:
     names:
         - Azerbaijani
@@ -18,38 +42,111 @@ azj:
         - Azəri
         - آذری
     link: http://corpora.uni-leipzig.de/downloads/azj_wikipedia_2007_10K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Arabic
+        - script:Cyrillic
+        - script:Armenian
+        - script:Han
+        - script:Georgian
+        - script:Hangul
+        - script:Greek
 bak:
     names:
         - Bashkir
         - башҡорт теле
         - başqort tele
     link: http://corpora.uni-leipzig.de/downloads/bak_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+        - ['A', 'Z']
+        - ['a', 'z']
+    ignore:
+        - script:Arabic
 bel:
     names:
         - Belarusian
         - беларуская мова
     link: http://corpora.uni-leipzig.de/downloads/bel_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+        - ['A', 'Z']
+        - ['a', 'z']
 bos:
     names:
         - Standard Bosnian
         - босански
     link: http://corpora.uni-leipzig.de/downloads/bos_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Greek
+        - script:Hangul
+        - script:Arabic
 bre:
     names:
         - Breton
         - Brezhoneg
     link: http://corpora.uni-leipzig.de/downloads/bre_wikipedia_2007_30K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Greek
+        - script:Cyrillic
+        - script:Arabic
+        - script:Han
+        - script:Hebrew
+        - script:Devanagari
+        - script:Armenian
+        - script:Thai
+        - script:Katakana
+        - script:Hiragana
+        - script:Georgian
+        - script:Hangul
+        - script:Tamil
+        - script:Bengali
+        - script:Kannada
+        - script:Gujarati
+        - script:Gurmukhi
+        - script:Coptic
+        - script:Telugu
+        - script:Lao
+        - script:Syriac
+        - script:Thaana
+        - script:Oriya
+        - script:Malayalam
+        - script:Myanmar
+        - script:Mongolian
+        - script:Tifinagh
+        - script:Tibetan
+        - script:Ogham
+        - script:Yi
 bul:
     names:
         - Bulgarian
         - български език
         - bălgarski ezik
     link: http://corpora.uni-leipzig.de/downloads/bul_news_2007_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - ['A', 'Z']
+        - ['a', 'z']
 cat:
     names:
         - Catalan
         - català
     link: http://corpora.uni-leipzig.de/downloads/cat_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Greek
 ceb:
     names: 
         - Cebuano
@@ -77,7 +174,11 @@ deu:
         - German
         - Deutsch
     link: http://corpora.uni-leipzig.de/downloads/deu_news_2010_100K-text.tar.gz
-    important: [[A, Z], [a, z], 'ÄÖÜäöüß€']
+    important:
+        - probable:Latin
+    ignore:
+        - script:Greek
+        - script:Cyrillic
 ell:
     names:
         - Modern Greek
@@ -135,6 +236,15 @@ heb:
         - Hebrew
         - עִבְרִית
     link: http://corpora.uni-leipzig.de/downloads/heb_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Hebrew
+        - probable:Common
+    supplement:
+        - script:Hebrew
+        - ['A', 'Z']
+        - ['a', 'z']
+    ignore:
+        - script:Cyrillic
 hin:
     names:
         - Hindi
@@ -204,6 +314,8 @@ kor:
         - 조선말
     link: http://corpora.uni-leipzig.de/downloads/kor_news_2007_300K-text.tar.gz
     important:
+        - probable:Hangul
+    supplement:
         - script:Hangul
     ignore:
         - script:Latin

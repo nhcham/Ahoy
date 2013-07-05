@@ -603,7 +603,7 @@ def build(lang, languages, extra_slots):
                 ratio = float(char_map[c]) / max_count
                 if ratio > 1.0:
                     ratio = 1.0
-            ratio = ratio ** 0.5
+            ratio = ratio ** 0.33
             name = '(unknown)'
             try:
                 name = unicodedata.name(c)
@@ -672,6 +672,25 @@ def build(lang, languages, extra_slots):
                     for c in x:
                         ignored.add(c)
     
+    if 'supplement' in languages[lang]:
+        for x in languages[lang]['supplement']:
+            if type(x) == list:
+                for c in range(ord(x[0]), ord(x[1]) + 1):
+                    alphabet.add(chr(c))
+            else:
+                if 'script:' in x:
+                    # pull characters from script
+                    for category, ranges in scripts[x.replace('script:', '')].items():
+                        for r in ranges:
+                            c_start = r[0]
+                            c_end = r[1]
+                            for ci in range(c_start, c_end + 1):
+                                alphabet.add(chr(ci))
+                    pass
+                else:
+                    for c in x:
+                        alphabet.add(c)
+                        
     safe_alphabet = set()
     safe_alphabet.add(SPACE)
     
@@ -693,6 +712,18 @@ def build(lang, languages, extra_slots):
                         c_end = r[1]
                         for ci in range(c_start, c_end + 1):
                             safe_alphabet.add(chr(ci))
+                pass
+            elif 'probable:' in x:
+                # pull characters from script but only use those which have been
+                # seen more than a few times in our data
+                for category, ranges in scripts[x.replace('probable:', '')].items():
+                    for r in ranges:
+                        c_start = r[0]
+                        c_end = r[1]
+                        for ci in range(c_start, c_end + 1):
+                            c = chr(ci)
+                            if c in char_map and char_map[c] >= 10:
+                                safe_alphabet.add(c)
                 pass
             else:
                 for c in x:
