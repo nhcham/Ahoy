@@ -4,11 +4,57 @@ import glob
 import heapq
 import os
 import sys
+import unicodedata
 import yaml
+import unicodedata2
 
 DOWNLOAD_PATH = '_downloads'
 CLIP_HUFFMAN_TABLES = 512
 USE_PREFIXES = True
+
+catnames = dict()
+catnames['Lu'] = 'Letter, uppercase'
+catnames['Ll'] = 'Letter, lowercase'
+catnames['Lt'] = 'Letter, titlecase'
+catnames['Lm'] = 'Letter, modifier'
+catnames['Lo'] = 'Letter, other'
+catnames['Mn'] = 'Mark, nonspacing'
+catnames['Mc'] = 'Mark, spacing combining'
+catnames['Me'] = 'Mark, enclosing'
+catnames['Nd'] = 'Number, decimal digit'
+catnames['Nl'] = 'Number, letter'
+catnames['No'] = 'Number, other'
+catnames['Pc'] = 'Punctuation, connector'
+catnames['Pd'] = 'Punctuation, dash'
+catnames['Ps'] = 'Punctuation, open'
+catnames['Pe'] = 'Punctuation, close'
+catnames['Pi'] = 'Punctuation, initial quote'
+catnames['Pf'] = 'Punctuation, final quote'
+catnames['Po'] = 'Punctuation, other'
+catnames['Sm'] = 'Symbol, math'
+catnames['Sc'] = 'Symbol, currency'
+catnames['Sk'] = 'Symbol, modifier'
+catnames['So'] = 'Symbol, other'
+catnames['Zs'] = 'Separator, space'
+catnames['Zl'] = 'Separator, line'
+catnames['Zp'] = 'Separator, paragraph'
+catnames['Cc'] = 'Other, control'
+catnames['Cf'] = 'Other, format'
+catnames['Cs'] = 'Other, surrogate'
+catnames['Co'] = 'Other, private use'
+catnames['Cn'] = 'Other, not assigned'
+
+def mix_colors(a, b, f):
+    ra = float(int(a[1:3], 16)) / 255.0
+    ga = float(int(a[3:5], 16)) / 255.0
+    ba = float(int(a[5:7], 16)) / 255.0
+    rb = float(int(b[1:3], 16)) / 255.0
+    gb = float(int(b[3:5], 16)) / 255.0
+    bb = float(int(b[5:7], 16)) / 255.0
+    rm = int((ra * (1.0 - f) + rb * f) * 255)
+    gm = int((ga * (1.0 - f) + gb * f) * 255)
+    bm = int((ba * (1.0 - f) + bb * f) * 255)
+    return '#%02x%02x%02x' % (rm, gm, bm)
 
 def download_file(lang, url):
     file_path = os.path.join(DOWNLOAD_PATH, os.path.basename(url))
@@ -341,7 +387,7 @@ def build(lang, languages, extra_slots):
     print("Using sentences from %s." % corpora_path)
     
     if not 'alphabet' in languages[lang]:
-        print("There's no alphabet defined, so here's a list of used characters:")
+        print("There's no alphabet defined, so we're using everything we can find...")
         char_map = dict()
         
         with open(corpora_path) as f:
@@ -350,8 +396,77 @@ def build(lang, languages, extra_slots):
                 line = line[line.index("\t") + 1:]
                 handle_sentence_find_characters(line)
             
-        print(''.join(sorted(list(char_map.keys()))))
-        exit(0)
+        #print(''.join(sorted(list(char_map.keys()))))
+        
+        with open('charmap-%s.html' % lang, 'w') as f:
+            f.write("<html>\n")
+            f.write("<meta http-equiv='content-type' content='text/html; charset=utf-8'>\n");
+            f.write("<head>\n")
+            f.write("<link rel='stylesheet' type='text/css' href='styles.css' />\n");
+            f.write("</head>\n")
+            f.write("<body>\n")
+            f.write("<h1>Character map for [%s] (%s)</h1>\n" % (lang, ' / '.join(languages[lang]['names'])))
+            max_count = 0
+            for c, count in char_map.items():
+                if c != ' ':
+                    if count > max_count:
+                        max_count = count
+            last_script = None
+            
+            def comp(a, b):
+                scripta = unicodedata2.script(a)
+                scriptb = unicodedata2.script(b)
+                if scripta == scriptb:
+                    if a < b:
+                        return -1
+                    else:
+                        return 1
+                else:
+                    if scripta < scriptb:
+                        return -1
+                    else:
+                        return 1
+                    
+            def cmp_to_key(mycmp):
+                'Convert a cmp= function into a key= function'
+                class K(object):
+                    def __init__(self, obj, *args):
+                        self.obj = obj
+                    def __lt__(self, other):
+                        return mycmp(self.obj, other.obj) < 0
+                    def __gt__(self, other):
+                        return mycmp(self.obj, other.obj) > 0
+                    def __eq__(self, other):
+                        return mycmp(self.obj, other.obj) == 0
+                    def __le__(self, other):
+                        return mycmp(self.obj, other.obj) <= 0  
+                    def __ge__(self, other):
+                        return mycmp(self.obj, other.obj) >= 0
+                    def __ne__(self, other):
+                        return mycmp(self.obj, other.obj) != 0
+                return K
+            
+            for c in sorted(list(char_map.keys()), key = cmp_to_key(comp)):
+                script = unicodedata2.script(c)
+                if script != last_script:
+                    f.write("<h2>%s</h2>\n" % script)
+                last_script = script
+                    
+                ratio = float(char_map[c]) / max_count
+                if ratio > 1.0:
+                    ratio = 1.0
+                ratio = ratio ** 0.5
+                #try:
+                    #print('name', unicodedata.name(c), '')
+                #except ValueError:
+                    #pass
+                color = mix_colors('#ffffff', '#73d216', ratio)
+                f.write("<span class='cb' style='background-color: %s;'>%s</span>" % (color, c))
+            f.write("\n")
+            f.write("</body>\n")
+            f.write("</html>\n")
+        languages[lang]['alphabet'] = ''.join(sorted(list(char_map.keys())))
+        #exit(0)
     
     alphabet = set()
     for c in " .?!,-'/@:+*=&%#":
@@ -372,8 +487,10 @@ def build(lang, languages, extra_slots):
     if USE_PREFIXES:
         prefixes = [alphabet_lookup[_] for _ in alphabet if _ != ' ']
     
-    print("Alphabet has %d characters: [%s]" % (len(alphabet), ''.join(alphabet)))
-    print("A total of %d prefixes are defined: [%s]" % (len(prefixes), ''.join([alphabet[_] for _ in prefixes])))
+    #print("Alphabet has %d characters: [%s]" % (len(alphabet), ''.join(alphabet)))
+    #print("A total of %d prefixes are defined: [%s]" % (len(prefixes), ''.join([alphabet[_] for _ in prefixes])))
+    print("Alphabet has %d characters." % (len(alphabet)))
+    print("A total of %d prefixes are defined." % (len(prefixes)))
     
     huffman_keys_cache = dict()
     frequencies = dict()

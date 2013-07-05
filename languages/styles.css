@@ -1,0 +1,13 @@
+body {
+    font-family: monospace;
+}
+
+.cb {
+    display: inline-block;
+    font-size: 16pt;
+    border: 1px solid #888;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    vertical-align: middle;
+}
