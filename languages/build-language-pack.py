@@ -15,6 +15,7 @@ import glob
 import heapq
 import math
 import os
+import re
 import sys
 import unicodedata
 import yaml
@@ -61,6 +62,40 @@ catnames['Cf'] = 'Other, format'
 catnames['Cs'] = 'Other, surrogate'
 catnames['Co'] = 'Other, private use'
 catnames['Cn'] = 'Other, not assigned'
+
+def load_scripts():
+    regex = re.compile("^([0-9A-F\.]+)\s+;\s+([A-Za-z_]+)\s+#\s+([A-Za-z&]+)\s+")
+
+    groups = dict()
+
+    with open('unicode/Scripts.txt') as f:
+        for line in f:
+            line = line.strip()
+            if len(line) == 0 or line[0] == '#':
+                continue
+            match = regex.match(line)
+            if match == None:
+                print(line)
+                exit(1)
+            
+            crange = match.groups()[0]
+            script = match.groups()[1]
+            category = match.groups()[2]
+            if '..' in crange:
+                temp = crange.split('..')
+                c_start = int(temp[0], 16)
+                c_end = int(temp[1], 16)
+            else:
+                c_start = int(crange, 16)
+                c_end = int(crange, 16)
+                
+            if script not in groups:
+                groups[script] = dict()
+            if category not in groups[script]:
+                groups[script][category] = list()
+            groups[script][category].append((c_start, c_end))
+            
+    return groups
 
 def mix_colors(a, b, f):
     if f < 0.0:
@@ -557,15 +592,17 @@ def build(lang, languages, extra_slots):
                     return mycmp(self.obj, other.obj) != 0
             return K
         
-        for c in sorted(list(char_map.keys()), key = cmp_to_key(comp)):
+        for c in sorted(list(set(alphabet) | set(char_map.keys())), key = cmp_to_key(comp)):
             script = unicodedata2.script(c)
             if script != last_script:
                 fout.write("<h3>%s</h3>\n" % script)
             last_script = script
                 
-            ratio = float(char_map[c]) / max_count
-            if ratio > 1.0:
-                ratio = 1.0
+            ratio = 0.0
+            if c in char_map:
+                ratio = float(char_map[c]) / max_count
+                if ratio > 1.0:
+                    ratio = 1.0
             ratio = ratio ** 0.5
             name = '(unknown)'
             try:
@@ -574,7 +611,7 @@ def build(lang, languages, extra_slots):
                 pass
             color = mix_colors('#ffffff', '#73d216', ratio)
             font_color = '#000'
-            if (char_map[c] < 10):
+            if c not in char_map or (char_map[c] < 10):
                 font_color = '#aaa'
             fout.write("<div title='%s' class='cb%s' style='color: %s; background-color: %s;'>%s</div>\n" % (name, ' important' if c in safe_alphabet else (' ignored' if c in ignored else ''), font_color, color, c))
         fout.write("\n")
@@ -587,6 +624,8 @@ def build(lang, languages, extra_slots):
     fout.write("</head>\n")
     fout.write("<body>\n")
     fout.write("<h1>Language pack for [%s] (%s)</h1>" % (lang, ' / '.join(languages[lang]['names'])))
+    
+    scripts = load_scripts()
     
     print("Building language pack for [%s] (%s)..." % (lang, ' / '.join(languages[lang]['names'])))
 
@@ -609,14 +648,29 @@ def build(lang, languages, extra_slots):
     if not 'important' in languages[lang]:
         global had_important_defined
         had_important_defined = False
-        print("There are no important characters defined, so we're using everything we can find...")
-        print("Warning: This will make the language pack much bigger.")
-        languages[lang]['important'] = ''.join(sorted(list(char_map.keys())))
+        #print("There are no important characters defined, so we're using everything we can find...")
+        #print("Warning: This will make the language pack much bigger.")
+        languages[lang]['important'] = list()
         
     ignored = set()
     if 'ignore' in languages[lang]:
-        for c in languages[lang]['ignore']:
-            ignored.add(c)
+        for x in languages[lang]['ignore']:
+            if type(x) == list:
+                for c in range(ord(x[0]), ord(x[1]) + 1):
+                    ignored.add(chr(c))
+            else:
+                if 'script:' in x:
+                    # pull characters from script
+                    for category, ranges in scripts[x.replace('script:', '')].items():
+                        for r in ranges:
+                            c_start = r[0]
+                            c_end = r[1]
+                            for ci in range(c_start, c_end + 1):
+                                ignored.add(chr(ci))
+                    pass
+                else:
+                    for c in x:
+                        ignored.add(c)
     
     safe_alphabet = set()
     safe_alphabet.add(SPACE)
@@ -631,8 +685,18 @@ def build(lang, languages, extra_slots):
             for c in range(ord(x[0]), ord(x[1]) + 1):
                 safe_alphabet.add(chr(c))
         else:
-            for c in x:
-                safe_alphabet.add(c)
+            if 'script:' in x:
+                # pull characters from script
+                for category, ranges in scripts[x.replace('script:', '')].items():
+                    for r in ranges:
+                        c_start = r[0]
+                        c_end = r[1]
+                        for ci in range(c_start, c_end + 1):
+                            safe_alphabet.add(chr(ci))
+                pass
+            else:
+                for c in x:
+                    safe_alphabet.add(c)
                 
     ignored -= safe_alphabet
     alphabet |= safe_alphabet
@@ -655,6 +719,12 @@ def build(lang, languages, extra_slots):
         prefixes = [alphabet_lookup[_] for _ in alphabet if _ not in [SPACE, ESCAPE] and _ in safe_alphabet]
     
     write_char_table()
+    
+    if not had_important_defined:
+        fout.write("</body>\n")
+        fout.write("</html>\n")
+        fout.close()
+        exit()
         
     #print("Alphabet has %d characters: [%s]" % (len(alphabet), ''.join(alphabet)))
     #print("A total of %d prefixes are defined: [%s]" % (len(prefixes), ''.join([alphabet[_] for _ in prefixes])))
