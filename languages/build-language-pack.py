@@ -386,87 +386,91 @@ def build(lang, languages, extra_slots):
     corpora_path = download_file(lang, languages[lang]['link'])
     print("Using sentences from %s." % corpora_path)
     
+    char_map = dict()
+    
+    with open(corpora_path) as f:
+        for line in f:
+            line = line.strip()
+            line = line[line.index("\t") + 1:]
+            handle_sentence_find_characters(line)
+        
+    #print(''.join(sorted(list(char_map.keys()))))
+    
+    with open('charmap-%s.html' % lang, 'w') as f:
+        f.write("<html>\n")
+        f.write("<meta http-equiv='content-type' content='text/html; charset=utf-8'>\n");
+        f.write("<head>\n")
+        f.write("<link rel='stylesheet' type='text/css' href='styles.css' />\n");
+        f.write("</head>\n")
+        f.write("<body>\n")
+        f.write("<h1>Character map for [%s] (%s)</h1>\n" % (lang, ' / '.join(languages[lang]['names'])))
+        max_count = 0
+        for c, count in char_map.items():
+            if c != ' ':
+                if count > max_count:
+                    max_count = count
+        last_script = None
+        
+        def comp(a, b):
+            scripta = unicodedata2.script(a)
+            scriptb = unicodedata2.script(b)
+            if scripta == scriptb:
+                if a < b:
+                    return -1
+                else:
+                    return 1
+            else:
+                if scripta < scriptb:
+                    return -1
+                else:
+                    return 1
+                
+        def cmp_to_key(mycmp):
+            'Convert a cmp= function into a key= function'
+            class K(object):
+                def __init__(self, obj, *args):
+                    self.obj = obj
+                def __lt__(self, other):
+                    return mycmp(self.obj, other.obj) < 0
+                def __gt__(self, other):
+                    return mycmp(self.obj, other.obj) > 0
+                def __eq__(self, other):
+                    return mycmp(self.obj, other.obj) == 0
+                def __le__(self, other):
+                    return mycmp(self.obj, other.obj) <= 0  
+                def __ge__(self, other):
+                    return mycmp(self.obj, other.obj) >= 0
+                def __ne__(self, other):
+                    return mycmp(self.obj, other.obj) != 0
+            return K
+        
+        for c in sorted(list(char_map.keys()), key = cmp_to_key(comp)):
+            script = unicodedata2.script(c)
+            if script != last_script:
+                f.write("<h2>%s</h2>\n" % script)
+            last_script = script
+                
+            ratio = float(char_map[c]) / max_count
+            if ratio > 1.0:
+                ratio = 1.0
+            ratio = ratio ** 0.5
+            name = '(unknown)'
+            try:
+                name = unicodedata.name(c)
+            except ValueError:
+                pass
+            color = mix_colors('#ffffff', '#73d216', ratio)
+            font_color = '#000'
+            if (char_map[c] < 10):
+                font_color = '#aaa'
+            f.write("<span title='%s' class='cb' style='color: %s; background-color: %s;'>%s</span>" % (name, font_color, color, c))
+        f.write("\n")
+        f.write("</body>\n")
+        f.write("</html>\n")
+        
     if not 'alphabet' in languages[lang]:
         print("There's no alphabet defined, so we're using everything we can find...")
-        char_map = dict()
-        
-        with open(corpora_path) as f:
-            for line in f:
-                line = line.strip()
-                line = line[line.index("\t") + 1:]
-                handle_sentence_find_characters(line)
-            
-        #print(''.join(sorted(list(char_map.keys()))))
-        
-        with open('charmap-%s.html' % lang, 'w') as f:
-            f.write("<html>\n")
-            f.write("<meta http-equiv='content-type' content='text/html; charset=utf-8'>\n");
-            f.write("<head>\n")
-            f.write("<link rel='stylesheet' type='text/css' href='styles.css' />\n");
-            f.write("</head>\n")
-            f.write("<body>\n")
-            f.write("<h1>Character map for [%s] (%s)</h1>\n" % (lang, ' / '.join(languages[lang]['names'])))
-            max_count = 0
-            for c, count in char_map.items():
-                if c != ' ':
-                    if count > max_count:
-                        max_count = count
-            last_script = None
-            
-            def comp(a, b):
-                scripta = unicodedata2.script(a)
-                scriptb = unicodedata2.script(b)
-                if scripta == scriptb:
-                    if a < b:
-                        return -1
-                    else:
-                        return 1
-                else:
-                    if scripta < scriptb:
-                        return -1
-                    else:
-                        return 1
-                    
-            def cmp_to_key(mycmp):
-                'Convert a cmp= function into a key= function'
-                class K(object):
-                    def __init__(self, obj, *args):
-                        self.obj = obj
-                    def __lt__(self, other):
-                        return mycmp(self.obj, other.obj) < 0
-                    def __gt__(self, other):
-                        return mycmp(self.obj, other.obj) > 0
-                    def __eq__(self, other):
-                        return mycmp(self.obj, other.obj) == 0
-                    def __le__(self, other):
-                        return mycmp(self.obj, other.obj) <= 0  
-                    def __ge__(self, other):
-                        return mycmp(self.obj, other.obj) >= 0
-                    def __ne__(self, other):
-                        return mycmp(self.obj, other.obj) != 0
-                return K
-            
-            for c in sorted(list(char_map.keys()), key = cmp_to_key(comp)):
-                script = unicodedata2.script(c)
-                if script != last_script:
-                    f.write("<h2>%s</h2>\n" % script)
-                last_script = script
-                    
-                ratio = float(char_map[c]) / max_count
-                if ratio > 1.0:
-                    ratio = 1.0
-                ratio = ratio ** 0.5
-                #try:
-                    #print('name', unicodedata.name(c), '')
-                #except ValueError:
-                    #pass
-                color = mix_colors('#ffffff', '#73d216', ratio)
-                f.write("<span class='cb' style='background-color: %s;'>%s</span>" % (color, c))
-            f.write("\n")
-            f.write("</body>\n")
-            f.write("</html>\n")
         languages[lang]['alphabet'] = ''.join(sorted(list(char_map.keys())))
-        #exit(0)
     
     alphabet = set()
     for c in " .?!,-'/@:+*=&%#":

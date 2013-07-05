@@ -77,7 +77,7 @@ deu:
         - German
         - Deutsch
     link: http://corpora.uni-leipzig.de/downloads/deu_news_2010_100K-text.tar.gz
-#     alphabet: [[A, Z], [a, z], ['0', '9'], 'ÄÖÜäöüß']
+    alphabet: [[A, Z], [a, z], ['0', '9'], 'ÄÖÜäöüß']
 ell:
     names:
         - Modern Greek
