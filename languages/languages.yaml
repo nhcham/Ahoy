@@ -152,23 +152,37 @@ ceb:
         - Cebuano
         - Binisaya
     link: http://corpora.uni-leipzig.de/downloads/ceb_newscrawl_2011_10K-text.tar.gz
+    important:
+        - probable:Latin
 ces:
     names:
         - Czech
         - čeština
         - český
     link: http://corpora.uni-leipzig.de/downloads/ces_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Greek
 cym:
     names:
         - Welsh
         - Cymraeg
         - y Gymraeg
     link: http://corpora.uni-leipzig.de/downloads/cym_wikipedia_2007_30K-text.tar.gz
+    important:
+        - probable:Latin
 dan:
     names:
         - Danish
         - dansk
     link: http://corpora.uni-leipzig.de/downloads/dan_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Han
+        - script:Katakana
 deu:
     names:
         - German
@@ -179,40 +193,97 @@ deu:
     ignore:
         - script:Greek
         - script:Cyrillic
-ell:
-    names:
-        - Modern Greek
-        - νέα ελληνικά
-    link: http://corpora.uni-leipzig.de/downloads/ell_wikipedia_2007_100K-text.tar.gz
+# commented out for now because link yields no content
+# ell:
+#     names:
+#         - Modern Greek
+#         - νέα ελληνικά
+#     link: http://corpora.uni-leipzig.de/downloads/ell_wikipedia_2007_100K-text.tar.gz
 eng:
     names:
         - English
     link: http://corpora.uni-leipzig.de/downloads/eng_news_2010_100K-text.tar.gz
-    important: [[A, Z], [a, z]]
+    important:
+        - probable:Latin
 epo:
     names:
         - Esperanto
     link: http://corpora.uni-leipzig.de/downloads/epo_wikipedia_2007_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Greek
+        - script:Han
+        - script:Arabic
+        - script:Devanagari
+        - script:Katakana
+        - script:Hebrew
+        - script:Hiragana
+        - script:Georgian
+        - script:Hangul
+        - script:Armenian
+        - script:Tibetan
+        - script:Telugu
+        - script:Mandaic
 est:
     names:
         - Estonian
         - eesti keel
     link: http://corpora.uni-leipzig.de/downloads/est_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Han
+        - script:Hebrew
+        - script:Katakana
 eus:
     names:
         - Basque
         - Euskara
     link: http://corpora.uni-leipzig.de/downloads/eus_web_2002_100K-text.tar.gz
+    important:
+        - probable:Latin
 fas:
     names:
         - Persian
         - فارسی
     link: http://corpora.uni-leipzig.de/downloads/fas_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Arabic
+    supplement:
+        - script:Arabic
+    ignore:
+        - script:Hangul
+        - script:Latin
+        - script:Han
 fin:
     names:
         - Finnish
         - Suomen kieli
-    link: http://corpora.uni-leipzig.de/downloads/fin_news_2007_100K-text.tar.gz
+    link: http://corpora.uni-leipzig.de/downloads/fin_wikipedia_2007_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Greek
+        - script:Han
+        - script:Arabic
+        - script:Hebrew
+        - script:Thai
+        - script:Katakana
+        - script:Georgian
+        - script:Hiragana
+        - script:Devanagari
+        - script:Canadian_Aboriginal
+        - script:Bengali
+        - script:Tamil
+        - script:Mongolian
+        - script:Armenian
+        - script:Ethiopic
+        - script:Hangul
+        - script:Syriac
 fra:
     names:
         - French
@@ -228,11 +299,19 @@ gom:
         - ಕೊಂಕಣಿ
         - കൊങ്കണി
     link: http://corpora.uni-leipzig.de/downloads/gom_newscrawl_2011_30K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Arabic
 guj:
     names:
         - Gujarati
         - ગુજરાતી
     link: http://corpora.uni-leipzig.de/downloads/guj_newscrawl_2011_100K-text.tar.gz
+    important:
+        - script:Gujarati
+    ignore:
+        - script:Latin
 heb:
     names:
         - Hebrew
@@ -247,12 +326,15 @@ heb:
         - ['a', 'z']
     ignore:
         - script:Cyrillic
+        - script:Latin
 hin:
     names:
         - Hindi
         - मानक हिन्दी
     link: http://corpora.uni-leipzig.de/downloads/hin_newscrawl_2011_100K-text.tar.gz
     important: 
+        - probable:Devanagari
+    supplement:
         - script:Devanagari
     ignore: 
         - script:Gujarati
@@ -262,46 +344,116 @@ hrv:
         - Croatian
         - hrvatski
     link: http://corpora.uni-leipzig.de/downloads/hrv_wikipedia_2007_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Greek
+        - script:Arabic
+        - script:Han
+        - script:Hebrew
+        - script:Katakana
+        - script:Hiragana
+        - script:Georgian
+        - script:Armenian
+        - script:Telugu
+        - script:Tamil
+        - script:Hangul
+        - script:Devanagari
 ido:
     names: 
         - Ido
     link: http://corpora.uni-leipzig.de/downloads/ido_wikipedia_2007_30K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Hangul
+        - script:Cyrillic
+        - script:Han
+        - script:Hiragana
+        - script:Greek
+        - script:Arabic
 ind:
     names:
         - Indonesian
         - Bahasa Indonesia
     link: http://corpora.uni-leipzig.de/downloads/ind_newscrawl_2012_100K-text.tar.gz
+    important:
+        - probable:Latin
 isl:
     names:
         - Icelandic
         - íslenska
     link: http://corpora.uni-leipzig.de/downloads/isl_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
 ita:
     names:
         - Italian
         - Italiano
     link: http://corpora.uni-leipzig.de/downloads/ita_news_2010_100K-text.tar.gz
+    important:
+        - probable:Latin
 jpn:
     names:
         - Japanese
         - 日本語
     link: http://corpora.uni-leipzig.de/downloads/jpn_news_2005-2008_100K-text.tar.gz
+    important:
+        - probable:Hiragana
+        - probable:Katakana
+        - probable:Common
+    supplement:
+        - script:Hiragana
+        - script:Katakana
+    ignore:
+        - script:Han
+        - script:Latin
+        - script:Greek
+        - script:Hangul
 kal:
     names:
         - Greenlandic
         - Kalaallisut
     link: http://corpora.uni-leipzig.de/downloads/kal_newscrawl_2011_30K-text.tar.gz
+    important:
+        - probable:Latin
 kat:
     names: 
         - Georgian
         - ქართული ენა
     link: http://corpora.uni-leipzig.de/downloads/kat_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Georgian
+    supplement:
+        - script:Georgian
+    ignore:
+        - script:Latin
+        - script:Cyrillic
 kaz:
     names:
         - Kazakh
         - қазақ тілі
         - قازاق تىلى‎
     link: http://corpora.uni-leipzig.de/downloads/kaz_wikipedia_2010_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Latin
+        - script:Arabic
+        - script:Greek
+        - script:Han
+        - script:Georgian
+        - script:Hangul
+        - script:Devanagari
+        - script:Bengali
+        - script:Thai
+        - script:Syriac
+        - script:Tamil
+        - script:Hiragana
+        - script:Hebrew
 kir:
     names:
         - Kyrgyz
@@ -309,6 +461,14 @@ kir:
         - قىرعىز تىلى
         - Kırgızça
     link: http://corpora.uni-leipzig.de/downloads/kir_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Han
+        - script:Latin
+        - script:Greek
 kor:
     names:
         - Korean
@@ -334,151 +494,357 @@ kur:
         - Kurdí
         - Кöрди
     link: http://corpora.uni-leipzig.de/downloads/kur_newscrawl_2011_30K-text.tar.gz
+    important:
+        - probable:Arabic
+    supplement:
+        - script:Arabic
+    ignore:
+        - script:Latin
 lat:
     names:
         - Latin
         - Lingua latina
     link: http://corpora.uni-leipzig.de/downloads/lat_wikipedia_2007_30K-text.tar.gz
+    important:
+        - probable:Latin
 lav:
     names:
         - Latvian
         - latviešu valoda
     link: http://corpora.uni-leipzig.de/downloads/lav_wikipedia_2007_30K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Greek
+        - script:Arabic
+        - script:Han
+        - script:Hebrew
+        - script:Devanagari
+        - script:Hangul
+        - script:Armenian
+        - script:Myanmar
+        - script:Gurmukhi
+        - script:Georgian
+        - script:Tibetan
+        - script:Hiragana
+        - script:Katakana
+        - script:Gujarati
+        - script:Thai
 lit:
     names:
         - Lithuanian
         - lietuvių kalba
     link: http://corpora.uni-leipzig.de/downloads/lit_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Han
+        - script:Bopomofo
+        - script:Hangul
+        - script:Hebrew
 ltz:
     names:
         - Luxembourgish
         - Lëtzebuergesch
     link: http://corpora.uni-leipzig.de/downloads/ltz_wikipedia_2007_30K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Greek
+        - script:Cyrillic
+        - script:Arabic
+        - script:Hebrew
+        - script:Han
+        - script:Georgian
+        - script:Devanagari
+        - script:Katakana
+        - script:Hangul
 lus:
     names:
         - Mizo
     link: http://corpora.uni-leipzig.de/downloads/lus_newscrawl_2011_30K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Han
 mal:
     names:
         - Malayalam
         - മലയാളം
     link: http://corpora.uni-leipzig.de/downloads/mal_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Malayalam
+    supplement:
+        - script:Malayalam
+    ignore:
+        - script:Latin
 mar:
     names: 
         - Marathi
         - मराठी
     link: http://corpora.uni-leipzig.de/downloads/mar_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Devanagari
+    supplement:
+        - script:Devanagari
+    ignore:
+        - script:Latin
 mkd:
     names:
         - Macedonian
         - Македонски јазик
     link: http://corpora.uni-leipzig.de/downloads/mkd_newscrwal_2011_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Latin
+        - script:Greek
 mlg:
     names:
         - Malagasy
     link: http://corpora.uni-leipzig.de/downloads/mlg_web_2012_30K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Hiragana
+        - script:Han
+        - script:Hebrew
+        - script:Katakana
+        - script:Cyrillic
+        - script:Arabic
+        - script:Hangul
+        - script:Greek
+        - script:Kannada
 mlt:
     names:
         - Maltese
         - Malti
     link: http://corpora.uni-leipzig.de/downloads/mlt_newscrawl_2011_10K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Greek
 mon:
     names:
         - Mongolian
         - Монгол хэл
     link: http://corpora.uni-leipzig.de/downloads/mon_news_2011_30K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Latin
 mri:
     names:
         - Māori
     link: http://corpora.uni-leipzig.de/downloads/mri_web_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Hebrew
+        - script:Hangul
+        - script:Greek
+        - script:Cyrillic
 msa:
     names:
         - Malay
         - بهاس ملايو
     link: http://corpora.uni-leipzig.de/downloads/msa_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
 nep:
     names:
         - Nepali
         - नेपाली
     link: http://corpora.uni-leipzig.de/downloads/nep_news_2010_100K-text.tar.gz
+    important:
+        - probable:Devanagari
+    supplement:
+        - script:Devanagari
 new:
     names:
         - Nepal Bhasa
         - नेपाल भाषा
     link: http://corpora.uni-leipzig.de/downloads/new_wikipedia_2009_10K-text.tar.gz
+    important:
+        - probable:Devanagari
+    supplement:
+        - script:Devanagari
 nno:
     names:
         - Norwegian Nynorsk
         - norsk
         - nynorsk
     link: http://corpora.uni-leipzig.de/downloads/nno_wikipedia_2007_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Greek
+        - script:Hebrew
+        - script:Arabic
+        - script:Devanagari
+        - script:Han
+        - script:Tamil
+        - script:Armenian
+        - script:Hangul
+        - script:Thai
+        - script:Malayalam
+        - script:Bengali
+        - script:Katakana
+        - script:Georgian
+        - script:Gurmukhi
+        - script:Tibetan
+        - script:Canadian_Aboriginal
+        - script:Telugu
+        - script:Ethiopic
+        - script:Hiragana
+        - script:Gujarati
+        - script:Ogham
+        - script:Braille
 nob:
     names:
         - Norwegian Bokmål
         - norsk
         - bokmål
     link: http://corpora.uni-leipzig.de/downloads/nob_news_2007_100K-text.tar.gz
+    important:
+        - probable:Latin
 oci:
     names:
         - Occitan
     link: http://corpora.uni-leipzig.de/downloads/oci_wikipedia_2007_10K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
+        - script:Greek
+        - script:Arabic
+        - script:Devanagari
+        - script:Hebrew
+        - script:Han
 pol:
     names:
         - Polish
         - język polski
     link: http://corpora.uni-leipzig.de/downloads/pol_news_2008_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Greek
 por:
     names:
         - Portuguese
         - português
     link: http://corpora.uni-leipzig.de/downloads/por_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Katakana
 rus:
     names:
         - Russian
         - Русский язык
     link: http://corpora.uni-leipzig.de/downloads/rus_news_2010_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Latin
 slk:
     names:
         - Slovak
         - slovenčina
     link: http://corpora.uni-leipzig.de/downloads/slk_wikipedia_2007_100K-text.tar.gz
+    important:
+        - probable:Latin
 slv:
     names:
         - Slovene
         - slovenščina
     link: http://corpora.uni-leipzig.de/downloads/slv_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Cyrillic
 som:
     names:
         - Somali
         - Af-Soomaali
         - اللغة الصومالية
     link: http://corpora.uni-leipzig.de/downloads/som_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Arabic
+        - script:Han
 spa:
     names:
         - Spanish
         - español
         - castellano
     link: http://corpora.uni-leipzig.de/downloads/spa_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+    ignore:
+        - script:Katakana
+        - script:Arabic
+        - script:Cyrillic
 srp:
     names:
         - Standard Serbian
         - српски srpski
     link: http://corpora.uni-leipzig.de/downloads/srp_wikipedia_2010_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Latin
+        - script:Greek
+        - script:Han
+        - script:Tamil
+        - script:Arabic
+        - script:Hebrew
+        - script:Devanagari
+        - script:Hiragana
+        - script:Gurmukhi
+        - script:Ethiopic
+        - script:Armenian
+        - script:Katakana
 swa:
     names:
         - Swahili
         - Kiswahili
     link: http://corpora.uni-leipzig.de/downloads/swa_newscrawl_2011_10K-text.tar.gz
+    important:
+        - probable:Latin
 swe:
     names:
         - Swedish
         - svenska
     link: http://corpora.uni-leipzig.de/downloads/swe_news_2007_100K-text.tar.gz
+    important:
+        - probable:Latin
 tam:
     names:
         - Tamil
         - தமிழ்
     link: http://corpora.uni-leipzig.de/downloads/tam_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Tamil
+    supplement:
+        - script:Tamil
+    ignore:
+        - script:Latin
+        - script:Devanagari
+        - script:Greek
 tat:
     names:
         - Tatar
@@ -486,11 +852,22 @@ tat:
         - tatar tele
         - تاتار تيلی
     link: http://corpora.uni-leipzig.de/downloads/tat_news_2005-2011_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Latin
+        - script:Greek
 tel:
     names:
         - Telugu
         - తెలుగు
     link: http://corpora.uni-leipzig.de/downloads/tel_newscrawl_2011_100K-text.tar.gz
+    important:
+        - script:Telugu
+    ignore:
+        - script:Latin
 tgk:
     names:
         - Tajik
@@ -498,31 +875,69 @@ tgk:
         - تاجیکی‎
         - tojikī
     link: http://corpora.uni-leipzig.de/downloads/tgk_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Latin
+        - script:Arabic
+        - script:Greek
 tgl:
     names:
         - Tagalog
     link: http://corpora.uni-leipzig.de/downloads/tgl_newscrwal_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
 tha:
     names:
         - Thai
         - Siamese
         - ภาษาไทย
     link: http://corpora.uni-leipzig.de/downloads/tha_newscrawl_2011_100K-text.tar.gz
+    important:
+        - script:Thai
+    ignore:
+        - script:Latin
 tur:
     names:
         - Turkish
         - Türkçe
     link: http://corpora.uni-leipzig.de/downloads/tur_news_2005_100K-text.tar.gz
+    important:
+        - probable:Latin
 ukr:
     names:
         - Ukrainian
         - українська мова
     link: http://corpora.uni-leipzig.de/downloads/ukr_wikipedia_2010_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Latin
+        - script:Greek
+        - script:Han
+        - script:Hiragana
+        - script:Hebrew
+        - script:Armenian
+        - script:Arabic
+        - script:Devanagari
+        - script:Katakana
+        - script:Georgian
+        - script:Hangul
 urd:
     names:
         - Urdū
         - اُردُو
     link: http://corpora.uni-leipzig.de/downloads/urd_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Arabic
+    supplement:
+        - script:Arabic
+    ignore:
+        - script:Latin
 uzb:
     names:
         - Uzbek
@@ -530,14 +945,41 @@ uzb:
         - Ўзбек
         - اوزبیک
     link: http://corpora.uni-leipzig.de/downloads/uzb_newscrawl_2011_100K-text.tar.gz
+    important:
+        - probable:Cyrillic
+        - probable:Latin
+    supplement:
+        - script:Cyrillic
+    ignore:
+        - script:Arabic
 vie:
     names:
         - Vietnamese
         - Tiếng Việt
     link: http://corpora.uni-leipzig.de/downloads/vie_newscrwal_2011_100K-text.tar.gz
+    important:
+        - probable:Latin
+# Chinese commented out because it results in 3,618 prefix characters and I'm not sure
+# what will happen when we run this... total alphabet size is 76,111 characters! 
+# That's 16.22 bits per character.
+# Also, in Chinese there's no SPACE but a FULL WIDTH COMMA as word seperator
 zho:
     names:
         - Chinese
         - 汉语
         - 漢語
     link: http://corpora.uni-leipzig.de/downloads/zho_news_2007-2009_100K-text.tar.gz
+    space: "，"
+    important:
+        - probable:Han
+        - probable:Common
+    supplement:
+        - script:Han
+    ignore:
+        - script:Latin
+        - script:Hiragana
+        - script:Katakana
+        - script:Cyrillic
+        - script:Greek
+        - script:Bopomofo
+        

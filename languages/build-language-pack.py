@@ -498,11 +498,12 @@ def build(lang, languages, extra_slots):
         fout.write("<h2>Character map</h2>\n")
         
         script_count = dict()
-        for c in char_map.keys():
+        for c in (set(alphabet['charset']) | set(char_map.keys())):
             script = unicodedata2.script(c)
             if not script in script_count:
                 script_count[script] = 0
-            script_count[script] += char_map[c]
+            if c in char_map:
+                script_count[script] += char_map[c]
             
         max_count = 0
         for c, count in char_map.items():
@@ -646,13 +647,17 @@ def build(lang, languages, extra_slots):
     important -= set([SPACE])
     supplement -= set([SPACE])
     
+    # always add cerain characters so that we can post URLs, e-mail addresses
+    # and use hashtags
     for c in "0123456789.?!,-'/@:+*=&%#$()\"":
         important.add(c)
+    for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
+        supplement.add(c)
     
     alphabet -= ignore
     alphabet |= supplement
     alphabet |= important
-        
+    
     # alphabet is a list of characters, thus assigning a character to every number
     # in the range from 0 to len(alphabet) - 1:
     # [SPACE][PREFIXES][IMPORTANT BUT NOT PREFIX][ESCAPE][RARE CHARACTERS]
@@ -667,7 +672,10 @@ def build(lang, languages, extra_slots):
     prefix_start = len(temp)
     
     # append important prefix characters
-    temp.extend(sorted(set([_.lower() for _ in important])))
+    # Apparently, it may happen that Python's lower() function turns a single character
+    # into something for which len() returns 2
+    # TODO: Maybe use Unicode.txt lowercase data instead?
+    temp.extend(sorted(set([(_.lower() if len(_.lower()) == 1 else _) for _ in important])))
     prefix_end = len(temp)
     
     # append remaining important characters
