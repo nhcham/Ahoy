@@ -440,7 +440,7 @@ def build(lang, languages, extra_slots):
                 
         return result_line_length if maximum_reached else None
     
-    def save_huffman_tables(huffman_tables):
+    def save_huffman_tables(huffman_tables, path):
         offset_histogram = dict()
         offset_max = None
         for key, table in huffman_tables.items():
@@ -479,6 +479,28 @@ def build(lang, languages, extra_slots):
             
         out_bit_length = 0
         
+        with open(path, 'w') as fout:
+            fout.write("AHOY LANGUAGE PACK\n")
+            fout.write("language=%s\n" % lang)
+            fout.write("alphabet_length=%d\n" % alphabet['alphabet_length'])
+            fout.write("prefix_start=%d\n" % alphabet['prefix_start'])
+            fout.write("prefix_end=%d\n" % alphabet['prefix_end'])
+            fout.write("escape_offset=%d\n" % alphabet['escape_offset'])
+            fout.write("alphabet=")
+            for c in alphabet['charset']:
+                fout.write("%s" % c)
+            fout.write("\n")
+            for key, table in huffman_tables.items():
+                fout.write("huffman_key=%d\n" % key)
+                for row_index in range(len(table)):
+                    row = table[row_index]
+                    if row[2] != None:
+                        for _ in (2, 3):
+                            offset = row_index - row[_]
+                            fout.write("%d\n" % offset)
+                            #out_bit_length += offset_huffman1[offset]['bits_length']
+        os.system("bzip2 -9 %s" % path)
+            
         for row_index in range(offset_max + 1, len(offset_huffman2)):
             out_bit_length += 2 * offset_byte_count * 8
             
@@ -490,8 +512,8 @@ def build(lang, languages, extra_slots):
                     for _ in (2, 3):
                         offset = row_index - row[_]
                         out_bit_length += offset_huffman1[offset]['bits_length']
-        print("total size: %1.1f bytes (%1.1f bytes per Huffman tree)" % ((out_bit_length / 8.0), (out_bit_length / 8.0 / len(huffman_tables))))
-        return int(out_bit_length / 8.0)
+        #print("total size: %1.1f bytes (%1.1f bytes per Huffman tree)" % ((out_bit_length / 8.0), (out_bit_length / 8.0 / len(huffman_tables))))
+        return os.path.getsize(path + '.bz2')
         
 
     def write_char_table(alphabet):
@@ -766,8 +788,8 @@ def build(lang, languages, extra_slots):
     original_length_90 = None
     original_file_size = None
         
-    #for clip_count in [1000, 700, 500, 300, 200, 100, 50]:
     for clip_count in [None, 1000, 500, 400, 300, 250, 200, 100, 50]:
+    #for clip_count in [None, 200]:
         keep_keys = set(keys_by_usage)
         if clip_count != None:
             if clip_count >= len(keys_by_usage):
@@ -819,7 +841,10 @@ def build(lang, languages, extra_slots):
         lengths = sorted(lengths)
         print("80%% of all sentences are %d to %d characters long." % (lengths[int((len(lengths) - 1) * 10 / 100)], lengths[int((len(lengths) - 1) * 90 / 100)]))
         
-        file_size = save_huffman_tables(huffman_tables)
+        if not os.path.exists("_huffman"):
+            os.makedirs("_huffman")
+        
+        file_size = save_huffman_tables(huffman_tables, "_huffman/%s-huffman-trees-%d.txt" % (lang, len(keys_by_usage) if clip_count == None else clip_count))
         length_10 = lengths[int((len(lengths) - 1) * 10 / 100)]
         length_50 = lengths[int((len(lengths) - 1) * 50 / 100)]
         length_90 = lengths[int((len(lengths) - 1) * 90 / 100)]
