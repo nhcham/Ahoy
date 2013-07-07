@@ -806,25 +806,27 @@ def build(lang, languages, extra_slots):
             fout.write("</ul>\n")
             fout.write("<h2>Language pack performance</h2>\n")
             fout.write("<table>\n")
-            fout.write("<tr><th>Huffman trees</th><th colspan='4'>Message length (10% &ndash; 90%)</th><th colspan='2'>File size (kB)</th></tr>\n")
+            fout.write("<tr><th>Huffman trees</th><th colspan='4'>Message length (10% &ndash; 90%)</th><th>Performance</th><th colspan='2'>File size (kB)</th></tr>\n")
             
         lengths = sorted(lengths)
         print("80%% of all sentences are %d to %d characters long." % (lengths[int((len(lengths) - 1) * 10 / 100)], lengths[int((len(lengths) - 1) * 90 / 100)]))
         
         file_size = save_huffman_tables(huffman_tables)
         length_10 = lengths[int((len(lengths) - 1) * 10 / 100)]
+        length_50 = lengths[int((len(lengths) - 1) * 50 / 100)]
         length_90 = lengths[int((len(lengths) - 1) * 90 / 100)]
         if clip_count == None:
             original_length_10 = length_10
             original_length_90 = length_90
             original_file_size = file_size
             
-        fout.write("<tr><td>%d</td><td>%d</td><td>%d%%</td><td>%d</td><td>%d%%</td><td>%1.1f</td><td>%d%%</td></tr>\n" %
+        fout.write("<tr><td>%d</td><td>%d</td><td>%d%%</td><td>%d</td><td>%d%%</td><td>%d%%</td><td>%1.1f</td><td>%d%%</td></tr>\n" %
                    (len(keys_by_usage) if clip_count == None else clip_count,
                     length_10,
                     int(length_10 * 100.0 / original_length_10),
                     length_90,
                     int(length_90 * 100.0 / original_length_90),
+                    float(length_50) * 100.0 / (192.0 / original_bit_length_per_char),
                     file_size / 1024.0,
                     int(file_size * 100.0 / original_file_size)))
         fout.flush()
