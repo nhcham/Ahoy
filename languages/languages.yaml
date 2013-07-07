@@ -218,6 +218,8 @@ fra:
         - French
         - français
     link: http://corpora.uni-leipzig.de/downloads/fra_news_2010_100K-text.tar.gz
+    important:
+        - probable:Latin
 gom:
     names:
         - Konkani

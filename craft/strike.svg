@@ -9,15 +9,15 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="12"
-   height="12"
+   width="64"
+   height="64"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   inkscape:export-filename="/home/michael/programming/android/Ahoy/languages/html/css/aluminium.png"
+   inkscape:export-filename="/home/michael/programming/android/Ahoy/languages/html/css/strike.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
-   sodipodi:docname="badge.svg">
+   sodipodi:docname="strike.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="12.263883"
-     inkscape:cx="-18.052402"
-     inkscape:cy="12.680109"
+     inkscape:zoom="34.687499"
+     inkscape:cx="53.452472"
+     inkscape:cy="58.902333"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -54,7 +54,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -62,18 +62,12 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-1040.3622)">
+     transform="translate(0,-988.3622)">
     <path
-       style="fill:#eeeeec;stroke:none;fill-opacity:1"
-       d="M 0,4 12,16 12,4 z"
-       id="path2987"
-       inkscape:connector-curvature="0"
-       transform="translate(0,1036.3622)"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="opacity:0.42000001999999997;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m -0.39459459,1039.2613 13.99999959,14"
+       style="opacity:0.42;fill:none;stroke:#cc0000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 65,987.3622 -65,65"
        id="path3757"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
   </g>
 </svg>

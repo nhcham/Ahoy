@@ -18,14 +18,44 @@ body {
     border-radius: 4px;
 }
 
-.important {
-    background-image: url(important.png);
+.butter {
+    background-image: url(butter.png);
     background-repeat: no-repeat;
     background-position: right top;
 }
 
-.ignored {
-    background-image: url(ignored.png);
+.butter-dashed {
+    background-image: url(butter-dashed.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.chameleon{
+    background-image: url(chameleon.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.scarlet_red {
+    background-image: url(scarlet_red.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.sky_blue {
+    background-image: url(sky_blue.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.aluminium {
+    background-image: url(aluminium.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.strike{
+    background-image: url(strike.png);
     background-repeat: no-repeat;
     background-position: right top;
 }
@@ -37,4 +67,25 @@ li {
 h1, h2 {
     border-bottom: 1px solid #888;
     padding-bottom: 0.2em;
+}
+
+.toomuch {
+    opacity: 0.5;
+}
+
+td {
+    text-align: right;
+}
+
+th {
+    text-align: left;
+}
+
+th, td {
+    border: 1px solid #888;
+    padding: 0.2em;
+}
+
+table {
+    border-collapse: collapse;
 }

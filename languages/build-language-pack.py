@@ -22,14 +22,13 @@ import yaml
 import unicodedata2
 
 DOWNLOAD_PATH = '_downloads'
-CLIP_HUFFMAN_TABLES = 512
+CLIP_HUFFMAN_TABLES = 300
 USE_PREFIXES = True
 ESCAPE = chr(0x1b)
 SPACE = chr(0x20)
 
 wrote_example_sentences = 0
 original_bit_length_per_char = None
-had_important_defined = True
     
 catnames = dict()
 catnames['Lu'] = 'Letter, uppercase'
@@ -125,60 +124,31 @@ def download_file(lang, url):
     return glob.glob(os.path.join(DOWNLOAD_PATH, '%s*-sentences*' % lang))[0]
 
 huffman_key_label = dict()
-huffman_key_label[-1] = 'ESCP'
+huffman_key_label[1] = 'ESCAPE'
 
-def huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet_size, prefixes, alphabet):
+def huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet):
     result = list()
     
-    ## add position-dependent bigram prefix keys
-    #if word_offset >= 0 and word_offset < extra_slots and ci1 in prefixes and ci2 in prefixes:
-        #result.append([ci1, ci2, word_offset])
-        
     # add position-independent bigram prefix keys
-    global had_important_defined
-    if had_important_defined:
-        if ci1 in prefixes and ci2 in prefixes:
-            result.append([ci1, ci2, -1])
-        
-    ## add position-dependent monogram prefix keys
-    #if word_offset >= 0 and word_offset < extra_slots and ci1 in prefixes:
-        #result.append([ci1, -1, word_offset])
+    if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']) and ci2 in range(alphabet['prefix_start'], alphabet['prefix_end']):
+        result.append(alphabet['huffman_key_bigrams'] + (ci2 - alphabet['prefix_start']) * (alphabet['prefix_end'] - alphabet['prefix_start']) + (ci1 - alphabet['prefix_start']))
+        huffman_key_label[result[-1]] = "%s%s>" % (alphabet['charset'][ci2], alphabet['charset'][ci1])
         
     # add position-independent monogram prefix keys
-    if ci1 in prefixes:
-        result.append([ci1, -1, -1])
+    if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']):
+        result.append(alphabet['huffman_key_monograms'] + (ci1 - alphabet['prefix_start']))
+        huffman_key_label[result[-1]] = "%s>" % alphabet['charset'][ci1]
     
     # add word offset keys
     if word_offset >= 0 and word_offset < extra_slots:
-        result.append([-1, -1, word_offset])
+        result.append(alphabet['huffman_key_word_offsets'] + word_offset)
+        huffman_key_label[result[-1]] = "#%d" % word_offset
 
     # add default key
-    result.append([-1, -1, -1])
+    result.append(alphabet['huffman_key_default'])
+    huffman_key_label[result[-1]] = '-'
     
-    encoded_result = list()
-    for item in result:
-        _ci1 = item[0]
-        _ci2 = item[1]
-        _word_offset = item[2]
-        
-        if _ci1 < 0:
-            _ci1 = alphabet_size
-        if _ci2 < 0:
-            _ci2 = alphabet_size
-        if _word_offset < 0:
-            _word_offset = extra_slots
-            
-        value = (_word_offset * (alphabet_size + 1) + _ci2) * (alphabet_size + 1) + _ci1
-        
-        if not value in huffman_key_label:
-            label = "%s/%s%s" % (_word_offset if _word_offset < extra_slots else '-',
-                                 alphabet[_ci2] if _ci2 < alphabet_size else '-', 
-                                 alphabet[_ci1] if _ci1 < alphabet_size else '-')
-            huffman_key_label[value] = label
-        
-        encoded_result.append(value)
-    
-    return encoded_result
+    return result
 
 def build(lang, languages, extra_slots):
     def iterate_line(line):
@@ -186,15 +156,17 @@ def build(lang, languages, extra_slots):
         ci1 = -1
         ci2 = -1
         for c in line:
-            if (c not in alphabet_lookup) or (c == ESCAPE):
+            if (c not in alphabet['lookup']) or (c == ESCAPE):
                 continue
-            ci = alphabet_lookup[c]
+            ci = alphabet['lookup'][c]
             
-            # pick first best key
-            yield (c, ci, ci1, ci2, word_offset)
+            yield(ci, ci1, ci2, word_offset)
                 
             ci2 = ci1
             ci1 = ci
+            # turn ci1 into an important prefix character if possible
+            if ci1 in range(alphabet['prefix_end'], alphabet['escape_offset']):
+                ci1 = alphabet['lowercase'][ci1 - alphabet['prefix_end']]
             word_offset += 1
             if (c == SPACE):
                 word_offset = 0
@@ -208,25 +180,25 @@ def build(lang, languages, extra_slots):
             char_map[c] += 1
             
     def handle_sentence_find_freqs(line):
-        for (c, ci, ci1, ci2, word_offset) in iterate_line(line):
-            escape_char = None
-            if ci > escape_index:
+        for (ci, ci1, ci2, word_offset) in iterate_line(line):
+            #print("[%s] [%s] [%s]" % (alphabet['charset'][ci2], alphabet['charset'][ci1], alphabet['charset'][ci]))
+            escape_ci = None
+            if ci > alphabet['escape_offset']:
                 # this is not one of the most important characters, insert an escape
                 # instead and add this character to the escaped characters table
-                escape_char = c
-                c = ESCAPE
-                ci = alphabet_lookup[c]
+                escape_ci = ci
+                ci = alphabet['escape_offset']
                 
             t = (ci1, ci2, word_offset)
             if t not in huffman_keys_cache:
-                huffman_keys_cache[t] = huffman_keys(ci1, ci2, word_offset, extra_slots, len(alphabet_lookup), prefixes, alphabet)
+                huffman_keys_cache[t] = huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet)
 
             # use favorite (first) key
             use_key = huffman_keys_cache[t][0]
 
             if not use_key in frequencies:
                 frequencies[use_key] = dict()
-                for _ in range(0, escape_index + 1):
+                for _ in range(0, escape_offset + 1):
                     frequencies[use_key][_] = 0
                     
             frequencies[use_key][ci] += 1
@@ -237,21 +209,19 @@ def build(lang, languages, extra_slots):
 
                 if not use_key in frequencies:
                     frequencies[use_key] = dict()
-                    for _ in range(0, escape_index + 1):
+                    for _ in range(0, escape_offset + 1):
                         frequencies[use_key][_] = 0
                         
                 frequencies[use_key][ci] += 1
-                
 
-            if escape_char != None:
+            if escape_ci != None:
                 # we have encountered a rare character, put it in a special Huffman tree
-                c = escape_char
-                ci = alphabet_lookup[c]
-                use_key = -1
+                ci = escape_ci
+                use_key = alphabet['huffman_key_escape']
 
                 if not use_key in frequencies:
                     frequencies[use_key] = dict()
-                    for _ in range(escape_index + 1, len(alphabet)):
+                    for _ in range(alphabet['escape_offset'] + 1, alphabet['alphabet_length']):
                         frequencies[use_key][_] = 0
                         
                 frequencies[use_key][ci] += 1
@@ -310,23 +280,20 @@ def build(lang, languages, extra_slots):
     
     def handle_sentence_estimate_tree_usage(line):
         
-        result_bits = 0
-        result_line_length = 0
-        maximum_reached = False
-        
-        for (c, ci, ci1, ci2, word_offset) in iterate_line(line):
-            escape_char = None
-            if ci > escape_index:
+        for (ci, ci1, ci2, word_offset) in iterate_line(line):
+            escape_ci = None
+            if ci > alphabet['escape_offset']:
                 # this is not one of the most important characters, insert an escape
-                # instead and add this character to the escaped characters table
-                escape_char = c
-                c = ESCAPE
-                ci = alphabet_lookup[c]
+                # instead
+                # because we just want to determine tree usage, we don't handle the
+                # actual escaped character here any further...
+                escape_ci = ci
+                ci = alphabet['escape_offset']
 
             # pick first best key
             t = (ci1, ci2, word_offset)
             if t not in huffman_keys_cache:
-                huffman_keys_cache[t] = huffman_keys(ci1, ci2, word_offset, extra_slots, len(alphabet_lookup), prefixes, alphabet)
+                huffman_keys_cache[t] = huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet)
                 
             use_key = None
             for key in huffman_keys_cache[t]:
@@ -338,31 +305,18 @@ def build(lang, languages, extra_slots):
                 huffman_key_histogram[use_key] = 0
             huffman_key_histogram[use_key] += 1
             
-            if not maximum_reached:
-                if (result_bits + huffman[use_key][ci]['bits_length'] <= 192):
-                    result_bits += huffman[use_key][ci]['bits_length']
-                    result_line_length += 1
-                    #sys.stdout.write("<span class='b%d'>%s</span" % (huffman[use_key][ci]['bits_length'], alphabet[ci]))
-                else:
-                    #sys.stdout.write("\n")
-                    maximum_reached = True
-            
-        #sys.stdout.write("\n")
-        return result_line_length if maximum_reached else None
-        
     def handle_sentence_find_updated_freqs(line):
-        for (c, ci, ci1, ci2, word_offset) in iterate_line(line):
-            escape_char = None
-            if ci > escape_index:
+        for (ci, ci1, ci2, word_offset) in iterate_line(line):
+            escape_ci = None
+            if ci > alphabet['escape_offset']:
                 # this is not one of the most important characters, insert an escape
                 # instead and add this character to the escaped characters table
-                escape_char = c
-                c = ESCAPE
-                ci = alphabet_lookup[c]
+                escape_ci = ci
+                ci = alphabet['escape_offset']
 
             t = (ci1, ci2, word_offset)
             if t not in huffman_keys_cache:
-                huffman_keys_cache[t] = huffman_keys(ci1, ci2, word_offset, extra_slots, len(alphabet_lookup), prefixes, alphabet)
+                huffman_keys_cache[t] = huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet)
             
             use_key = None
             for key in huffman_keys_cache[t]:
@@ -376,20 +330,19 @@ def build(lang, languages, extra_slots):
 
             if not use_key in frequencies:
                 frequencies[use_key] = dict()
-                for _ in range(0, escape_index + 1):
+                for _ in range(0, alphabet['escape_offset'] + 1):
                     frequencies[use_key][_] = 0
                     
             frequencies[use_key][ci] += 1
             
-            if escape_char != None:
+            if escape_ci != None:
                 # we have encountered a rare character, put it in a special Huffman tree
-                c = escape_char
-                ci = alphabet_lookup[c]
-                use_key = -1
+                ci = escape_ci
+                use_key = alphabet['huffman_key_escape']
                 
                 if not use_key in frequencies:
                     frequencies[use_key] = dict()
-                    for _ in range(escape_index + 1, len(alphabet)):
+                    for _ in range(alphabet['escape_offset'] + 1, alphabet['alphabet_length']):
                         frequencies[use_key][_] = 0
                         
                 frequencies[use_key][ci] += 1
@@ -400,28 +353,27 @@ def build(lang, languages, extra_slots):
         result_line_length = 0
         maximum_reached = False
         
-        html_line = ''
+        html_line = ""
         html_line_no_markup = ''
         
         has_funny_spaces = False
         
-        for (c, ci, ci1, ci2, word_offset) in iterate_line(line):
-            if unicodedata.category(c) in ['Mn', 'Mc', 'Me']:
+        for (ci, ci1, ci2, word_offset) in iterate_line(line):
+            if unicodedata.category(alphabet['charset'][ci]) in ['Mn', 'Mc', 'Me']:
                 has_funny_spaces = True
 
-            escape_char = None
-            if ci > escape_index:
+            escape_ci = None
+            if ci > alphabet['escape_offset']:
                 # this is not one of the most important characters, insert an escape
                 # instead and add this character to the escaped characters table
-                escape_char = c
-                c = ESCAPE
-                ci = alphabet_lookup[c]
+                escape_ci = ci
+                ci = alphabet['escape_offset']
 
             # pick first best key
             t = (ci1, ci2, word_offset)
             
             if t not in huffman_keys_cache:
-                huffman_keys_cache[t] = huffman_keys(ci1, ci2, word_offset, extra_slots, len(alphabet_lookup), prefixes, alphabet)
+                huffman_keys_cache[t] = huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet)
 
             use_key = None
             for key in huffman_keys_cache[t]:
@@ -433,54 +385,53 @@ def build(lang, languages, extra_slots):
                 huffman_key_histogram[use_key] = 0
             huffman_key_histogram[use_key] += 1
             
-            if not maximum_reached:
-                if escape_char != None:
-                    # we have come across a rare character, see if we can fit both
-                    # ESCAPE and the character in here...
-                    delta = huffman[use_key][ci]['bits_length']
-                    delta += huffman[-1][alphabet_lookup[escape_char]]['bits_length']
-                    if (result_bits + delta <= 192):
-                        result_bits += delta
-                        result_line_length += 1
-                        
-                        use_bits = float(delta)
-                        color = '#ffffff'
-                        if use_bits < original_bit_length_per_char:
-                            color = mix_colors('#73d216', '#ffffff', use_bits / original_bit_length_per_char)
-                        else:
-                            color = mix_colors('#ffffff', '#a40000', (use_bits - original_bit_length_per_char) / (16.0 - original_bit_length_per_char))
-                        html_line += "<span style='background-color: %s'>%s</span>" % (color, escape_char)
-                        html_line_no_markup += escape_char
-                        
-                        #sys.stdout.write("%s[%d] " % (alphabet[ci], huffman[use_key][ci]['bits_length']))
-                        #sys.stdout.write("%s[%d] " % (escape_char, huffman[-1][alphabet_lookup[escape_char]]['bits_length']))
-                        #sys.stdout.write("<span class='b%d'>%s</span" % (huffman[use_key][ci]['bits_length'], alphabet[ci]))
-                    else:
-                        #sys.stdout.write("\n")
-                        maximum_reached = True
+            if escape_ci != None:
+                # we have come across a rare character, see if we can fit both
+                # ESCAPE and the character in here...
+                delta = huffman[use_key][ci]['bits_length']
+                delta += huffman[alphabet['huffman_key_escape']][escape_ci]['bits_length']
+                
+                use_bits = float(delta)
+                color = '#ffffff'
+                if use_bits < original_bit_length_per_char:
+                    color = mix_colors('#73d216', '#ffffff', use_bits / original_bit_length_per_char)
                 else:
-                    if (result_bits + huffman[use_key][ci]['bits_length'] <= 192):
-                        result_bits += huffman[use_key][ci]['bits_length']
-                        result_line_length += 1
-                        use_bits = float(huffman[use_key][ci]['bits_length'])
-                        color = '#ffffff'
-                        if use_bits < original_bit_length_per_char:
-                            color = mix_colors('#73d216', '#ffffff', use_bits / original_bit_length_per_char)
-                        else:
-                            color = mix_colors('#ffffff', '#a40000', (use_bits - original_bit_length_per_char) / (16.0 - original_bit_length_per_char))
-                        html_line += "<span style='background-color: %s'>%s</span>" % (color, alphabet[ci])
-                        html_line_no_markup += alphabet[ci]
-                        #sys.stdout.write("%s[%d] " % (alphabet[ci], huffman[use_key][ci]['bits_length']))
-                        #sys.stdout.write("<span class='b%d'>%s</span>" % (huffman[use_key][ci]['bits_length'], alphabet[ci]))
-                    else:
-                        #sys.stdout.write("\n")
+                    color = mix_colors('#ffffff', '#a40000', (use_bits - original_bit_length_per_char) / (16.0 - original_bit_length_per_char))
+                html_line += "<span style='background-color: %s'>%s</span>" % (color, alphabet['charset'][escape_ci])
+                html_line_no_markup += alphabet['charset'][escape_ci]
+                
+                if not maximum_reached and (result_bits + delta <= 192):
+                    result_bits += delta
+                    result_line_length += 1
+                else:
+                    if not maximum_reached:
+                        html_line += "<span class='toomuch'>"
+                        maximum_reached = True
+            else:
+                
+                use_bits = float(huffman[use_key][ci]['bits_length'])
+                color = '#ffffff'
+                if use_bits < original_bit_length_per_char:
+                    color = mix_colors('#73d216', '#ffffff', use_bits / original_bit_length_per_char)
+                else:
+                    color = mix_colors('#ffffff', '#a40000', (use_bits - original_bit_length_per_char) / (16.0 - original_bit_length_per_char))
+                html_line += "<span style='background-color: %s'>%s</span>" % (color, alphabet['charset'][ci])
+                html_line_no_markup += alphabet['charset'][ci]
+                
+                if not maximum_reached and (result_bits + huffman[use_key][ci]['bits_length'] <= 192):
+                    result_bits += huffman[use_key][ci]['bits_length']
+                    result_line_length += 1
+                else:
+                    if not maximum_reached:
+                        html_line += "<span class='toomuch'>"
                         maximum_reached = True
             
         #sys.stdout.write("\n")
         global wrote_example_sentences
         
         if maximum_reached:
-            if wrote_example_sentences < 20:
+            html_line += "</span>"
+            if wrote_example_sentences < 10:
                 wrote_example_sentences += 1
                 fout.write("<li style='font-family: monospace;'>%s" % html_line)
                 if has_funny_spaces:
@@ -540,9 +491,10 @@ def build(lang, languages, extra_slots):
                         offset = row_index - row[_]
                         out_bit_length += offset_huffman1[offset]['bits_length']
         print("total size: %1.1f bytes (%1.1f bytes per Huffman tree)" % ((out_bit_length / 8.0), (out_bit_length / 8.0 / len(huffman_tables))))
+        return int(out_bit_length / 8.0)
         
 
-    def write_char_table():
+    def write_char_table(alphabet):
         fout.write("<h2>Character map</h2>\n")
         
         script_count = dict()
@@ -592,7 +544,7 @@ def build(lang, languages, extra_slots):
                     return mycmp(self.obj, other.obj) != 0
             return K
         
-        for c in sorted(list(set(alphabet) | set(char_map.keys())), key = cmp_to_key(comp)):
+        for c in sorted(list(set(alphabet['charset']) | set(char_map.keys())), key = cmp_to_key(comp)):
             script = unicodedata2.script(c)
             if script != last_script:
                 fout.write("<h3>%s</h3>\n" % script)
@@ -613,8 +565,50 @@ def build(lang, languages, extra_slots):
             font_color = '#000'
             if c not in char_map or (char_map[c] < 10):
                 font_color = '#aaa'
-            fout.write("<div title='%s' class='cb%s' style='color: %s; background-color: %s;'>%s</div>\n" % (name, ' important' if c in safe_alphabet else (' ignored' if c in ignored else ''), font_color, color, c))
+            css_class = ''
+            if c in alphabet['lookup']:
+                ci = alphabet['lookup'][c]
+                if ci >= alphabet['prefix_start'] and ci < alphabet['prefix_end']:
+                    css_class = 'butter'
+                elif ci >= alphabet['prefix_end'] and ci < alphabet['escape_offset']:
+                    css_class = 'butter-dashed'
+                elif ci > alphabet['escape_offset']:
+                    css_class = 'aluminium'
+            else:
+                css_class = 'strike'
+            fout.write("<div title='%s' class='cb %s' style='color: %s; background-color: %s;'>%s</div>\n" % (name, css_class, font_color, color, c))
         fout.write("\n")
+        
+    def parse_character_set(entries, char_map):
+        result = set()
+        for x in entries:
+            if type(x) == list:
+                for c in range(ord(x[0]), ord(x[1]) + 1):
+                    result.add(chr(c))
+            else:
+                if 'script:' in x:
+                    # pull characters from script
+                    for category, ranges in scripts[x.replace('script:', '')].items():
+                        for r in ranges:
+                            c_start = r[0]
+                            c_end = r[1]
+                            for ci in range(c_start, c_end + 1):
+                                result.add(chr(ci))
+                elif 'probable:' in x:
+                    # pull characters from script
+                    for category, ranges in scripts[x.replace('probable:', '')].items():
+                        for r in ranges:
+                            c_start = r[0]
+                            c_end = r[1]
+                            for ci in range(c_start, c_end + 1):
+                                c = chr(ci)
+                                if c in char_map and char_map[c] >= 10:
+                                    result.add(c)
+                else:
+                    for c in x:
+                        result.add(c)
+        return result
+        
         
     fout = open('html/report-%s.html' % lang, 'w')
     fout.write("<html>\n")
@@ -645,131 +639,96 @@ def build(lang, languages, extra_slots):
 
     alphabet = set(char_map.keys())
     
-    if not 'important' in languages[lang]:
-        global had_important_defined
-        had_important_defined = False
-        #print("There are no important characters defined, so we're using everything we can find...")
-        #print("Warning: This will make the language pack much bigger.")
-        languages[lang]['important'] = list()
+    important = parse_character_set(languages[lang]['important'], char_map) if 'important' in languages[lang] else set()
+    supplement = parse_character_set(languages[lang]['supplement'], char_map) if 'supplement' in languages[lang] else set()
+    ignore = parse_character_set(languages[lang]['ignore'], char_map) if 'ignore' in languages[lang] else set()
+    
+    important -= set([SPACE])
+    supplement -= set([SPACE])
+    
+    for c in "0123456789.?!,-'/@:+*=&%#$()\"":
+        important.add(c)
+    
+    alphabet -= ignore
+    alphabet |= supplement
+    alphabet |= important
         
-    ignored = set()
-    if 'ignore' in languages[lang]:
-        for x in languages[lang]['ignore']:
-            if type(x) == list:
-                for c in range(ord(x[0]), ord(x[1]) + 1):
-                    ignored.add(chr(c))
-            else:
-                if 'script:' in x:
-                    # pull characters from script
-                    for category, ranges in scripts[x.replace('script:', '')].items():
-                        for r in ranges:
-                            c_start = r[0]
-                            c_end = r[1]
-                            for ci in range(c_start, c_end + 1):
-                                ignored.add(chr(ci))
-                    pass
-                else:
-                    for c in x:
-                        ignored.add(c)
+    # alphabet is a list of characters, thus assigning a character to every number
+    # in the range from 0 to len(alphabet) - 1:
+    # [SPACE][PREFIXES][IMPORTANT BUT NOT PREFIX][ESCAPE][RARE CHARACTERS]
+    #         |         \_prefix_end              \_escape_offset
+    #         \_prefix_start
     
-    if 'supplement' in languages[lang]:
-        for x in languages[lang]['supplement']:
-            if type(x) == list:
-                for c in range(ord(x[0]), ord(x[1]) + 1):
-                    alphabet.add(chr(c))
-            else:
-                if 'script:' in x:
-                    # pull characters from script
-                    for category, ranges in scripts[x.replace('script:', '')].items():
-                        for r in ranges:
-                            c_start = r[0]
-                            c_end = r[1]
-                            for ci in range(c_start, c_end + 1):
-                                alphabet.add(chr(ci))
-                    pass
-                else:
-                    for c in x:
-                        alphabet.add(c)
-                        
-    safe_alphabet = set()
-    safe_alphabet.add(SPACE)
-    
-    for c in "0123456789":
-        safe_alphabet.add(c)
-    for c in ".?!,-'/@:+*=&%#$()\"":
-        safe_alphabet.add(c)
-        
-    for x in languages[lang]['important']:
-        if type(x) == list:
-            for c in range(ord(x[0]), ord(x[1]) + 1):
-                safe_alphabet.add(chr(c))
-        else:
-            if 'script:' in x:
-                # pull characters from script
-                for category, ranges in scripts[x.replace('script:', '')].items():
-                    for r in ranges:
-                        c_start = r[0]
-                        c_end = r[1]
-                        for ci in range(c_start, c_end + 1):
-                            safe_alphabet.add(chr(ci))
-                pass
-            elif 'probable:' in x:
-                # pull characters from script but only use those which have been
-                # seen more than a few times in our data
-                for category, ranges in scripts[x.replace('probable:', '')].items():
-                    for r in ranges:
-                        c_start = r[0]
-                        c_end = r[1]
-                        for ci in range(c_start, c_end + 1):
-                            c = chr(ci)
-                            if c in char_map and char_map[c] >= 10:
-                                safe_alphabet.add(c)
-                pass
-            else:
-                for c in x:
-                    safe_alphabet.add(c)
-                
-    ignored -= safe_alphabet
-    alphabet |= safe_alphabet
-    alphabet -= ignored
-    
-    # [SAFE ALPHABET STARTING WITH SPACE][ESCAPE][REMAINING ALPHABET]
+    # now construct the alphabet
     temp = []
+    
+    # append SPACE
     temp.append(SPACE)
-    temp.extend(sorted(list(safe_alphabet - set(SPACE))))
+    prefix_start = len(temp)
+    
+    # append important prefix characters
+    temp.extend(sorted(set([_.lower() for _ in important])))
+    prefix_end = len(temp)
+    
+    # append remaining important characters
+    temp.extend(sorted([_ for _ in important if _ not in temp]))
+    
+    # append ESCAPE
+    escape_offset = len(temp)
     temp.append(ESCAPE)
-    escape_index = len(temp) - 1
-    temp.extend(sorted(list(alphabet - set(temp))))
-    alphabet = temp
-    alphabet_lookup = dict()
-    for index, c in enumerate(alphabet):
-        alphabet_lookup[c] = index
     
-    prefixes = list()
-    if USE_PREFIXES:
-        prefixes = [alphabet_lookup[_] for _ in alphabet if _ not in [SPACE, ESCAPE] and _ in safe_alphabet]
+    # append remaining rare characters
+    temp.extend(sorted([_ for _ in (supplement | alphabet) if _ not in temp]))
+    alphabet_length = len(temp)
     
-    write_char_table()
+    if len(temp) != len(set(temp)):
+        print("Oops, there are duplicate characters in the alphabet.")
+        exit(1)
     
-    if not had_important_defined:
+    alphabet = dict()
+    alphabet['charset'] = temp
+    alphabet['lookup'] = dict()
+    for index, c in enumerate(temp):
+        alphabet['lookup'][c] = index
+    alphabet['prefix_start'] = prefix_start
+    alphabet['prefix_end'] = prefix_end
+    alphabet['escape_offset'] = escape_offset
+    alphabet['alphabet_length'] = alphabet_length
+    alphabet['lowercase'] = list()
+    for ci in range(prefix_end, escape_offset):
+        lc = ci
+        c = temp[ci].lower()
+        if c in alphabet['lookup']:
+            lc = alphabet['lookup'][c]
+        alphabet['lowercase'].append(lc)
+        
+    alphabet['huffman_key_default'] = 0
+    alphabet['huffman_key_escape'] = 1
+    alphabet['huffman_key_word_offsets'] = 2
+    alphabet['huffman_key_monograms'] = alphabet['huffman_key_word_offsets'] + extra_slots
+    alphabet['huffman_key_bigrams'] = alphabet['huffman_key_monograms'] + (alphabet['prefix_end'] - alphabet['prefix_start'])
+    
+    write_char_table(alphabet)
+    
+    print("Alphabet has %d total / %d important / %d prefix characters." % 
+            (alphabet['alphabet_length'], 
+             alphabet['escape_offset'] - alphabet['prefix_start'], 
+             alphabet['prefix_end'] - alphabet['prefix_start']))
+    original_bit_length_per_char = math.log(alphabet['alphabet_length']) / math.log(2)
+    print("Uninformed information content is %1.2f bits per character." % (original_bit_length_per_char))
+    
+    if '--charset' in sys.argv or 'important' not in languages[lang]:
         fout.write("</body>\n")
         fout.write("</html>\n")
         fout.close()
         exit()
         
-    #print("Alphabet has %d characters: [%s]" % (len(alphabet), ''.join(alphabet)))
-    #print("A total of %d prefixes are defined: [%s]" % (len(prefixes), ''.join([alphabet[_] for _ in prefixes])))
-    print("Alphabet has %d characters, %d of which are highly important." % (len(alphabet), len(safe_alphabet)))
-    original_bit_length_per_char = math.log(len(alphabet)) / math.log(2)
-    print("Uninformed information content is %1.2f bits per character." % (original_bit_length_per_char))
-    print("A total of %d prefixes are defined." % (len(prefixes)))
-    
     huffman_keys_cache = dict()
     frequencies = dict()
     
     for line in iterate_lines(corpora_path, 0):
         handle_sentence_find_freqs(line)
-     
+        
     #for key in frequencies.keys():
         #print(huffman_key_label[key])
         #for ci in sorted(frequencies[key], key=lambda x: -frequencies[key][x]):
@@ -788,64 +747,93 @@ def build(lang, languages, extra_slots):
     
     huffman_key_histogram = dict()
         
-    lengths = list()
     for line in iterate_lines(corpora_path, 1):
-        length = handle_sentence_estimate_tree_usage(line)
-        if length != None:
-            lengths.append(length)
-            
-    lengths = sorted(lengths)
-    print("80%% of all sentences are %d to %d characters long." % (lengths[int((len(lengths) - 1) * 10 / 100)], lengths[int((len(lengths) - 1) * 90 / 100)]))
+        handle_sentence_estimate_tree_usage(line)
      
     keys_by_usage = sorted(huffman_key_histogram.keys(), key=lambda x: -huffman_key_histogram[x])
     #for key in keys_by_usage:
         #print("[%4s] %8d" % (huffman_key_label[key], huffman_key_histogram[key]))
         
-    keep_keys = set(keys_by_usage[0:CLIP_HUFFMAN_TABLES])
-    
-    print("Now re-creating frequency tables...")
-    frequencies = dict()
+    original_length_10 = None
+    original_length_90 = None
+    original_file_size = None
         
-    for line in iterate_lines(corpora_path, 0):
-        handle_sentence_find_updated_freqs(line)
-     
-    #for key in frequencies.keys():
-        #print(key)
-        #for ci in sorted(frequencies[key], key=lambda x: -frequencies[key][x]):
-            #print("[%s] %8d" % (alphabet[ci], frequencies[key][ci]))
+    #for clip_count in [1000, 700, 500, 300, 200, 100, 50]:
+    for clip_count in [None, 1000, 500, 400, 300, 250, 200, 100, 50]:
+        keep_keys = set(keys_by_usage)
+        if clip_count != None:
+            if clip_count >= len(keys_by_usage):
+                continue
+            keep_keys = set(keys_by_usage[0:clip_count])
+        keep_keys.add(alphabet['huffman_key_default'])
+        keep_keys.add(alphabet['huffman_key_escape'])
+        
+        print("Now re-creating frequency tables...")
+        frequencies = dict()
             
-    print("Re-created %d frequency tables." % len(frequencies))
-    
-    huffman = dict()
-    huffman_tables = dict()
-    for key in frequencies.keys():
-        a, b = build_huffman(frequencies[key])
-        huffman[key] = a
-        huffman_tables[key] = b
+        for line in iterate_lines(corpora_path, 0):
+            handle_sentence_find_updated_freqs(line)
         
-    print("Re-created %d Huffman trees, now determining message length range." % len(huffman))
-        
-    huffman_key_histogram = dict()
-    
-    fout.write("<h2>Example sentences</h2>\n")
-    fout.write("<ul>\n")
-    
-    lengths = list()
-    for line in iterate_lines(corpora_path, 1):
-        length = handle_sentence_find_lengths(line)
-        if length != None:
-            lengths.append(length)
+        #for key in frequencies.keys():
+            #print(key)
+            #for ci in sorted(frequencies[key], key=lambda x: -frequencies[key][x]):
+                #print("[%s] %8d" % (alphabet[ci], frequencies[key][ci]))
                 
-    fout.write("</ul>\n")
-    
-    lengths = sorted(lengths)
-    print("80%% of all sentences are %d to %d characters long." % (lengths[int((len(lengths) - 1) * 10 / 100)], lengths[int((len(lengths) - 1) * 90 / 100)]))
-    
-    save_huffman_tables(huffman_tables)
-    
-    #keys_by_usage = sorted(huffman_key_histogram.keys(), key=lambda x: -huffman_key_histogram[x])
-    #for key in keys_by_usage:
-        #print("[%4s] %8d" % (huffman_key_label[key], huffman_key_histogram[key]))
+        print("Re-created %d frequency tables." % len(frequencies))
+        
+        huffman = dict()
+        huffman_tables = dict()
+        for key in frequencies.keys():
+            a, b = build_huffman(frequencies[key])
+            huffman[key] = a
+            huffman_tables[key] = b
+            
+        print("Re-created %d Huffman trees, now determining message length range." % len(huffman))
+            
+        huffman_key_histogram = dict()
+        
+        if clip_count == None:
+            fout.write("<h2>Example sentences</h2>\n")
+            fout.write("<ul>\n")
+        
+        lengths = list()
+        for line in iterate_lines(corpora_path, 1):
+            length = handle_sentence_find_lengths(line)
+            if length != None:
+                lengths.append(length)
+                    
+        if clip_count == None:
+            fout.write("</ul>\n")
+            fout.write("<h2>Language pack performance</h2>\n")
+            fout.write("<table>\n")
+            fout.write("<tr><th>Huffman trees</th><th colspan='4'>Message length (10% &ndash; 90%)</th><th colspan='2'>File size (kB)</th></tr>\n")
+            
+        lengths = sorted(lengths)
+        print("80%% of all sentences are %d to %d characters long." % (lengths[int((len(lengths) - 1) * 10 / 100)], lengths[int((len(lengths) - 1) * 90 / 100)]))
+        
+        file_size = save_huffman_tables(huffman_tables)
+        length_10 = lengths[int((len(lengths) - 1) * 10 / 100)]
+        length_90 = lengths[int((len(lengths) - 1) * 90 / 100)]
+        if clip_count == None:
+            original_length_10 = length_10
+            original_length_90 = length_90
+            original_file_size = file_size
+            
+        fout.write("<tr><td>%d</td><td>%d</td><td>%d%%</td><td>%d</td><td>%d%%</td><td>%1.1f</td><td>%d%%</td></tr>\n" %
+                   (len(keys_by_usage) if clip_count == None else clip_count,
+                    length_10,
+                    int(length_10 * 100.0 / original_length_10),
+                    length_90,
+                    int(length_90 * 100.0 / original_length_90),
+                    file_size / 1024.0,
+                    int(file_size * 100.0 / original_file_size)))
+        fout.flush()
+        
+        #keys_by_usage = sorted(huffman_key_histogram.keys(), key=lambda x: -huffman_key_histogram[x])
+        #for key in keys_by_usage:
+            #print("[%4s] %8d" % (huffman_key_label[key], huffman_key_histogram[key]))
+        
+    fout.write("</table>\n")
         
     fout.write("</body>\n")
     fout.write("</html>\n")
@@ -854,10 +842,10 @@ def build(lang, languages, extra_slots):
 if __name__ == '__main__':
     languages = yaml.load(open('languages.yaml'))
 
-    if len(sys.argv) < 3:
-        print("Usage: ./build-language-pack.py [language tag] [word offset slots]")
+    if len(sys.argv) < 2:
+        print("Usage: ./build-language-pack.py [language tag]")
         exit(1)
 
     lang = sys.argv[1]
-    extra_slots = int(sys.argv[2])
+    extra_slots = 10
     build(lang, languages, extra_slots)
