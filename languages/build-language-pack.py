@@ -787,6 +787,7 @@ def build(lang, languages, extra_slots):
     original_length_10 = None
     original_length_90 = None
     original_file_size = None
+    original_performance = None
         
     for clip_count in [None, 1000, 500, 400, 300, 250, 200, 100, 50]:
     #for clip_count in [None, 200]:
@@ -836,7 +837,7 @@ def build(lang, languages, extra_slots):
             fout.write("</ul>\n")
             fout.write("<h2>Language pack performance</h2>\n")
             fout.write("<table>\n")
-            fout.write("<tr><th>Huffman trees</th><th colspan='4'>Message length (10% &ndash; 90%)</th><th>Performance</th><th colspan='2'>File size (kB)</th></tr>\n")
+            fout.write("<tr><th>Huffman trees</th><th colspan='4'>Message length (10% &ndash; 90%)</th><th colspan='2'>Performance</th><th colspan='2'>File size (kB)</th></tr>\n")
             
         lengths = sorted(lengths)
         print("80%% of all sentences are %d to %d characters long." % (lengths[int((len(lengths) - 1) * 10 / 100)], lengths[int((len(lengths) - 1) * 90 / 100)]))
@@ -848,18 +849,21 @@ def build(lang, languages, extra_slots):
         length_10 = lengths[int((len(lengths) - 1) * 10 / 100)]
         length_50 = lengths[int((len(lengths) - 1) * 50 / 100)]
         length_90 = lengths[int((len(lengths) - 1) * 90 / 100)]
+        performance = float(length_50) * 100.0 / (192.0 / original_bit_length_per_char)
         if clip_count == None:
             original_length_10 = length_10
             original_length_90 = length_90
             original_file_size = file_size
+            original_performance = performance
             
-        fout.write("<tr><td>%d</td><td>%d</td><td>%d%%</td><td>%d</td><td>%d%%</td><td>%d%%</td><td>%1.1f</td><td>%d%%</td></tr>\n" %
+        fout.write("<tr><td>%d</td><td>%d</td><td>%d%%</td><td>%d</td><td>%d%%</td><td>%d%%</td><td>%d%%</td><td>%1.1f</td><td>%d%%</td></tr>\n" %
                    (len(keys_by_usage) if clip_count == None else clip_count,
                     length_10,
                     int(length_10 * 100.0 / original_length_10),
                     length_90,
                     int(length_90 * 100.0 / original_length_90),
-                    float(length_50) * 100.0 / (192.0 / original_bit_length_per_char),
+                    int(performance),
+                    int(performance * 100.0 / original_performance),
                     file_size / 1024.0,
                     int(file_size * 100.0 / original_file_size)))
         fout.flush()
