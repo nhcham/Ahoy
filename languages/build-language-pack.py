@@ -129,10 +129,11 @@ huffman_key_label[1] = 'ESCAPE'
 def huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet):
     result = list()
     
-    # add position-independent bigram prefix keys
-    if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']) and ci2 in range(alphabet['prefix_start'], alphabet['prefix_end']):
-        result.append(alphabet['huffman_key_bigrams'] + (ci2 - alphabet['prefix_start']) * (alphabet['prefix_end'] - alphabet['prefix_start']) + (ci1 - alphabet['prefix_start']))
-        huffman_key_label[result[-1]] = "%s%s>" % (alphabet['charset'][ci2], alphabet['charset'][ci1])
+    if not 'use_bigrams' in languages[lang] or (languages[lang]['use_bigrams'] == True):
+        # add position-independent bigram prefix keys
+        if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']) and ci2 in range(alphabet['prefix_start'], alphabet['prefix_end']):
+            result.append(alphabet['huffman_key_bigrams'] + (ci2 - alphabet['prefix_start']) * (alphabet['prefix_end'] - alphabet['prefix_start']) + (ci1 - alphabet['prefix_start']))
+            huffman_key_label[result[-1]] = "%s%s>" % (alphabet['charset'][ci2], alphabet['charset'][ci1])
         
     # add position-independent monogram prefix keys
     if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']):

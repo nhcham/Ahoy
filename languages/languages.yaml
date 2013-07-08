@@ -511,6 +511,7 @@ kor:
         - 한국어
         - 조선말
     link: http://corpora.uni-leipzig.de/downloads/kor_news_2007_300K-text.tar.gz
+    use_bigrams: false
     important:
         - probable:Hangul
     supplement:
@@ -1046,6 +1047,7 @@ zho:
         - 漢語
     link: http://corpora.uni-leipzig.de/downloads/zho_news_2007-2009_100K-text.tar.gz
     space: "，"
+    use_bigrams: false
     important:
         - probable:Han
         - probable:Common
