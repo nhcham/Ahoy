@@ -4,6 +4,7 @@ afr:
     link: http://corpora.uni-leipzig.de/downloads/afr_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 als:
     names:
         - Tosk
@@ -22,6 +23,7 @@ als:
         - script:Kannada
         - script:Katakana
         - script:Syriac
+    trees: 200
 ara:
     names:
         - Arabic
@@ -35,6 +37,7 @@ ara:
         - script:Latin
     supplement:
         - script:Arabic
+    trees: 300
 azj:
     names:
         - Azerbaijani
@@ -52,6 +55,7 @@ azj:
         - script:Georgian
         - script:Hangul
         - script:Greek
+    trees: 400
 bak:
     names:
         - Bashkir
@@ -66,6 +70,7 @@ bak:
         - ['a', 'z']
     ignore:
         - script:Arabic
+    trees: 400
 bel:
     names:
         - Belarusian
@@ -77,6 +82,7 @@ bel:
         - script:Cyrillic
         - ['A', 'Z']
         - ['a', 'z']
+    trees: 300
 bos:
     names:
         - Standard Bosnian
@@ -89,6 +95,7 @@ bos:
         - script:Greek
         - script:Hangul
         - script:Arabic
+    trees: 200
 bre:
     names:
         - Breton
@@ -127,6 +134,7 @@ bre:
         - script:Tibetan
         - script:Ogham
         - script:Yi
+    trees: 200
 bul:
     names:
         - Bulgarian
@@ -138,6 +146,7 @@ bul:
     supplement:
         - ['A', 'Z']
         - ['a', 'z']
+    trees: 200
 cat:
     names:
         - Catalan
@@ -147,6 +156,7 @@ cat:
         - probable:Latin
     ignore:
         - script:Greek
+    trees: 200
 ceb:
     names: 
         - Cebuano
@@ -154,6 +164,7 @@ ceb:
     link: http://corpora.uni-leipzig.de/downloads/ceb_newscrawl_2011_10K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 ces:
     names:
         - Czech
@@ -164,6 +175,7 @@ ces:
         - probable:Latin
     ignore:
         - script:Greek
+    trees: 300
 cym:
     names:
         - Welsh
@@ -172,6 +184,7 @@ cym:
     link: http://corpora.uni-leipzig.de/downloads/cym_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 dan:
     names:
         - Danish
@@ -183,6 +196,7 @@ dan:
         - script:Cyrillic
         - script:Han
         - script:Katakana
+    trees: 250
 deu:
     names:
         - German
@@ -193,6 +207,7 @@ deu:
     ignore:
         - script:Greek
         - script:Cyrillic
+    trees: 200
 # commented out for now because link yields no content
 # ell:
 #     names:
@@ -205,6 +220,7 @@ eng:
     link: http://corpora.uni-leipzig.de/downloads/eng_news_2010_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 epo:
     names:
         - Esperanto
@@ -226,6 +242,7 @@ epo:
         - script:Tibetan
         - script:Telugu
         - script:Mandaic
+    trees: 200
 est:
     names:
         - Estonian
@@ -238,6 +255,7 @@ est:
         - script:Han
         - script:Hebrew
         - script:Katakana
+    trees: 250
 eus:
     names:
         - Basque
@@ -245,6 +263,7 @@ eus:
     link: http://corpora.uni-leipzig.de/downloads/eus_web_2002_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 fas:
     names:
         - Persian
@@ -258,6 +277,7 @@ fas:
         - script:Hangul
         - script:Latin
         - script:Han
+    trees: 400
 fin:
     names:
         - Finnish
@@ -284,6 +304,7 @@ fin:
         - script:Ethiopic
         - script:Hangul
         - script:Syriac
+    trees: 200
 fra:
     names:
         - French
@@ -291,6 +312,7 @@ fra:
     link: http://corpora.uni-leipzig.de/downloads/fra_news_2010_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 gom:
     names:
         - Konkani
@@ -303,6 +325,7 @@ gom:
         - probable:Latin
     ignore:
         - script:Arabic
+    trees: 200
 guj:
     names:
         - Gujarati
@@ -312,6 +335,7 @@ guj:
         - script:Gujarati
     ignore:
         - script:Latin
+    trees: 400
 heb:
     names:
         - Hebrew
@@ -327,6 +351,7 @@ heb:
     ignore:
         - script:Cyrillic
         - script:Latin
+    trees: 250
 hin:
     names:
         - Hindi
@@ -339,6 +364,7 @@ hin:
     ignore: 
         - script:Gujarati
         - script:Latin
+    trees: 400
 hrv:
     names:
         - Croatian
@@ -360,6 +386,7 @@ hrv:
         - script:Tamil
         - script:Hangul
         - script:Devanagari
+    trees: 250
 ido:
     names: 
         - Ido
@@ -373,6 +400,7 @@ ido:
         - script:Hiragana
         - script:Greek
         - script:Arabic
+    trees: 200
 ind:
     names:
         - Indonesian
@@ -380,6 +408,7 @@ ind:
     link: http://corpora.uni-leipzig.de/downloads/ind_newscrawl_2012_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 isl:
     names:
         - Icelandic
@@ -387,6 +416,7 @@ isl:
     link: http://corpora.uni-leipzig.de/downloads/isl_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 250
 ita:
     names:
         - Italian
@@ -394,6 +424,7 @@ ita:
     link: http://corpora.uni-leipzig.de/downloads/ita_news_2010_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 jpn:
     names:
         - Japanese
@@ -411,6 +442,7 @@ jpn:
         - script:Latin
         - script:Greek
         - script:Hangul
+    trees: 400
 kal:
     names:
         - Greenlandic
@@ -418,6 +450,7 @@ kal:
     link: http://corpora.uni-leipzig.de/downloads/kal_newscrawl_2011_30K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 kat:
     names: 
         - Georgian
@@ -430,6 +463,7 @@ kat:
     ignore:
         - script:Latin
         - script:Cyrillic
+    trees: 250
 kaz:
     names:
         - Kazakh
@@ -454,6 +488,7 @@ kaz:
         - script:Tamil
         - script:Hiragana
         - script:Hebrew
+    trees: 300
 kir:
     names:
         - Kyrgyz
@@ -469,6 +504,7 @@ kir:
         - script:Han
         - script:Latin
         - script:Greek
+    trees: 300
 kor:
     names:
         - Korean
@@ -500,6 +536,7 @@ kur:
         - script:Arabic
     ignore:
         - script:Latin
+    trees: 200
 lat:
     names:
         - Latin
@@ -507,6 +544,7 @@ lat:
     link: http://corpora.uni-leipzig.de/downloads/lat_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 lav:
     names:
         - Latvian
@@ -531,6 +569,7 @@ lav:
         - script:Katakana
         - script:Gujarati
         - script:Thai
+    trees: 300
 lit:
     names:
         - Lithuanian
@@ -544,6 +583,7 @@ lit:
         - script:Bopomofo
         - script:Hangul
         - script:Hebrew
+    trees: 300
 ltz:
     names:
         - Luxembourgish
@@ -561,6 +601,7 @@ ltz:
         - script:Devanagari
         - script:Katakana
         - script:Hangul
+    trees: 250
 lus:
     names:
         - Mizo
@@ -569,6 +610,7 @@ lus:
         - probable:Latin
     ignore:
         - script:Han
+    trees: 200
 mal:
     names:
         - Malayalam
@@ -580,6 +622,7 @@ mal:
         - script:Malayalam
     ignore:
         - script:Latin
+    trees: 500
 mar:
     names: 
         - Marathi
@@ -591,6 +634,7 @@ mar:
         - script:Devanagari
     ignore:
         - script:Latin
+    trees: 500
 mkd:
     names:
         - Macedonian
@@ -603,6 +647,7 @@ mkd:
     ignore:
         - script:Latin
         - script:Greek
+    trees: 200
 mlg:
     names:
         - Malagasy
@@ -619,6 +664,7 @@ mlg:
         - script:Hangul
         - script:Greek
         - script:Kannada
+    trees: 200
 mlt:
     names:
         - Maltese
@@ -628,6 +674,7 @@ mlt:
         - probable:Latin
     ignore:
         - script:Greek
+    trees: 200
 mon:
     names:
         - Mongolian
@@ -639,6 +686,7 @@ mon:
         - script:Cyrillic
     ignore:
         - script:Latin
+    trees: 250
 mri:
     names:
         - Māori
@@ -650,6 +698,7 @@ mri:
         - script:Hangul
         - script:Greek
         - script:Cyrillic
+    trees: 100
 msa:
     names:
         - Malay
@@ -657,6 +706,7 @@ msa:
     link: http://corpora.uni-leipzig.de/downloads/msa_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 nep:
     names:
         - Nepali
@@ -666,6 +716,7 @@ nep:
         - probable:Devanagari
     supplement:
         - script:Devanagari
+    trees: 500
 new:
     names:
         - Nepal Bhasa
@@ -675,6 +726,7 @@ new:
         - probable:Devanagari
     supplement:
         - script:Devanagari
+    trees: 500
 nno:
     names:
         - Norwegian Nynorsk
@@ -707,6 +759,7 @@ nno:
         - script:Gujarati
         - script:Ogham
         - script:Braille
+    trees: 200
 nob:
     names:
         - Norwegian Bokmål
@@ -715,6 +768,7 @@ nob:
     link: http://corpora.uni-leipzig.de/downloads/nob_news_2007_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 oci:
     names:
         - Occitan
@@ -728,6 +782,7 @@ oci:
         - script:Devanagari
         - script:Hebrew
         - script:Han
+    trees: 200
 pol:
     names:
         - Polish
@@ -737,6 +792,7 @@ pol:
         - probable:Latin
     ignore:
         - script:Greek
+    trees: 300
 por:
     names:
         - Portuguese
@@ -746,6 +802,7 @@ por:
         - probable:Latin
     ignore:
         - script:Katakana
+    trees: 200
 rus:
     names:
         - Russian
@@ -757,6 +814,7 @@ rus:
         - script:Cyrillic
     ignore:
         - script:Latin
+    trees: 300
 slk:
     names:
         - Slovak
@@ -764,6 +822,7 @@ slk:
     link: http://corpora.uni-leipzig.de/downloads/slk_wikipedia_2007_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 slv:
     names:
         - Slovene
@@ -773,6 +832,7 @@ slv:
         - probable:Latin
     ignore:
         - script:Cyrillic
+    trees: 200
 som:
     names:
         - Somali
@@ -784,6 +844,7 @@ som:
     ignore:
         - script:Arabic
         - script:Han
+    trees: 200
 spa:
     names:
         - Spanish
@@ -796,6 +857,7 @@ spa:
         - script:Katakana
         - script:Arabic
         - script:Cyrillic
+    trees: 200
 srp:
     names:
         - Standard Serbian
@@ -818,6 +880,7 @@ srp:
         - script:Ethiopic
         - script:Armenian
         - script:Katakana
+    trees: 250
 swa:
     names:
         - Swahili
@@ -825,6 +888,7 @@ swa:
     link: http://corpora.uni-leipzig.de/downloads/swa_newscrawl_2011_10K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 swe:
     names:
         - Swedish
@@ -832,6 +896,7 @@ swe:
     link: http://corpora.uni-leipzig.de/downloads/swe_news_2007_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 tam:
     names:
         - Tamil
@@ -845,6 +910,7 @@ tam:
         - script:Latin
         - script:Devanagari
         - script:Greek
+    trees: 400
 tat:
     names:
         - Tatar
@@ -859,6 +925,7 @@ tat:
     ignore:
         - script:Latin
         - script:Greek
+    trees: 400
 tel:
     names:
         - Telugu
@@ -868,6 +935,7 @@ tel:
         - script:Telugu
     ignore:
         - script:Latin
+    trees: 500
 tgk:
     names:
         - Tajik
@@ -883,12 +951,14 @@ tgk:
         - script:Latin
         - script:Arabic
         - script:Greek
+    trees: 300
 tgl:
     names:
         - Tagalog
     link: http://corpora.uni-leipzig.de/downloads/tgl_newscrwal_2011_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 200
 tha:
     names:
         - Thai
@@ -899,6 +969,7 @@ tha:
         - script:Thai
     ignore:
         - script:Latin
+    trees: 400
 tur:
     names:
         - Turkish
@@ -906,6 +977,7 @@ tur:
     link: http://corpora.uni-leipzig.de/downloads/tur_news_2005_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 300
 ukr:
     names:
         - Ukrainian
@@ -927,6 +999,7 @@ ukr:
         - script:Katakana
         - script:Georgian
         - script:Hangul
+    trees: 300
 urd:
     names:
         - Urdū
@@ -938,6 +1011,7 @@ urd:
         - script:Arabic
     ignore:
         - script:Latin
+    trees: 300
 uzb:
     names:
         - Uzbek
@@ -952,6 +1026,7 @@ uzb:
         - script:Cyrillic
     ignore:
         - script:Arabic
+    trees: 400
 vie:
     names:
         - Vietnamese
@@ -959,6 +1034,7 @@ vie:
     link: http://corpora.uni-leipzig.de/downloads/vie_newscrwal_2011_100K-text.tar.gz
     important:
         - probable:Latin
+    trees: 500
 # Chinese commented out because it results in 3,618 prefix characters and I'm not sure
 # what will happen when we run this... total alphabet size is 76,111 characters! 
 # That's 16.22 bits per character.
