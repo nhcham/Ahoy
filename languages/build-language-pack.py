@@ -889,4 +889,7 @@ if __name__ == '__main__':
 
     lang = sys.argv[1]
     extra_slots = 10
+    if 'extra_slots' in languages[lang]:
+        extra_slots = languages[lang]['extra_slots']
+        
     build(lang, languages, extra_slots)

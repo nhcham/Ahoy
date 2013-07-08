@@ -1050,6 +1050,7 @@ zho:
     space: "，"
     use_bigrams: false
     use_monograms: false
+    extra_slots: 0
     important:
         - probable:Han
         - probable:Common
