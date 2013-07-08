@@ -484,15 +484,17 @@ def build(lang, languages, extra_slots):
         with open(path, 'w') as fout:
             fout.write("AHOY LANGUAGE PACK\n")
             fout.write("language=%s\n" % lang)
-            fout.write("alphabet_length=%d\n" % alphabet['alphabet_length'])
-            fout.write("prefix_start=%d\n" % alphabet['prefix_start'])
-            fout.write("prefix_end=%d\n" % alphabet['prefix_end'])
-            fout.write("escape_offset=%d\n" % alphabet['escape_offset'])
+            for _ in ['extra_slots', 'prefix_start','prefix_end', 'escape_offset', 
+                'alphabet_length', 'huffman_key_default', 'huffman_key_escape', 
+                'huffman_key_word_offsets', 'huffman_key_monograms', 
+                'huffman_key_bigrams']:
+                fout.write("%s=%d\n" % (_, alphabet[_]))
             fout.write("alphabet=")
             for c in alphabet['charset']:
                 fout.write("%s" % c)
             fout.write("\n")
-            for key, table in huffman_tables.items():
+            for key in sorted(huffman_tables.keys()):
+                table = huffman_tables[key]
                 fout.write("huffman_key=%d\n" % key)
                 for row_index in range(len(table)):
                     row = table[row_index]
@@ -501,7 +503,9 @@ def build(lang, languages, extra_slots):
                             offset = row_index - row[_]
                             fout.write("%d\n" % offset)
                             #out_bit_length += offset_huffman1[offset]['bits_length']
-        os.system("bzip2 -9 %s" % path)
+            fout.write("EOF\n")
+        os.system("bzip2 -f -k -9 %s" % path)
+        os.system("gzip -f -9 %s" % path)
             
         for row_index in range(offset_max + 1, len(offset_huffman2)):
             out_bit_length += 2 * offset_byte_count * 8
@@ -716,6 +720,11 @@ def build(lang, languages, extra_slots):
     if len(temp) != len(set(temp)):
         print("Oops, there are duplicate characters in the alphabet.")
         exit(1)
+        
+    for c in temp:
+        if len(c) != 1 or c == "\n":
+            print("OOOOOPS.")
+            exit(1)
     
     alphabet = dict()
     alphabet['charset'] = temp
@@ -726,6 +735,7 @@ def build(lang, languages, extra_slots):
     alphabet['prefix_end'] = prefix_end
     alphabet['escape_offset'] = escape_offset
     alphabet['alphabet_length'] = alphabet_length
+    alphabet['extra_slots'] = extra_slots
     alphabet['lowercase'] = list()
     for ci in range(prefix_end, escape_offset):
         lc = ci
@@ -790,8 +800,12 @@ def build(lang, languages, extra_slots):
     original_length_90 = None
     original_file_size = None
     original_performance = None
+    
+    clip_list = [None, 1000, 500, 400, 300, 250, 200, 100, 50]
+    if 'trees' in languages[lang]:
+        clip_list = [languages[lang]['trees']]
         
-    for clip_count in [None, 1000, 500, 400, 300, 250, 200, 100, 50]:
+    for clip_count in clip_list:
     #for clip_count in [None, 200]:
         keep_keys = set(keys_by_usage)
         if clip_count != None:
@@ -847,28 +861,42 @@ def build(lang, languages, extra_slots):
         if not os.path.exists("_huffman"):
             os.makedirs("_huffman")
         
-        file_size = save_huffman_tables(huffman_tables, "_huffman/%s-huffman-trees-%d.txt" % (lang, len(keys_by_usage) if clip_count == None else clip_count))
+        path = "_huffman/%s-huffman-trees-%d.txt" % (lang, len(keys_by_usage) if clip_count == None else clip_count)
+        if 'trees' in languages[lang]:
+            path = "_huffman/ahoy-language-pack-%s.txt" % lang
+        file_size = save_huffman_tables(huffman_tables, path)
         length_10 = lengths[int((len(lengths) - 1) * 10 / 100)]
         length_50 = lengths[int((len(lengths) - 1) * 50 / 100)]
         length_90 = lengths[int((len(lengths) - 1) * 90 / 100)]
         performance = float(length_50) * 100.0 / (192.0 / original_bit_length_per_char)
+        if 'trees' in languages[lang]:
+            with open("_huffman/ahoy-language-pack-%s-stats.yaml" % lang, 'w') as f:
+                stats = dict()
+                stats['length_10'] = length_10
+                stats['length_50'] = length_50
+                stats['length_90'] = length_90
+                stats['original_bit_length_per_char'] = original_bit_length_per_char
+                stats['performance'] = performance
+                stats['alphabet'] = alphabet
+                f.write(yaml.dump(stats, default_flow_style = False))
         if clip_count == None:
             original_length_10 = length_10
             original_length_90 = length_90
             original_file_size = file_size
             original_performance = performance
             
-        fout.write("<tr><td>%d</td><td>%d</td><td>%d%%</td><td>%d</td><td>%d%%</td><td>%d%%</td><td>%d%%</td><td>%1.1f</td><td>%d%%</td></tr>\n" %
-                   (len(keys_by_usage) if clip_count == None else clip_count,
-                    length_10,
-                    int(length_10 * 100.0 / original_length_10),
-                    length_90,
-                    int(length_90 * 100.0 / original_length_90),
-                    int(performance),
-                    int(performance * 100.0 / original_performance),
-                    file_size / 1024.0,
-                    int(file_size * 100.0 / original_file_size)))
-        fout.flush()
+        if original_length_10 != None:
+            fout.write("<tr><td>%d</td><td>%d</td><td>%d%%</td><td>%d</td><td>%d%%</td><td>%d%%</td><td>%d%%</td><td>%1.1f</td><td>%d%%</td></tr>\n" %
+                    (len(keys_by_usage) if clip_count == None else clip_count,
+                        length_10,
+                        int(length_10 * 100.0 / original_length_10),
+                        length_90,
+                        int(length_90 * 100.0 / original_length_90),
+                        int(performance),
+                        int(performance * 100.0 / original_performance),
+                        file_size / 1024.0,
+                        int(file_size * 100.0 / original_file_size)))
+            fout.flush()
         
         #keys_by_usage = sorted(huffman_key_histogram.keys(), key=lambda x: -huffman_key_histogram[x])
         #for key in keys_by_usage:
