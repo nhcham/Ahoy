@@ -523,6 +523,7 @@ kor:
         - script:Greek
         - script:Katakana
         - script:Mandaic
+    trees: 50
 kur:
     names:
         - Kurdish
@@ -1048,6 +1049,7 @@ zho:
     link: http://corpora.uni-leipzig.de/downloads/zho_news_2007-2009_100K-text.tar.gz
     space: "，"
     use_bigrams: false
+    use_monograms: false
     important:
         - probable:Han
         - probable:Common
@@ -1060,4 +1062,4 @@ zho:
         - script:Cyrillic
         - script:Greek
         - script:Bopomofo
-        
+    trees: 1
