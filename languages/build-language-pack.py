@@ -135,10 +135,11 @@ def huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet):
             result.append(alphabet['huffman_key_bigrams'] + (ci2 - alphabet['prefix_start']) * (alphabet['prefix_end'] - alphabet['prefix_start']) + (ci1 - alphabet['prefix_start']))
             huffman_key_label[result[-1]] = "%s%s>" % (alphabet['charset'][ci2], alphabet['charset'][ci1])
         
-    # add position-independent monogram prefix keys
-    if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']):
-        result.append(alphabet['huffman_key_monograms'] + (ci1 - alphabet['prefix_start']))
-        huffman_key_label[result[-1]] = "%s>" % alphabet['charset'][ci1]
+    if not 'use_monograms' in languages[lang] or (languages[lang]['use_monograms'] == True):
+        # add position-independent monogram prefix keys
+        if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']):
+            result.append(alphabet['huffman_key_monograms'] + (ci1 - alphabet['prefix_start']))
+            huffman_key_label[result[-1]] = "%s>" % alphabet['charset'][ci1]
     
     # add word offset keys
     if word_offset >= 0 and word_offset < extra_slots:
