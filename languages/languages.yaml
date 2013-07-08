@@ -1,6 +1,7 @@
 afr:
     names:
         - Afrikaans
+    native: Afrikaans
     link: http://corpora.uni-leipzig.de/downloads/afr_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -8,6 +9,7 @@ afr:
 als:
     names:
         - Tosk
+    native: Tosk
     link: http://corpora.uni-leipzig.de/downloads/als_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
@@ -28,6 +30,7 @@ ara:
     names:
         - Arabic
         - العربية
+    native: العربية
     link: http://corpora.uni-leipzig.de/downloads/ara_news_2005-2009_100K-text.tar.gz
     important:
         - probable:Arabic
@@ -44,6 +47,7 @@ azj:
         - Azeri
         - Azəri
         - آذری
+    native: azərbaycanca
     link: http://corpora.uni-leipzig.de/downloads/azj_wikipedia_2007_10K-text.tar.gz
     important:
         - probable:Latin
@@ -61,6 +65,7 @@ bak:
         - Bashkir
         - башҡорт теле
         - başqort tele
+    native: башҡортса
     link: http://corpora.uni-leipzig.de/downloads/bak_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -75,6 +80,7 @@ bel:
     names:
         - Belarusian
         - беларуская мова
+    native: беларуская
     link: http://corpora.uni-leipzig.de/downloads/bel_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -87,6 +93,7 @@ bos:
     names:
         - Standard Bosnian
         - босански
+    native: bosanski
     link: http://corpora.uni-leipzig.de/downloads/bos_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -100,6 +107,7 @@ bre:
     names:
         - Breton
         - Brezhoneg
+    native: brezhoneg
     link: http://corpora.uni-leipzig.de/downloads/bre_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
@@ -140,6 +148,7 @@ bul:
         - Bulgarian
         - български език
         - bălgarski ezik
+    native: български
     link: http://corpora.uni-leipzig.de/downloads/bul_news_2007_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -151,6 +160,7 @@ cat:
     names:
         - Catalan
         - català
+    native: català
     link: http://corpora.uni-leipzig.de/downloads/cat_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -161,6 +171,7 @@ ceb:
     names: 
         - Cebuano
         - Binisaya
+    native: Cebuano
     link: http://corpora.uni-leipzig.de/downloads/ceb_newscrawl_2011_10K-text.tar.gz
     important:
         - probable:Latin
@@ -170,6 +181,7 @@ ces:
         - Czech
         - čeština
         - český
+    native: česky
     link: http://corpora.uni-leipzig.de/downloads/ces_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -181,6 +193,7 @@ cym:
         - Welsh
         - Cymraeg
         - y Gymraeg
+    native: Cymraeg
     link: http://corpora.uni-leipzig.de/downloads/cym_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
@@ -189,6 +202,7 @@ dan:
     names:
         - Danish
         - dansk
+    native: dansk
     link: http://corpora.uni-leipzig.de/downloads/dan_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -201,6 +215,7 @@ deu:
     names:
         - German
         - Deutsch
+    native: Deutsch
     link: http://corpora.uni-leipzig.de/downloads/deu_news_2010_100K-text.tar.gz
     important:
         - probable:Latin
@@ -213,10 +228,12 @@ deu:
 #     names:
 #         - Modern Greek
 #         - νέα ελληνικά
+#     native: Ελληνικά
 #     link: http://corpora.uni-leipzig.de/downloads/ell_wikipedia_2007_100K-text.tar.gz
 eng:
     names:
         - English
+    native: English
     link: http://corpora.uni-leipzig.de/downloads/eng_news_2010_100K-text.tar.gz
     important:
         - probable:Latin
@@ -224,6 +241,7 @@ eng:
 epo:
     names:
         - Esperanto
+    native: Esperanto
     link: http://corpora.uni-leipzig.de/downloads/epo_wikipedia_2007_100K-text.tar.gz
     important:
         - probable:Latin
@@ -247,6 +265,7 @@ est:
     names:
         - Estonian
         - eesti keel
+    native: eesti
     link: http://corpora.uni-leipzig.de/downloads/est_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -260,6 +279,7 @@ eus:
     names:
         - Basque
         - Euskara
+    native: euskara
     link: http://corpora.uni-leipzig.de/downloads/eus_web_2002_100K-text.tar.gz
     important:
         - probable:Latin
@@ -268,6 +288,7 @@ fas:
     names:
         - Persian
         - فارسی
+    native: فارسی
     link: http://corpora.uni-leipzig.de/downloads/fas_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Arabic
@@ -282,6 +303,7 @@ fin:
     names:
         - Finnish
         - Suomen kieli
+    native: suomi
     link: http://corpora.uni-leipzig.de/downloads/fin_wikipedia_2007_100K-text.tar.gz
     important:
         - probable:Latin
@@ -309,6 +331,7 @@ fra:
     names:
         - French
         - français
+    native: français
     link: http://corpora.uni-leipzig.de/downloads/fra_news_2010_100K-text.tar.gz
     important:
         - probable:Latin
@@ -320,6 +343,7 @@ gom:
         - Konknni
         - ಕೊಂಕಣಿ
         - കൊങ്കണി
+    native: Konkani
     link: http://corpora.uni-leipzig.de/downloads/gom_newscrawl_2011_30K-text.tar.gz
     important:
         - probable:Latin
@@ -330,6 +354,7 @@ guj:
     names:
         - Gujarati
         - ગુજરાતી
+    native: ગુજરાતી
     link: http://corpora.uni-leipzig.de/downloads/guj_newscrawl_2011_100K-text.tar.gz
     important:
         - script:Gujarati
@@ -340,6 +365,7 @@ heb:
     names:
         - Hebrew
         - עִבְרִית
+    native: עברית
     link: http://corpora.uni-leipzig.de/downloads/heb_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Hebrew
@@ -356,6 +382,7 @@ hin:
     names:
         - Hindi
         - मानक हिन्दी
+    native: हिन्दी
     link: http://corpora.uni-leipzig.de/downloads/hin_newscrawl_2011_100K-text.tar.gz
     important: 
         - probable:Devanagari
@@ -369,6 +396,7 @@ hrv:
     names:
         - Croatian
         - hrvatski
+    native: hrvatski
     link: http://corpora.uni-leipzig.de/downloads/hrv_wikipedia_2007_100K-text.tar.gz
     important:
         - probable:Latin
@@ -390,6 +418,7 @@ hrv:
 ido:
     names: 
         - Ido
+    native: Ido
     link: http://corpora.uni-leipzig.de/downloads/ido_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
@@ -405,6 +434,7 @@ ind:
     names:
         - Indonesian
         - Bahasa Indonesia
+    native: Bahasa Indonesia
     link: http://corpora.uni-leipzig.de/downloads/ind_newscrawl_2012_100K-text.tar.gz
     important:
         - probable:Latin
@@ -413,6 +443,7 @@ isl:
     names:
         - Icelandic
         - íslenska
+    native: íslenska
     link: http://corpora.uni-leipzig.de/downloads/isl_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -421,6 +452,7 @@ ita:
     names:
         - Italian
         - Italiano
+    native: italiano
     link: http://corpora.uni-leipzig.de/downloads/ita_news_2010_100K-text.tar.gz
     important:
         - probable:Latin
@@ -429,6 +461,7 @@ jpn:
     names:
         - Japanese
         - 日本語
+    native: 日本語
     link: http://corpora.uni-leipzig.de/downloads/jpn_news_2005-2008_100K-text.tar.gz
     important:
         - probable:Hiragana
@@ -447,6 +480,7 @@ kal:
     names:
         - Greenlandic
         - Kalaallisut
+    native: kalaallisut
     link: http://corpora.uni-leipzig.de/downloads/kal_newscrawl_2011_30K-text.tar.gz
     important:
         - probable:Latin
@@ -455,6 +489,7 @@ kat:
     names: 
         - Georgian
         - ქართული ენა
+    native: ქართული
     link: http://corpora.uni-leipzig.de/downloads/kat_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Georgian
@@ -469,6 +504,7 @@ kaz:
         - Kazakh
         - қазақ тілі
         - قازاق تىلى‎
+    native: қазақша
     link: http://corpora.uni-leipzig.de/downloads/kaz_wikipedia_2010_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -495,6 +531,7 @@ kir:
         - Кыргызча
         - قىرعىز تىلى
         - Kırgızça
+    native: Кыргызча
     link: http://corpora.uni-leipzig.de/downloads/kir_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -510,6 +547,7 @@ kor:
         - Korean
         - 한국어
         - 조선말
+    native: 한국어
     link: http://corpora.uni-leipzig.de/downloads/kor_news_2007_300K-text.tar.gz
     use_bigrams: false
     important:
@@ -531,6 +569,7 @@ kur:
         - Kurdî
         - Kurdí
         - Кöрди
+    native: Kurdî
     link: http://corpora.uni-leipzig.de/downloads/kur_newscrawl_2011_30K-text.tar.gz
     important:
         - probable:Arabic
@@ -543,6 +582,7 @@ lat:
     names:
         - Latin
         - Lingua latina
+    native: Latina
     link: http://corpora.uni-leipzig.de/downloads/lat_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
@@ -551,6 +591,8 @@ lav:
     names:
         - Latvian
         - latviešu valoda
+    native: latviešu
+    native: Latviešu
     link: http://corpora.uni-leipzig.de/downloads/lav_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
@@ -576,6 +618,7 @@ lit:
     names:
         - Lithuanian
         - lietuvių kalba
+    native: lietuvių
     link: http://corpora.uni-leipzig.de/downloads/lit_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -590,6 +633,7 @@ ltz:
     names:
         - Luxembourgish
         - Lëtzebuergesch
+    native: Lëtzebuergesch
     link: http://corpora.uni-leipzig.de/downloads/ltz_wikipedia_2007_30K-text.tar.gz
     important:
         - probable:Latin
@@ -607,6 +651,7 @@ ltz:
 lus:
     names:
         - Mizo
+    native: Mizo ţawng
     link: http://corpora.uni-leipzig.de/downloads/lus_newscrawl_2011_30K-text.tar.gz
     important:
         - probable:Latin
@@ -617,6 +662,7 @@ mal:
     names:
         - Malayalam
         - മലയാളം
+    native: മലയാളം
     link: http://corpora.uni-leipzig.de/downloads/mal_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Malayalam
@@ -629,6 +675,7 @@ mar:
     names: 
         - Marathi
         - मराठी
+    native: मराठी
     link: http://corpora.uni-leipzig.de/downloads/mar_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Devanagari
@@ -641,6 +688,7 @@ mkd:
     names:
         - Macedonian
         - Македонски јазик
+    native: македонски
     link: http://corpora.uni-leipzig.de/downloads/mkd_newscrwal_2011_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -653,6 +701,7 @@ mkd:
 mlg:
     names:
         - Malagasy
+    native: Malagasy
     link: http://corpora.uni-leipzig.de/downloads/mlg_web_2012_30K-text.tar.gz
     important:
         - probable:Latin
@@ -671,6 +720,7 @@ mlt:
     names:
         - Maltese
         - Malti
+    native: Malti
     link: http://corpora.uni-leipzig.de/downloads/mlt_newscrawl_2011_10K-text.tar.gz
     important:
         - probable:Latin
@@ -681,6 +731,7 @@ mon:
     names:
         - Mongolian
         - Монгол хэл
+    native: монгол
     link: http://corpora.uni-leipzig.de/downloads/mon_news_2011_30K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -692,6 +743,7 @@ mon:
 mri:
     names:
         - Māori
+    native: Māori
     link: http://corpora.uni-leipzig.de/downloads/mri_web_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -705,6 +757,7 @@ msa:
     names:
         - Malay
         - بهاس ملايو
+    native: Malay
     link: http://corpora.uni-leipzig.de/downloads/msa_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -713,6 +766,7 @@ nep:
     names:
         - Nepali
         - नेपाली
+    native: नेपाली
     link: http://corpora.uni-leipzig.de/downloads/nep_news_2010_100K-text.tar.gz
     important:
         - probable:Devanagari
@@ -723,6 +777,7 @@ new:
     names:
         - Nepal Bhasa
         - नेपाल भाषा
+    native: नेपाल भाषा
     link: http://corpora.uni-leipzig.de/downloads/new_wikipedia_2009_10K-text.tar.gz
     important:
         - probable:Devanagari
@@ -734,6 +789,7 @@ nno:
         - Norwegian Nynorsk
         - norsk
         - nynorsk
+    native: norsk nynorsk
     link: http://corpora.uni-leipzig.de/downloads/nno_wikipedia_2007_100K-text.tar.gz
     important:
         - probable:Latin
@@ -767,6 +823,7 @@ nob:
         - Norwegian Bokmål
         - norsk
         - bokmål
+    native: norsk bokmål
     link: http://corpora.uni-leipzig.de/downloads/nob_news_2007_100K-text.tar.gz
     important:
         - probable:Latin
@@ -774,6 +831,7 @@ nob:
 oci:
     names:
         - Occitan
+    native: occitan
     link: http://corpora.uni-leipzig.de/downloads/oci_wikipedia_2007_10K-text.tar.gz
     important:
         - probable:Latin
@@ -789,6 +847,7 @@ pol:
     names:
         - Polish
         - język polski
+    native: polski
     link: http://corpora.uni-leipzig.de/downloads/pol_news_2008_100K-text.tar.gz
     important:
         - probable:Latin
@@ -799,6 +858,7 @@ por:
     names:
         - Portuguese
         - português
+    native: português
     link: http://corpora.uni-leipzig.de/downloads/por_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -809,6 +869,7 @@ rus:
     names:
         - Russian
         - Русский язык
+    native: русский
     link: http://corpora.uni-leipzig.de/downloads/rus_news_2010_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -821,6 +882,7 @@ slk:
     names:
         - Slovak
         - slovenčina
+    native: slovenčina
     link: http://corpora.uni-leipzig.de/downloads/slk_wikipedia_2007_100K-text.tar.gz
     important:
         - probable:Latin
@@ -829,6 +891,7 @@ slv:
     names:
         - Slovene
         - slovenščina
+    native: slovenščina
     link: http://corpora.uni-leipzig.de/downloads/slv_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -840,6 +903,7 @@ som:
         - Somali
         - Af-Soomaali
         - اللغة الصومالية
+    native: Soomaaliga
     link: http://corpora.uni-leipzig.de/downloads/som_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -852,6 +916,7 @@ spa:
         - Spanish
         - español
         - castellano
+    native: español
     link: http://corpora.uni-leipzig.de/downloads/spa_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -864,6 +929,7 @@ srp:
     names:
         - Standard Serbian
         - српски srpski
+    native: српски
     link: http://corpora.uni-leipzig.de/downloads/srp_wikipedia_2010_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -887,6 +953,7 @@ swa:
     names:
         - Swahili
         - Kiswahili
+    native: Kiswahili
     link: http://corpora.uni-leipzig.de/downloads/swa_newscrawl_2011_10K-text.tar.gz
     important:
         - probable:Latin
@@ -895,6 +962,7 @@ swe:
     names:
         - Swedish
         - svenska
+    native: svenska
     link: http://corpora.uni-leipzig.de/downloads/swe_news_2007_100K-text.tar.gz
     important:
         - probable:Latin
@@ -903,6 +971,7 @@ tam:
     names:
         - Tamil
         - தமிழ்
+    native: தமிழ்
     link: http://corpora.uni-leipzig.de/downloads/tam_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Tamil
@@ -919,6 +988,7 @@ tat:
         - татар теле
         - tatar tele
         - تاتار تيلی
+    native: татарча
     link: http://corpora.uni-leipzig.de/downloads/tat_news_2005-2011_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -932,6 +1002,7 @@ tel:
     names:
         - Telugu
         - తెలుగు
+    native: తెలుగు
     link: http://corpora.uni-leipzig.de/downloads/tel_newscrawl_2011_100K-text.tar.gz
     important:
         - script:Telugu
@@ -944,6 +1015,7 @@ tgk:
         - тоҷикӣ
         - تاجیکی‎
         - tojikī
+    native: тоҷикӣ
     link: http://corpora.uni-leipzig.de/downloads/tgk_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -957,6 +1029,7 @@ tgk:
 tgl:
     names:
         - Tagalog
+    native: Tagalog
     link: http://corpora.uni-leipzig.de/downloads/tgl_newscrwal_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -966,6 +1039,7 @@ tha:
         - Thai
         - Siamese
         - ภาษาไทย
+    native: ไทย
     link: http://corpora.uni-leipzig.de/downloads/tha_newscrawl_2011_100K-text.tar.gz
     important:
         - script:Thai
@@ -976,6 +1050,7 @@ tur:
     names:
         - Turkish
         - Türkçe
+    native: Türkçe
     link: http://corpora.uni-leipzig.de/downloads/tur_news_2005_100K-text.tar.gz
     important:
         - probable:Latin
@@ -984,6 +1059,7 @@ ukr:
     names:
         - Ukrainian
         - українська мова
+    native: українська
     link: http://corpora.uni-leipzig.de/downloads/ukr_wikipedia_2010_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -1006,6 +1082,7 @@ urd:
     names:
         - Urdū
         - اُردُو
+    native: اردو
     link: http://corpora.uni-leipzig.de/downloads/urd_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Arabic
@@ -1020,6 +1097,7 @@ uzb:
         - Oʻzbek
         - Ўзбек
         - اوزبیک
+    native: oʻzbekcha
     link: http://corpora.uni-leipzig.de/downloads/uzb_newscrawl_2011_100K-text.tar.gz
     important:
         - probable:Cyrillic
@@ -1033,6 +1111,7 @@ vie:
     names:
         - Vietnamese
         - Tiếng Việt
+    native: Tiếng Việt
     link: http://corpora.uni-leipzig.de/downloads/vie_newscrwal_2011_100K-text.tar.gz
     important:
         - probable:Latin
@@ -1046,6 +1125,7 @@ zho:
         - Chinese
         - 汉语
         - 漢語
+    native: 中文
     link: http://corpora.uni-leipzig.de/downloads/zho_news_2007-2009_100K-text.tar.gz
     space: "，"
     use_bigrams: false
