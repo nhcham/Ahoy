@@ -26,6 +26,7 @@ CLIP_HUFFMAN_TABLES = 300
 USE_PREFIXES = True
 ESCAPE = chr(0x1b)
 SPACE = chr(0x20)
+TOTAL_BITS = 174
 
 wrote_example_sentences = 0
 original_bit_length_per_char = None
@@ -61,6 +62,7 @@ catnames['Cf'] = 'Other, format'
 catnames['Cs'] = 'Other, surrogate'
 catnames['Co'] = 'Other, private use'
 catnames['Cn'] = 'Other, not assigned'
+
 
 def load_scripts():
     regex = re.compile("^([0-9A-F\.]+)\s+;\s+([A-Za-z_]+)\s+#\s+([A-Za-z&]+)\s+")
@@ -402,7 +404,7 @@ def build(lang, languages, extra_slots):
                 html_line += "<span style='background-color: %s'>%s</span>" % (color, alphabet['charset'][escape_ci])
                 html_line_no_markup += alphabet['charset'][escape_ci]
                 
-                if not maximum_reached and (result_bits + delta <= 192):
+                if not maximum_reached and (result_bits + delta <= TOTAL_BITS):
                     result_bits += delta
                     result_line_length += 1
                 else:
@@ -420,7 +422,7 @@ def build(lang, languages, extra_slots):
                 html_line += "<span style='background-color: %s'>%s</span>" % (color, alphabet['charset'][ci])
                 html_line_no_markup += alphabet['charset'][ci]
                 
-                if not maximum_reached and (result_bits + huffman[use_key][ci]['bits_length'] <= 192):
+                if not maximum_reached and (result_bits + huffman[use_key][ci]['bits_length'] <= TOTAL_BITS):
                     result_bits += huffman[use_key][ci]['bits_length']
                     result_line_length += 1
                 else:
@@ -489,10 +491,12 @@ def build(lang, languages, extra_slots):
                 'huffman_key_word_offsets', 'huffman_key_monograms', 
                 'huffman_key_bigrams']:
                 fout.write("%s=%d\n" % (_, alphabet[_]))
-            fout.write("alphabet=")
+            fout.write("ALPHABET\n")
             for c in alphabet['charset']:
-                fout.write("%s" % c)
-            fout.write("\n")
+                fout.write("%x\n" % ord(c))
+            fout.write("LOWERCASE\n")
+            for c in alphabet['lowercase']:
+                fout.write("%x\n" % c)
             for key in sorted(huffman_tables.keys()):
                 table = huffman_tables[key]
                 fout.write("huffman_key=%d\n" % key)
@@ -501,11 +505,10 @@ def build(lang, languages, extra_slots):
                     if row[2] != None:
                         for _ in (2, 3):
                             offset = row_index - row[_]
-                            fout.write("%d\n" % offset)
+                            fout.write("%x\n" % offset)
                             #out_bit_length += offset_huffman1[offset]['bits_length']
             fout.write("EOF\n")
-        os.system("bzip2 -f -k -9 %s" % path)
-        os.system("gzip -f -9 %s" % path)
+        os.system("gzip -f -9 -c %s > %s.gz" % (path, path))
             
         for row_index in range(offset_max + 1, len(offset_huffman2)):
             out_bit_length += 2 * offset_byte_count * 8
@@ -519,7 +522,7 @@ def build(lang, languages, extra_slots):
                         offset = row_index - row[_]
                         out_bit_length += offset_huffman1[offset]['bits_length']
         #print("total size: %1.1f bytes (%1.1f bytes per Huffman tree)" % ((out_bit_length / 8.0), (out_bit_length / 8.0 / len(huffman_tables))))
-        return os.path.getsize(path + '.bz2')
+        return os.path.getsize(path + '.gz')
         
 
     def write_char_table(alphabet):
@@ -758,6 +761,9 @@ def build(lang, languages, extra_slots):
              alphabet['prefix_end'] - alphabet['prefix_start']))
     original_bit_length_per_char = math.log(alphabet['alphabet_length']) / math.log(2)
     print("Uninformed information content is %1.2f bits per character." % (original_bit_length_per_char))
+    #print("Prefixes: [%s]" % (''.join(alphabet['charset'][alphabet['prefix_start']:alphabet['prefix_end']])))
+    #print("Remaining important: [%s]" % (''.join(alphabet['charset'][alphabet['prefix_end']:alphabet['escape_offset']])))
+    #print("Rare: [%s]" % (''.join(alphabet['charset'][alphabet['escape_offset']+1:])))
     
     if '--charset' in sys.argv or 'important' not in languages[lang]:
         fout.write("</body>\n")
@@ -868,7 +874,7 @@ def build(lang, languages, extra_slots):
         length_10 = lengths[int((len(lengths) - 1) * 10 / 100)]
         length_50 = lengths[int((len(lengths) - 1) * 50 / 100)]
         length_90 = lengths[int((len(lengths) - 1) * 90 / 100)]
-        performance = float(length_50) * 100.0 / (192.0 / original_bit_length_per_char)
+        performance = float(length_50) * 100.0 / (float(TOTAL_BITS) / original_bit_length_per_char)
         if 'trees' in languages[lang]:
             with open("_huffman/ahoy-language-pack-%s-stats.yaml" % lang, 'w') as f:
                 stats = dict()
