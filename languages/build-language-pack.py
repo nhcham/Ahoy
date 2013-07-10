@@ -444,7 +444,7 @@ def build(lang, languages, extra_slots):
                 
         return result_line_length if maximum_reached else None
     
-    def save_huffman_tables(huffman_tables, path):
+    def save_huffman_tables(huffman_tables, huffman, path):
         offset_histogram = dict()
         offset_max = None
         for key, table in huffman_tables.items():
@@ -483,7 +483,7 @@ def build(lang, languages, extra_slots):
             
         out_bit_length = 0
         
-        with open(path, 'w') as fout:
+        with open(path + '-base.txt', 'w') as fout:
             fout.write("AHOY LANGUAGE PACK\n")
             fout.write("language=%s\n" % lang)
             for _ in ['extra_slots', 'prefix_start','prefix_end', 'escape_offset', 
@@ -497,6 +497,18 @@ def build(lang, languages, extra_slots):
             fout.write("LOWERCASE\n")
             for c in alphabet['lowercase']:
                 fout.write("%x\n" % c)
+            for key in sorted(huffman.keys()):
+                table = huffman[key]
+                fout.write("huffman_key=%d\n" % key)
+                r = range(0, alphabet['escape_offset'] + 1)
+                if key == alphabet['huffman_key_escape']:
+                    r = range(alphabet['escape_offset'] + 1, alphabet['alphabet_length'])
+                for ci in r:
+                    fout.write("%x\n" % table[ci]['bits_length'])
+            fout.write("EOF\n")
+            
+        with open(path + '-links.txt', 'w') as fout:
+            fout.write("AHOY LANGUAGE PACK LINKS\n")
             for key in sorted(huffman_tables.keys()):
                 table = huffman_tables[key]
                 fout.write("huffman_key=%d\n" % key)
@@ -508,21 +520,9 @@ def build(lang, languages, extra_slots):
                             fout.write("%x\n" % offset)
                             #out_bit_length += offset_huffman1[offset]['bits_length']
             fout.write("EOF\n")
-        os.system("gzip -f -9 -c %s > %s.gz" % (path, path))
             
-        for row_index in range(offset_max + 1, len(offset_huffman2)):
-            out_bit_length += 2 * offset_byte_count * 8
             
-        print("offset huffman table: %1.1f bytes" % (out_bit_length / 8))
-        for key, table in huffman_tables.items():
-            for row_index in range(len(table)):
-                row = table[row_index]
-                if row[2] != None:
-                    for _ in (2, 3):
-                        offset = row_index - row[_]
-                        out_bit_length += offset_huffman1[offset]['bits_length']
-        #print("total size: %1.1f bytes (%1.1f bytes per Huffman tree)" % ((out_bit_length / 8.0), (out_bit_length / 8.0 / len(huffman_tables))))
-        return os.path.getsize(path + '.gz')
+        return 0
         
 
     def write_char_table(alphabet):
@@ -869,8 +869,8 @@ def build(lang, languages, extra_slots):
         
         path = "_huffman/%s-huffman-trees-%d.txt" % (lang, len(keys_by_usage) if clip_count == None else clip_count)
         if 'trees' in languages[lang]:
-            path = "_huffman/ahoy-language-pack-%s.txt" % lang
-        file_size = save_huffman_tables(huffman_tables, path)
+            path = "_huffman/ahoy-language-pack-%s" % lang
+        file_size = save_huffman_tables(huffman_tables, huffman, path)
         length_10 = lengths[int((len(lengths) - 1) * 10 / 100)]
         length_50 = lengths[int((len(lengths) - 1) * 50 / 100)]
         length_90 = lengths[int((len(lengths) - 1) * 90 / 100)]
