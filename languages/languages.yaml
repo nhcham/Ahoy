@@ -6,6 +6,7 @@ afr:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 als:
     names:
         - Tosk
@@ -26,6 +27,7 @@ als:
         - script:Katakana
         - script:Syriac
     trees: 200
+    status: sketch
 ara:
     names:
         - Arabic
@@ -41,6 +43,7 @@ ara:
     supplement:
         - script:Arabic
     trees: 300
+    status: sketch
 azj:
     names:
         - Azerbaijani
@@ -60,6 +63,7 @@ azj:
         - script:Hangul
         - script:Greek
     trees: 400
+    status: sketch
 bak:
     names:
         - Bashkir
@@ -76,6 +80,7 @@ bak:
     ignore:
         - script:Arabic
     trees: 400
+    status: sketch
 bel:
     names:
         - Belarusian
@@ -89,6 +94,7 @@ bel:
         - ['A', 'Z']
         - ['a', 'z']
     trees: 300
+    status: sketch
 bos:
     names:
         - Standard Bosnian
@@ -103,6 +109,7 @@ bos:
         - script:Hangul
         - script:Arabic
     trees: 200
+    status: sketch
 bre:
     names:
         - Breton
@@ -143,6 +150,7 @@ bre:
         - script:Ogham
         - script:Yi
     trees: 200
+    status: sketch
 bul:
     names:
         - Bulgarian
@@ -156,6 +164,7 @@ bul:
         - ['A', 'Z']
         - ['a', 'z']
     trees: 200
+    status: sketch
 cat:
     names:
         - Catalan
@@ -167,6 +176,7 @@ cat:
     ignore:
         - script:Greek
     trees: 200
+    status: sketch
 ceb:
     names: 
         - Cebuano
@@ -176,6 +186,7 @@ ceb:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 ces:
     names:
         - Czech
@@ -188,6 +199,7 @@ ces:
     ignore:
         - script:Greek
     trees: 300
+    status: sketch
 cym:
     names:
         - Welsh
@@ -198,6 +210,7 @@ cym:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 dan:
     names:
         - Danish
@@ -211,6 +224,7 @@ dan:
         - script:Han
         - script:Katakana
     trees: 250
+    status: sketch
 deu:
     names:
         - German
@@ -223,6 +237,7 @@ deu:
         - script:Greek
         - script:Cyrillic
     trees: 200
+    status: draft
 # commented out for now because link yields no content
 # ell:
 #     names:
@@ -238,6 +253,7 @@ eng:
     important:
         - probable:Latin
     trees: 200
+    status: draft
 epo:
     names:
         - Esperanto
@@ -261,6 +277,7 @@ epo:
         - script:Telugu
         - script:Mandaic
     trees: 200
+    status: sketch
 est:
     names:
         - Estonian
@@ -275,6 +292,7 @@ est:
         - script:Hebrew
         - script:Katakana
     trees: 250
+    status: sketch
 eus:
     names:
         - Basque
@@ -284,6 +302,7 @@ eus:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 fas:
     names:
         - Persian
@@ -299,6 +318,7 @@ fas:
         - script:Latin
         - script:Han
     trees: 400
+    status: sketch
 fin:
     names:
         - Finnish
@@ -327,6 +347,7 @@ fin:
         - script:Hangul
         - script:Syriac
     trees: 200
+    status: sketch
 fra:
     names:
         - French
@@ -336,6 +357,7 @@ fra:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 gom:
     names:
         - Konkani
@@ -350,6 +372,7 @@ gom:
     ignore:
         - script:Arabic
     trees: 200
+    status: sketch
 guj:
     names:
         - Gujarati
@@ -361,6 +384,7 @@ guj:
     ignore:
         - script:Latin
     trees: 400
+    status: sketch
 heb:
     names:
         - Hebrew
@@ -378,6 +402,7 @@ heb:
         - script:Cyrillic
         - script:Latin
     trees: 250
+    status: sketch
 hin:
     names:
         - Hindi
@@ -392,6 +417,7 @@ hin:
         - script:Gujarati
         - script:Latin
     trees: 400
+    status: sketch
 hrv:
     names:
         - Croatian
@@ -415,6 +441,7 @@ hrv:
         - script:Hangul
         - script:Devanagari
     trees: 250
+    status: sketch
 ido:
     names: 
         - Ido
@@ -430,6 +457,7 @@ ido:
         - script:Greek
         - script:Arabic
     trees: 200
+    status: sketch
 ind:
     names:
         - Indonesian
@@ -439,6 +467,7 @@ ind:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 isl:
     names:
         - Icelandic
@@ -448,6 +477,7 @@ isl:
     important:
         - probable:Latin
     trees: 250
+    status: sketch
 ita:
     names:
         - Italian
@@ -457,6 +487,7 @@ ita:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 jpn:
     names:
         - Japanese
@@ -476,6 +507,7 @@ jpn:
         - script:Greek
         - script:Hangul
     trees: 400
+    status: sketch
 kal:
     names:
         - Greenlandic
@@ -485,6 +517,7 @@ kal:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 kat:
     names: 
         - Georgian
@@ -499,6 +532,7 @@ kat:
         - script:Latin
         - script:Cyrillic
     trees: 250
+    status: sketch
 kaz:
     names:
         - Kazakh
@@ -525,6 +559,7 @@ kaz:
         - script:Hiragana
         - script:Hebrew
     trees: 300
+    status: sketch
 kir:
     names:
         - Kyrgyz
@@ -542,6 +577,7 @@ kir:
         - script:Latin
         - script:Greek
     trees: 300
+    status: sketch
 kor:
     names:
         - Korean
@@ -562,6 +598,7 @@ kor:
         - script:Katakana
         - script:Mandaic
     trees: 50
+    status: sketch
 kur:
     names:
         - Kurdish
@@ -578,6 +615,7 @@ kur:
     ignore:
         - script:Latin
     trees: 200
+    status: sketch
 lat:
     names:
         - Latin
@@ -587,6 +625,7 @@ lat:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 lav:
     names:
         - Latvian
@@ -614,6 +653,7 @@ lav:
         - script:Gujarati
         - script:Thai
     trees: 300
+    status: sketch
 lit:
     names:
         - Lithuanian
@@ -629,6 +669,7 @@ lit:
         - script:Hangul
         - script:Hebrew
     trees: 300
+    status: sketch
 ltz:
     names:
         - Luxembourgish
@@ -648,6 +689,7 @@ ltz:
         - script:Katakana
         - script:Hangul
     trees: 250
+    status: sketch
 lus:
     names:
         - Mizo
@@ -658,6 +700,7 @@ lus:
     ignore:
         - script:Han
     trees: 200
+    status: sketch
 mal:
     names:
         - Malayalam
@@ -671,6 +714,7 @@ mal:
     ignore:
         - script:Latin
     trees: 500
+    status: sketch
 mar:
     names: 
         - Marathi
@@ -684,6 +728,7 @@ mar:
     ignore:
         - script:Latin
     trees: 500
+    status: sketch
 mkd:
     names:
         - Macedonian
@@ -698,6 +743,7 @@ mkd:
         - script:Latin
         - script:Greek
     trees: 200
+    status: sketch
 mlg:
     names:
         - Malagasy
@@ -716,6 +762,7 @@ mlg:
         - script:Greek
         - script:Kannada
     trees: 200
+    status: sketch
 mlt:
     names:
         - Maltese
@@ -727,6 +774,7 @@ mlt:
     ignore:
         - script:Greek
     trees: 200
+    status: sketch
 mon:
     names:
         - Mongolian
@@ -740,6 +788,7 @@ mon:
     ignore:
         - script:Latin
     trees: 250
+    status: sketch
 mri:
     names:
         - Māori
@@ -753,6 +802,7 @@ mri:
         - script:Greek
         - script:Cyrillic
     trees: 100
+    status: sketch
 msa:
     names:
         - Malay
@@ -762,6 +812,7 @@ msa:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 nep:
     names:
         - Nepali
@@ -773,6 +824,7 @@ nep:
     supplement:
         - script:Devanagari
     trees: 500
+    status: sketch
 new:
     names:
         - Nepal Bhasa
@@ -784,6 +836,7 @@ new:
     supplement:
         - script:Devanagari
     trees: 500
+    status: sketch
 nno:
     names:
         - Norwegian Nynorsk
@@ -818,6 +871,7 @@ nno:
         - script:Ogham
         - script:Braille
     trees: 200
+    status: sketch
 nob:
     names:
         - Norwegian Bokmål
@@ -828,6 +882,7 @@ nob:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 oci:
     names:
         - Occitan
@@ -843,6 +898,7 @@ oci:
         - script:Hebrew
         - script:Han
     trees: 200
+    status: sketch
 pol:
     names:
         - Polish
@@ -854,6 +910,7 @@ pol:
     ignore:
         - script:Greek
     trees: 300
+    status: sketch
 por:
     names:
         - Portuguese
@@ -865,6 +922,7 @@ por:
     ignore:
         - script:Katakana
     trees: 200
+    status: sketch
 rus:
     names:
         - Russian
@@ -878,6 +936,7 @@ rus:
     ignore:
         - script:Latin
     trees: 300
+    status: sketch
 slk:
     names:
         - Slovak
@@ -887,6 +946,7 @@ slk:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 slv:
     names:
         - Slovene
@@ -898,6 +958,7 @@ slv:
     ignore:
         - script:Cyrillic
     trees: 200
+    status: sketch
 som:
     names:
         - Somali
@@ -911,6 +972,7 @@ som:
         - script:Arabic
         - script:Han
     trees: 200
+    status: sketch
 spa:
     names:
         - Spanish
@@ -925,6 +987,7 @@ spa:
         - script:Arabic
         - script:Cyrillic
     trees: 200
+    status: sketch
 srp:
     names:
         - Standard Serbian
@@ -949,6 +1012,7 @@ srp:
         - script:Armenian
         - script:Katakana
     trees: 250
+    status: sketch
 swa:
     names:
         - Swahili
@@ -958,6 +1022,7 @@ swa:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 swe:
     names:
         - Swedish
@@ -967,6 +1032,7 @@ swe:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 tam:
     names:
         - Tamil
@@ -982,6 +1048,7 @@ tam:
         - script:Devanagari
         - script:Greek
     trees: 400
+    status: sketch
 tat:
     names:
         - Tatar
@@ -998,6 +1065,7 @@ tat:
         - script:Latin
         - script:Greek
     trees: 400
+    status: sketch
 tel:
     names:
         - Telugu
@@ -1009,6 +1077,7 @@ tel:
     ignore:
         - script:Latin
     trees: 500
+    status: sketch
 tgk:
     names:
         - Tajik
@@ -1026,6 +1095,7 @@ tgk:
         - script:Arabic
         - script:Greek
     trees: 300
+    status: sketch
 tgl:
     names:
         - Tagalog
@@ -1034,6 +1104,7 @@ tgl:
     important:
         - probable:Latin
     trees: 200
+    status: sketch
 tha:
     names:
         - Thai
@@ -1046,6 +1117,7 @@ tha:
     ignore:
         - script:Latin
     trees: 400
+    status: sketch
 tur:
     names:
         - Turkish
@@ -1055,6 +1127,7 @@ tur:
     important:
         - probable:Latin
     trees: 300
+    status: sketch
 ukr:
     names:
         - Ukrainian
@@ -1078,6 +1151,7 @@ ukr:
         - script:Georgian
         - script:Hangul
     trees: 300
+    status: sketch
 urd:
     names:
         - Urdū
@@ -1091,6 +1165,7 @@ urd:
     ignore:
         - script:Latin
     trees: 300
+    status: sketch
 uzb:
     names:
         - Uzbek
@@ -1107,6 +1182,7 @@ uzb:
     ignore:
         - script:Arabic
     trees: 400
+    status: sketch
 vie:
     names:
         - Vietnamese
@@ -1120,6 +1196,7 @@ vie:
 # what will happen when we run this... total alphabet size is 76,111 characters! 
 # That's 16.22 bits per character.
 # Also, in Chinese there's no SPACE but a FULL WIDTH COMMA as word seperator
+    status: sketch
 zho:
     names:
         - Chinese
