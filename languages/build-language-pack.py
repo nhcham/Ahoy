@@ -493,6 +493,7 @@ def build(lang, languages, extra_slots):
                 'huffman_key_word_offsets', 'huffman_key_monograms', 
                 'huffman_key_bigrams']:
                 fout.write(struct.pack("<I", alphabet[_]))
+            fout.write(struct.pack("<I", len(huffman)))
             for c in alphabet['charset']:
                 fout.write(struct.pack("<I", ord(c)))
             for c in alphabet['lowercase']:
