@@ -484,41 +484,6 @@ def build(lang, languages, extra_slots):
             
         out_bit_length = 0
         
-        with open(path + '.alp', 'wb') as fout:
-            fout.write(bytes("AHOY_LANGUAGE_PACK\0", 'US-ASCII'))
-            fout.write(bytes("%s\0" % lang, 'US-ASCII'))
-            fout.write(bytes("V1\0", 'US-ASCII'))
-            for _ in ['extra_slots', 'prefix_start','prefix_end', 'escape_offset', 
-                'alphabet_length', 'huffman_key_default', 'huffman_key_escape', 
-                'huffman_key_word_offsets', 'huffman_key_monograms', 
-                'huffman_key_bigrams']:
-                fout.write(struct.pack("<I", alphabet[_]))
-            for c in alphabet['charset']:
-                fout.write(struct.pack("<I", ord(c)))
-            for c in alphabet['lowercase']:
-                fout.write(struct.pack("<I", c))
-            for key in sorted(huffman.keys()):
-                fout.write(struct.pack("<I", key))
-                
-            numbers = list()
-            for key in sorted(huffman.keys()):
-                r = range(0, alphabet['escape_offset'] + 1)
-                if key == alphabet['huffman_key_escape']:
-                    r = range(alphabet['escape_offset'] + 1, alphabet['alphabet_length'])
-                for ci in r:
-                    numbers.append(huffman[key][ci]['bits_length'])
-            fout.write(struct.pack("<%dB" % len(numbers), *numbers))
-            
-            numbers = list()
-            for key in sorted(huffman_tables.keys()):
-                table = huffman_tables[key]
-                for row_index in range(len(table)):
-                    row = table[row_index]
-                    if row[2] != None:
-                        for _ in (2, 3):
-                            numbers.append(row[_])
-            fout.write(struct.pack("<%dH" % len(numbers), *numbers))
-            
         with open(path + '-summary.alp', 'wb') as fout:
             fout.write(bytes("AHOY_LANGUAGE_PACK\0", 'US-ASCII'))
             fout.write(bytes("%s\0" % lang, 'US-ASCII'))
@@ -543,6 +508,17 @@ def build(lang, languages, extra_slots):
                 for ci in r:
                     numbers.append(huffman[key][ci]['bits_length'])
             fout.write(struct.pack("<%dB" % len(numbers), *numbers))
+            
+        with open(path + '-links.alp', 'wb') as fout:
+            numbers = list()
+            for key in sorted(huffman_tables.keys()):
+                table = huffman_tables[key]
+                for row_index in range(len(table)):
+                    row = table[row_index]
+                    if row[2] != None:
+                        for _ in (2, 3):
+                            numbers.append(row[_])
+            fout.write(struct.pack("<%dH" % len(numbers), *numbers))
             
         return 0
         

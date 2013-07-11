@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.Comparator;
 
 import org.nhcham.ahoy.AhoyService;
+import org.nhcham.ahoy.ApMessageFilter;
 
 public class AhoyActivity extends Activity implements OnClickListener 
 {
@@ -26,10 +27,14 @@ public class AhoyActivity extends Activity implements OnClickListener
     
     LinearLayout messagesLayout, messagesLayoutInactive;
     TextView currentBroadcast, previouslySeenHeader, noMessagesIndicator;
-    EditText editText;
     ProgressBar broadcastSpinner;
     String statusMessage;
     Set<View> messageViews;
+    LayoutInflater inflater;
+    
+    EditText editText;
+    ProgressBar capacity;
+    TextView language;
     
     AhoyService ahoyService;
     boolean boundService;
@@ -67,6 +72,7 @@ public class AhoyActivity extends Activity implements OnClickListener
         broadcastSpinner = (ProgressBar) findViewById(R.id.broadcastSpinner);
         previouslySeenHeader = (TextView) findViewById(R.id.previouslySeenHeader);
         noMessagesIndicator = (TextView) findViewById(R.id.noMessagesIndicator);
+        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
         findViewById(R.id.buttonBroadcastMessage).setOnClickListener(this);
         findViewById(R.id.buttonStopBroadcast).setOnClickListener(this);
@@ -207,25 +213,82 @@ public class AhoyActivity extends Activity implements OnClickListener
         }
         else if (view.getId() == R.id.buttonBroadcastMessage)
         {
-            InputFilter ssidFilter = new InputFilter() 
+            InputFilter codePointFilter = new InputFilter() 
             {
                 @Override
-                public CharSequence filter(CharSequence arg0, int arg1, int arg2, Spanned arg3, int arg4, int arg5)
+                public CharSequence filter(CharSequence source, int sstart, int send, Spanned destination, int dstart, int dend)
                 {
-                    for (int k = arg1; k < arg2; k++)
+                    ApMessageFilter messageFilter = ahoyService.messageFilter;
+                    String s = source.toString();
+                    for (int k = sstart; k < send; k++)
                     {
-                        final char ch = arg0.charAt(k);
-                        if (ch < 0x20 || ch > 0x7e || ch == '?' || ch == '"' || ch == '$' || ch == '[' || ch == '\\' || ch == ']' || ch == '+')
-                            return "";
+//                         final int codePoint = s.codePointAt(k);
+//                         Log.d(TAG, String.format("trying to add code point %x", codePoint));
+//                         if (!messageFilter.codePoints.containsKey(codePoint))
+//                             Log.d(TAG, String.format("...but it't not defined!"));
+                        
+//                         if (codePoint != 0x00E4)
+//                             return "";
                     }
                     return null;
                 }
             };
                 
-            editText = new EditText(this);
-            editText.setFilters(new InputFilter[]{ ssidFilter, new InputFilter.LengthFilter(30) });
+            View t = inflater.inflate(R.layout.enter_message, null);
+            capacity = (ProgressBar)t.findViewById(R.id.capacity);
+            language = (TextView)t.findViewById(R.id.language);
+            capacity.setMax(172);
+            capacity.setProgress(0);
+
+            editText = (EditText)t.findViewById(R.id.message);
+//             editText = new EditText(this);
+//             editText.setFilters(new InputFilter[]{ ssidFilter, new InputFilter.LengthFilter(30) });
+            editText.setFilters(new InputFilter[]{ codePointFilter });
             editText.setText("");
-            showDialog(this, "Enter a message:", editText, "Broadcast", new DialogInterface.OnClickListener() {
+            
+            editText.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable _s)
+                {
+                    String s = _s.toString();
+                    int[] result = ahoyService.messageFilter.encodeMessage(s);
+                    int bitLength = result[0];
+                    int languageId = result[1];
+                    if (bitLength >= 0)
+                    {
+                        language.setText(String.format("Detected language: [%s] (%s)", 
+                            ahoyService.messageFilter.languagePacks.get(languageId).languageTag,
+                            ahoyService.messageFilter.languagePacks.get(languageId).languageNativeName));
+                        capacity.setProgress(bitLength);
+                    }
+                    else
+                    {
+                        language.setText(String.format("Cannot send this message."));
+                        capacity.setProgress(capacity.getMax());
+                    }
+                    
+                    /*
+                    HashMap<Integer, Integer> languageScores = new HashMap<Integer, Integer>();
+                    for (int i = 0; i < s.length(); i++)
+                    {
+                        int codePoint = s.codePointAt(i);
+                        if (ahoyService.messageFilter.codePointCosts.containsKey(codePoint))
+                            for (int languageId : ahoyService.messageFilter.codePointCosts.get(codePoint).keySet())
+                            {
+                                if (!languageScores.containsKey(languageId))
+                                    languageScores.put(languageId, 0);
+                                int thisScore = ahoyService.messageFilter.codePointCosts.get(codePoint).get(languageId);
+                                languageScores.put(languageId, languageScores.get(languageId) + thisScore);
+                            }
+                    }
+                    for (int languageId : languageScores.keySet())
+                        Log.d(TAG, String.format("Score for language %d is %d.", languageId, languageScores.get(languageId)));
+                    */
+                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+                public void onTextChanged(CharSequence s, int start, int before, int count){}
+            }); 
+            
+            showDialog(this, "Enter a message:", t, "Broadcast", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which)
                 {
                     final String message = editText.getText().toString().trim();
@@ -384,8 +447,6 @@ public class AhoyActivity extends Activity implements OnClickListener
                 boolean seenSomethingInactive = false;
                 for (String message: keys)
                 {
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
                     View t = inflater.inflate(R.layout.message, null);
                     TextView messageView = (TextView)t.findViewById(R.id.message);
                     messageView.setText(message);

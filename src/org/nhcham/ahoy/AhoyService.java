@@ -10,6 +10,11 @@ import android.os.PowerManager.WakeLock;
 import android.text.TextUtils;
 import android.util.*;
 import android.widget.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.lang.*;
 import java.security.SecureRandom;
 import java.text.DateFormat;
@@ -17,12 +22,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Calendar;
 import java.util.concurrent.*;
+import java.util.zip.GZIPInputStream;
 import org.nhcham.ahoy.ApMessageFilter;
 import org.nhcham.ahoy.WifiManagerExtended;
 
 public class AhoyService extends Service {
 
     final static String TAG = "AhoyService";
+    
+    public static ApMessageFilter messageFilter = null;
     
     // after 5 minutes, a message is considered gone ( = no more active)
     final static long ACTIVE_TIMEOUT = 5 * 60;
@@ -35,7 +43,8 @@ public class AhoyService extends Service {
     IBinder binder = new LocalBinder();
     
     private enum ServiceCommand {
-        NONE, SHUTDOWN, NEW_BROADCAST, STOP_BROADCAST, QUERY_STATE, GOT_SCAN_RESULTS, PERFORM_SCAN
+        NONE, SHUTDOWN, NEW_BROADCAST, STOP_BROADCAST, QUERY_STATE, 
+        GOT_SCAN_RESULTS, PERFORM_SCAN
     }
     
     private class ServiceCommandWithOption {
@@ -130,6 +139,7 @@ public class AhoyService extends Service {
             powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AhoyService");
             secureRandom = new SecureRandom();
+            messageFilter = new ApMessageFilter(_service);
         }
         
         public void _receivedScanResults()
@@ -153,7 +163,7 @@ public class AhoyService extends Service {
                     Intent intent = new Intent("AhoyActivityUpdate");
                     for (ScanResult result: results) 
                     {
-                        final String message = ApMessageFilter.ssidToMessage(result.SSID);
+                        final String message = messageFilter.ssidToMessage(result.SSID);
                         if (message != null)
                         {
                             Log.d(TAG, String.format("Caught a message: %s", message));
@@ -221,7 +231,7 @@ public class AhoyService extends Service {
                     randomKey += String.format("%02x", (int)(secureRandom.nextInt(256)));
                 Log.d(TAG, "USING RANDOM KEY: " + randomKey);
                 config.preSharedKey = randomKey;
-                config.SSID = ApMessageFilter.messageToSsid(desiredBroadcastMessage);
+                config.SSID = messageFilter.messageToSsid(desiredBroadcastMessage);
                 Log.d(TAG, config.toString());
                 wifiManagerEx.setWifiApConfiguration(config);
                 wifiManagerEx.setWifiApEnabled(config, true);
@@ -238,7 +248,7 @@ public class AhoyService extends Service {
             
             Intent intent2 = new Intent("AhoyActivityUpdate");
             if (wifiManagerEx.isWifiApEnabled())
-                intent2.putExtra("currentlyBroadcasting", ApMessageFilter.ssidToMessage(config.SSID));
+                intent2.putExtra("currentlyBroadcasting", messageFilter.ssidToMessage(config.SSID));
             else
                 intent2.putExtra("currentlyBroadcasting", (String)null);
             sendBroadcast(intent2);
@@ -293,7 +303,7 @@ public class AhoyService extends Service {
             if (wifiManagerEx.isWifiApEnabled())
             {
                 WifiConfiguration config = wifiManagerEx.getWifiApConfiguration();
-                intent.putExtra("currentlyBroadcasting", ApMessageFilter.ssidToMessage(config.SSID));
+                intent.putExtra("currentlyBroadcasting", messageFilter.ssidToMessage(config.SSID));
             }
             else
                 intent.putExtra("currentlyBroadcasting", (String)null);
