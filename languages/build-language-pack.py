@@ -16,6 +16,7 @@ import heapq
 import math
 import os
 import re
+import struct
 import sys
 import unicodedata
 import yaml
@@ -497,18 +498,22 @@ def build(lang, languages, extra_slots):
             fout.write("LOWERCASE\n")
             for c in alphabet['lowercase']:
                 fout.write("%x\n" % c)
+            fout.write("HUFFMAN KEYS\n")
             for key in sorted(huffman.keys()):
-                table = huffman[key]
-                fout.write("huffman_key=%d\n" % key)
+                fout.write("%x\n" % key)
+            fout.write("EOF\n")
+            
+        with open(path + '-lengths.raw', 'wb') as fout:
+            numbers = list()
+            for key in sorted(huffman.keys()):
                 r = range(0, alphabet['escape_offset'] + 1)
                 if key == alphabet['huffman_key_escape']:
                     r = range(alphabet['escape_offset'] + 1, alphabet['alphabet_length'])
                 for ci in r:
-                    fout.write("%x\n" % table[ci]['bits_length'])
-            fout.write("EOF\n")
+                    numbers.append(huffman[key][ci]['bits_length'])
+            fout.write(struct.pack("<%dB" % len(numbers), *numbers))
             
         with open(path + '-links.txt', 'w') as fout:
-            fout.write("AHOY LANGUAGE PACK LINKS\n")
             for key in sorted(huffman_tables.keys()):
                 table = huffman_tables[key]
                 fout.write("huffman_key=%d\n" % key)
