@@ -238,6 +238,7 @@ deu:
         - script:Cyrillic
     trees: 200
     status: draft
+    language_id: 1
 # commented out for now because link yields no content
 # ell:
 #     names:
@@ -253,7 +254,7 @@ eng:
     important:
         - probable:Latin
     trees: 200
-    status: draft
+    status: sketch
 epo:
     names:
         - Esperanto
@@ -1197,27 +1198,27 @@ vie:
 # That's 16.22 bits per character.
 # Also, in Chinese there's no SPACE but a FULL WIDTH COMMA as word seperator
     status: sketch
-zho:
-    names:
-        - Chinese
-        - 汉语
-        - 漢語
-    native: 中文
-    link: http://corpora.uni-leipzig.de/downloads/zho_news_2007-2009_100K-text.tar.gz
-    space: "，"
-    use_bigrams: false
-    use_monograms: false
-    extra_slots: 0
-    important:
-        - probable:Han
-        - probable:Common
-    supplement:
-        - script:Han
-    ignore:
-        - script:Latin
-        - script:Hiragana
-        - script:Katakana
-        - script:Cyrillic
-        - script:Greek
-        - script:Bopomofo
-    trees: 1
+# zho:
+#     names:
+#         - Chinese
+#         - 汉语
+#         - 漢語
+#     native: 中文
+#     link: http://corpora.uni-leipzig.de/downloads/zho_news_2007-2009_100K-text.tar.gz
+#     space: "，"
+#     use_bigrams: false
+#     use_monograms: false
+#     extra_slots: 0
+#     important:
+#         - probable:Han
+#         - probable:Common
+#     supplement:
+#         - script:Han
+#     ignore:
+#         - script:Latin
+#         - script:Hiragana
+#         - script:Katakana
+#         - script:Cyrillic
+#         - script:Greek
+#         - script:Bopomofo
+#     trees: 1

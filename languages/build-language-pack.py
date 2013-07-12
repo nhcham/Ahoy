@@ -27,7 +27,7 @@ CLIP_HUFFMAN_TABLES = 300
 USE_PREFIXES = True
 ESCAPE = chr(0x1b)
 SPACE = chr(0x20)
-TOTAL_BITS = 174
+TOTAL_BITS = 172
 
 wrote_example_sentences = 0
 original_bit_length_per_char = None
@@ -438,10 +438,7 @@ def build(lang, languages, extra_slots):
             html_line += "</span>"
             if wrote_example_sentences < 10:
                 wrote_example_sentences += 1
-                fout.write("<li style='font-family: monospace;'>%s" % html_line)
-                if has_funny_spaces:
-                    fout.write("<br /><span style='color: #888;'>%s</span>" % html_line_no_markup)
-                fout.write("</li>\n")
+                fout.write("<li>%s</li>\n" % html_line_no_markup)
                 
         return result_line_length if maximum_reached else None
     
@@ -525,7 +522,9 @@ def build(lang, languages, extra_slots):
         
 
     def write_char_table(alphabet):
-        fout.write("<h2>Character map</h2>\n")
+        fout.write("<h3>Character map</h3>\n")
+        
+        fout.write("<p>The following characters, grouped by Unicode script, are considered for this language pack.</p>\n")
         
         script_count = dict()
         for c in (set(alphabet['charset']) | set(char_map.keys())):
@@ -578,7 +577,7 @@ def build(lang, languages, extra_slots):
         for c in sorted(list(set(alphabet['charset']) | set(char_map.keys())), key = cmp_to_key(comp)):
             script = unicodedata2.script(c)
             if script != last_script:
-                fout.write("<h3>%s</h3>\n" % script)
+                fout.write("<h4>%s</h4>\n" % script)
             last_script = script
                 
             ratio = 0.0
@@ -642,20 +641,11 @@ def build(lang, languages, extra_slots):
         
         
     fout = open('html/report-%s.html' % lang, 'w')
-    fout.write("<html>\n")
-    fout.write("<meta http-equiv='content-type' content='text/html; charset=utf-8'>\n");
-    fout.write("<head>\n")
-    fout.write("<link rel='stylesheet' type='text/css' href='css/styles.css' />\n");
-    fout.write("</head>\n")
-    fout.write("<body>\n")
-    fout.write("<h1>Language pack for [%s] (%s)</h1>" % (lang, ' / '.join(languages[lang]['names'])))
-    
     scripts = load_scripts()
     
     print("Building language pack for [%s] (%s)..." % (lang, ' / '.join(languages[lang]['names'])))
 
     corpora_path = download_file(lang, languages[lang]['link'])
-    fout.write("<p>Using example sentences downloaded from <a href='%s'>%s</a>.</p>\n" % (languages[lang]['link'], languages[lang]['link']))
     print("Using sentences from %s." % corpora_path)
     
     char_map = dict()
@@ -765,8 +755,6 @@ def build(lang, languages, extra_slots):
     #print("Rare: [%s]" % (''.join(alphabet['charset'][alphabet['escape_offset']+1:])))
     
     if '--charset' in sys.argv or 'important' not in languages[lang]:
-        fout.write("</body>\n")
-        fout.write("</html>\n")
         fout.close()
         exit()
         
@@ -844,8 +832,8 @@ def build(lang, languages, extra_slots):
             
         huffman_key_histogram = dict()
         
-        if clip_count == None:
-            fout.write("<h2>Example sentences</h2>\n")
+        if clip_count == None or 'trees' in languages[lang]:
+            fout.write("<h3>Example sentences</h3>\n")
             fout.write("<ul>\n")
         
         lengths = list()
@@ -854,11 +842,11 @@ def build(lang, languages, extra_slots):
             if length != None:
                 lengths.append(length)
                     
-        if clip_count == None:
+        if clip_count == None or 'trees' in languages[lang]:
             fout.write("</ul>\n")
-            fout.write("<h2>Language pack performance</h2>\n")
-            fout.write("<table>\n")
-            fout.write("<tr><th>Huffman trees</th><th colspan='4'>Message length (10% &ndash; 90%)</th><th colspan='2'>Performance</th><th colspan='2'>File size (kB)</th></tr>\n")
+            #fout.write("<h3>Language pack performance</h3>\n")
+            #fout.write("<table>\n")
+            #fout.write("<tr><th>Huffman trees</th><th colspan='4'>Message length (10% &ndash; 90%)</th><th colspan='2'>Performance</th><th colspan='2'>File size (kB)</th></tr>\n")
             
         lengths = sorted(lengths)
         print("80%% of all sentences are %d to %d characters long." % (lengths[int((len(lengths) - 1) * 10 / 100)], lengths[int((len(lengths) - 1) * 90 / 100)]))
@@ -909,8 +897,6 @@ def build(lang, languages, extra_slots):
         
     fout.write("</table>\n")
         
-    fout.write("</body>\n")
-    fout.write("</html>\n")
     fout.close()
         
 if __name__ == '__main__':
