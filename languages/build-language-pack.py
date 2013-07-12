@@ -909,8 +909,6 @@ def build(lang, languages, extra_slots):
         #for key in keys_by_usage:
             #print("[%4s] %8d" % (huffman_key_label[key], huffman_key_histogram[key]))
         
-    fout.write("</table>\n")
-        
     fout.close()
         
 if __name__ == '__main__':
