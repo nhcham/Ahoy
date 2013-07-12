@@ -438,7 +438,7 @@ def build(lang, languages, extra_slots):
             html_line += "</span>"
             if wrote_example_sentences < 10:
                 wrote_example_sentences += 1
-                fout.write("<li>%s</li>\n" % html_line_no_markup)
+                fout.write("<li style='font-family: sans-serif;'>%s</li>\n" % html_line_no_markup)
                 
         return result_line_length if maximum_reached else None
     
