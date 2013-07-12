@@ -140,7 +140,10 @@ function loadLanguagePack(data)
         row.append(cell);
 
         cell = $('<td>');
-        cell.text(languagesDef[pack.languageTag]['native']);
+        var link = $('<a>');
+        link.attr('href', 'lang-' + pack.languageTag + '.html');
+        link.text(languagesDef[pack.languageTag]['native']);
+        cell.append(link);
         row.append(cell);
 
         cell = $('<td>');
@@ -172,6 +175,7 @@ function loadLanguagePack(data)
         row.append(cell);
 
         cell = $('<td>');
+        cell.css('vertical-align', 'middle');
         var note = $("<span style='display: none;' id='cannot-" + pack.languageTag + "'>Cannot use this language pack to encode your message.</span>");
         cell.append(note);
         var bar = $("<div class='progress'><div id='bar-" + pack.languageTag + "'></div></div>");
