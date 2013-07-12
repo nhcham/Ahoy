@@ -1,38 +1,92 @@
-<h2>Enter a message:</h2>
+<h2>Try it in your browser!</h2>
+
+<p>
+To see if a message in your language can be sent and received using Ahoy, enter
+something here:
+</p>
 
 <p>
 <input id='message' type='text' style='width: 30em;' maxlength='100'/>
 </p>
 
+<p id='please_wait'>
+<img src='include/ajax-loader.gif' />&nbsp;&nbsp;Please wait while language packs are being downloaded...
+</p>
+
+<p id='no_browser_support' style='display: none;'>
+<img src='include/dialog-warning.png' style='float: left; margin-right: 0.7em;' />
+Well, this is embarassing &ndash; we couldn't download the language packs to your 
+browser.<br />
+Please try again with a different web browser.
+<div style='clear: both;'></div>
+</p>
+
+<div id='message_can_be_sent' style='display: none;'>
+
 <p>
-Using the App, your message will be sent using the following language pack:
+Using the App, your message <span id='will_could'>will</span> be sent using the following language pack<span id='too_long'> (well, the message is actually too long and you wouldn't be able to transmit everything you typed)</span>:
 </p>
 
 <p>
-<table id='best' style='font-size: 80%; width: 100%'>
-<tr id='best_header'><th>ID</th><th>Language</th><th>Status</th><th>Message length</th><th>Capacity</th></tr>
+<table id='best' style='font-size: 80%; width: 100%' cellspacing='0'>
+<tr id='best_header'><th>ID</th><th colspan='2'>Language</th><th>Status</th><th>Message length</th><th>Capacity</th></tr>
 <tr id='best_placeholder'><td colspan='5'>Please enter a message.</td></tr>
 </table>
 </p>
 
 <p>
 Don't worry if the language shown above is not the language your message is written in 
-&ndash; it's not so bad. It just happens to yield the most compact encoding using the
-defined language packs.
+&ndash; it's not so bad, especially if your message is very short. The displayed language 
+just happens to yield the most compact encoding using the currently defined language 
+packs.
+</p>
+
+<p id='top_lang_is_draft' style='display: none;'>
+<img src='include/emblem-important.png' style='float: left; margin-right: 0.7em;' />
+If your native language is <b class='insert_lang_here'></b>, your help is required 
+because the language pack for <span class='insert_lang_here'></span> is not finalized yet.
+A draft already exists, please <a href='#' class='insert_lang_link_here'>click here</a> to review it and provide feedback.
+<div style='clear: both;'></div>
+</p>
+<p id='top_lang_is_sketch' style='display: none;'>
+<img src='include/emblem-important.png' style='float: left; margin-right: 0.7em;' />
+If your native language is <b class='insert_lang_here'></b>, your help is required 
+because the language pack for <span class='insert_lang_here'></span> is not finalized yet.
+A rough draft already exists, please <a href='#' class='insert_lang_link_here'>click here</a> to review it and provide feedback.
+<div style='clear: both;'></div>
+</p>
+<p id='top_lang_is_published' style='display: none;'>
+<img src='include/dialog-ok.png' style='float: left; margin-right: 0.7em;' />
+The language pack for <b class='insert_lang_here'></b> has already been finalized and
+has been published.<br />Therefore, your message can already be sent using Ahoy.
+<div style='clear: both;'></div>
 </p>
 
 <p>
-Your help is required to define or finalize language
-packs, so if you are a native speaker of a language which is marked as draft, 
-please have a look at the respective language and provide feedback.
+The following language packs could also be used to transmit your message, but less 
+efficiently:
 </p>
 
 <p>
-For comparison, the other message lengths are listed here:
-</p>
-
-<p>
-<table id='barchart' style='font-size: 80%; width: 100%'>
-<tr><th>ID</th><th>Language</th><th>Status</th><th>Message length</th><th>Capacity</th></tr>
+<table id='barchart' style='font-size: 80%; width: 100%' cellspacing='0'>
+<tr><th>ID</th><th colspan='2'>Language</th><th>Status</th><th>Message length</th><th>Capacity</th></tr>
 </table>
 </p>
+
+</div>
+
+<div id='message_cannot_be_sent' style='display: none;'>
+<p>
+Sorry, the message you entered cannot be sent with any of the available language packs.
+</p>
+<p>
+Please check the <a href='languages.html'>languages page</a> for whether your language
+is available. If it's not in the list or if there are characters missing from the 
+language pack, please tell us: <a href='mailto:info@nhcham.org'>info@nhcham.org</a>.
+</p>
+<div id='strip_chars'>
+<p>If we remove a few characters, the following variants could be sent:</p>
+<ul id='strip_chars_list'>
+</ul>
+</div>
+</div>

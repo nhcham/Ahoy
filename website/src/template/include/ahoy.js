@@ -4,7 +4,15 @@ var languagesDef = {};
 
 function loadLanguagePack(data)
 {
-    var zip_buffer = new Uint8Array(data);
+    var zip_buffer = null;
+    try {
+        zip_buffer = new Uint8Array(data);
+    } catch (e)
+    {
+        $('#no_browser_support').show();
+        $('#message').attr('disabled','disabled');
+    }
+    
     var zip = new JSZip(zip_buffer);
     $.each(zip.files, function (index, zipEntry) {
         if (zipEntry.options.dir)
@@ -136,21 +144,25 @@ function loadLanguagePack(data)
         row.append(cell);
 
         cell = $('<td>');
+        cell.text(languagesDef[pack.languageTag]['names'][0]);
+        row.append(cell);
+
+        cell = $('<td>');
         if (languagesDef[pack.languageTag]['status'] === undefined)
-            cell.html("unknown &ndash; <a href='lang/details-" + pack.languageTag + ".html'>input required</a>");
+            cell.html("unknown &ndash; <a href='lang-" + pack.languageTag + ".html'>input required</a>");
         else if (languagesDef[pack.languageTag]['status'] === 'published')
         {
-            cell.html("published");
+            cell.html("published &ndash; <a href='lang-" + pack.languageTag + ".html'>see details</a>");
             cell.css('background-color', '#73d216');
         }
         else if (languagesDef[pack.languageTag]['status'] === 'draft')
         {
-            cell.html("draft &ndash; <a href='lang/details-" + pack.languageTag + ".html'>confirmation required</a>");
+            cell.html("draft &ndash; <a href='lang-" + pack.languageTag + ".html'>confirmation required</a>");
             cell.css('background-color', '#b8de32');
         }
         else if (languagesDef[pack.languageTag]['status'] === 'sketch')
         {
-            cell.html("rough draft &ndash; <a href='lang/details-" + pack.languageTag + ".html'>input required</a>");
+            cell.html("rough draft &ndash; <a href='lang-" + pack.languageTag + ".html'>input required</a>");
             cell.css('background-color', '#fce94f');
         }
         row.append(cell);
@@ -174,30 +186,13 @@ function loadLanguagePack(data)
         
     });    
     
-    console.log("Finished!");
+    $('#please_wait').hide();
+    
     $('#message').keyup(function() {
         var message = $('#message').val();
         encode(message);
     });
     encode($('#message').val());
-    var widths = [];
-    $('#barchart tr').each(function(index, row) {
-        if (index == 0)
-        {
-            $(row).children('th').each(function(index2, cell) {
-                widths.push($(cell).width());
-                $(cell).width(widths[index2] + 5);
-            });
-        }
-    });
-    $('#best tr').each(function(index, row) {
-        if (index == 0)
-        {
-            $(row).children('th').each(function(index2, cell) {
-                $(cell).width(widths[index2] + 5);
-            });
-        }
-    });
     $('#message').focus();
 }
 
@@ -211,10 +206,13 @@ $(document).ready(function() {
 function encode(message)
 {
     var lengthForLanguage = {};
+    var clippedMessages = {};
     var bestLanguageLength = null;
     var bestLanguageTag = null;
     jQuery.each(languages, function(index, lang) {
-        var length = getEncodedMessageLength(languagePacks[lang], message);
+        var _ = getEncodedMessageLength(languagePacks[lang], message);
+        var length = _[0];
+        var clippedMessage = jQuery.trim(_[1]);
         if (length > 0 && (
             (bestLanguageLength == null) || 
             (length < bestLanguageLength) ||
@@ -225,6 +223,8 @@ function encode(message)
         }
         
         lengthForLanguage[lang] = length;
+        if (clippedMessage.length > 0)
+            clippedMessages[clippedMessage] = true;
         if (length < 0)
         {
             $('#ml-' + lang).html('&ndash;');
@@ -232,6 +232,7 @@ function encode(message)
             $('#bar-' + lang).css('width', '0%');
             $('#bar-' + lang).parent().hide();
             $('#cannot-' + lang).show();
+            $('#row-lang-' + lang).hide();
         }
         else
         {
@@ -240,6 +241,7 @@ function encode(message)
             $('#bar-' + lang).css('width', '' + ((length > 172 ? 172 : length) * 100.0 / 172) + '%');
             $('#bar-' + lang).parent().show();
             $('#cannot-' + lang).hide();
+            $('#row-lang-' + lang).show();
         }
     });
     
@@ -254,14 +256,41 @@ function encode(message)
         var element = $('#row-lang-' + bestLanguageTag).detach();
         $('#best').append(element);
         $('#best_placeholder').hide();
+        $('#message_can_be_sent').show();
+        $('#message_cannot_be_sent').hide();
+        $('.insert_lang_here').html(languagesDef[bestLanguageTag]['native']);
+        $('.insert_lang_link_here').attr('href', "lang-" + bestLanguageTag + ".html");
+        $('#top_lang_is_published').toggle(languagesDef[bestLanguageTag]['status'] == 'published');
+        $('#top_lang_is_draft').toggle(languagesDef[bestLanguageTag]['status'] == 'draft');
+        $('#top_lang_is_sketch').toggle(languagesDef[bestLanguageTag]['status'] == 'sketch');
+        $('#will_could').html(languagesDef[bestLanguageTag]['status'] == 'published' ? 'will' : 'could')
+        $('#too_long').toggle(bestLanguageLength > 172);
     }
     else
     {
         if (message.length == 0)
+        {
             $('#best_placeholder td').html("Please enter a message.");
+        }
         else
-            $('#best_placeholder td').html("<img src='include/dialog-warning.png' style='float: left; margin-top: 1em; margin-right: 1em;' /><p>There is currently no language pack which is able to encode your message. Please help to improve the App by getting in contact with <a href='mailto:info@nhcham.org'>info@nhcham.org</a> and request the addition of a language or the addition of missing characters.</p>");
+        {
+            $('#message_cannot_be_sent').show();
+            if (Object.keys(clippedMessages).length > 0)
+            {
+                $('#strip_chars').show();
+                $('#strip_chars_list').empty();
+                jQuery.each(Object.keys(clippedMessages), function(_, s) {
+                    var item = $('<li>');
+                    item.html(s);
+                    item.css('font-family', 'sans-serif');
+                    $('#strip_chars_list').append(item);
+                });
+            } 
+            else
+                $('#strip_chars').hide();
+        }
         $('#best_placeholder').show();
+        $('#message_can_be_sent').hide();
     }
     
     $('#barchart tr').sortElements(function(a, b) {
@@ -280,6 +309,8 @@ function encode(message)
 
 function getEncodedMessageLength(pack, s)
 {
+    var canEncode = true;
+    var clippedMessage = '';
     var bitLength = 0;
     var ci2 = -1;
     var ci1 = -1;
@@ -289,6 +320,7 @@ function getEncodedMessageLength(pack, s)
         var codePoint = s.charCodeAt(i);
         if (codePoint in pack.alphabetLookup)
         {
+            clippedMessage += s.charAt(i);
             var huffmanKey = pack.huffmanKeyDefault;
             if (wordOffset >= 0 && wordOffset < pack.extraSlots)
             {
@@ -330,9 +362,12 @@ function getEncodedMessageLength(pack, s)
             }
         }
         else 
-            return -1;
+            canEncode = false;
     }
-    return bitLength;
+    if (canEncode)
+        return [bitLength, clippedMessage];
+    else
+        return [-1, clippedMessage];
 }
 
 // yanked from http://james.padolsey.com/javascript/sorting-elements-with-jquery/

@@ -68,6 +68,7 @@ h1, h2 {
     margin-right: 0;
     padding-left: 1em;
     padding-right: 1em;
+    padding-bottom: 1em;
     background-color: #fafafa;
     border: 1px solid #aaa;
     border-top: 1px solid #fafafa;
@@ -98,7 +99,7 @@ tt {
     padding-right: 0.3em;
 }
 
-#download_box {
+.sidebox {
     border: 1px solid #aaa;
     border-radius: 8px;
     box-shadow: 0px 0px 16px rgba(0,0,0,0.2);
@@ -134,7 +135,7 @@ tt {
     display: inline-block;
     margin: 0;
     padding-top: 0.2em;
-    padding-bottom: 0.2em;
+    padding-bottom: 0.4em;
     padding-left: 0.5em;
     padding-right: 0.5em;
     margin-top: 3px;
@@ -179,22 +180,60 @@ input
 }
 
 table {
-    border-collapse: collapse;
     font-family: sans-serif;
     box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+    border: 1px solid #666;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
 
 th, td
 {
     text-align: left;
-    border: 1px solid #666;
     padding-left: 0.5em;
     padding-right: 0.5em;
 }
 
 th
 {
-    background-color: #eee;
+    background-color: #ddd;
+}
+
+th:not(:first-child)
+{
+    border-left: 1px solid #666;
+}
+
+td
+{
+    border-top: 1px solid #666;
+}
+
+td:not(:first-child)
+{
+    border-left: 1px solid #666;
+}
+
+table tr:last-child td:first-child 
+{
+    border-bottom-left-radius: 3px;
+}
+    
+table tr:last-child td:last-child 
+{
+    border-bottom-right-radius: 3px;
+}
+
+table tr:first-child th:first-child 
+{
+    border-top-left-radius: 10px;
+}
+    
+table tr:first-child th:last-child 
+{
+    border-top-right-radius: 10px;
 }
 
 .progress {
@@ -202,7 +241,7 @@ th
   border-radius: 4px;
   padding: 1px;
   width: 100%;
-  min-width: 400px;
+  min-width: 300px;
 }
 
 .progress div {
@@ -215,3 +254,90 @@ th
 .progress div.over {
    background-color: #cc0000;
 }
+
+.cb {
+    font-family: monospace;
+    display: inline-block;
+    font-size: 12pt;
+    border: 1px solid #888;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    text-align: center;
+    vertical-align: middle;
+    margin-right: -3px;
+    margin-bottom: 1px;
+    border-radius: 4px;
+}
+
+.butter {
+    background-image: url(butter.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.butter-dashed {
+    background-image: url(butter-dashed.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.chameleon{
+    background-image: url(chameleon.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.scarlet_red {
+    background-image: url(scarlet_red.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.sky_blue {
+    background-image: url(sky_blue.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.aluminium {
+    background-image: url(aluminium.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.strike{
+    background-image: url(strike.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+ul#submenu {
+    display: block;
+    list-style: none;
+    padding: 0;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #888;
+    text-align: center;
+    line-height: 15pt;
+}
+
+ul#submenu li {
+    display: inline-block;
+    font-size: 9pt;
+    font-family: sans-serif;
+    margin-bottom: 0;
+    margin-right: 1em;
+}
+
+ul#submenu li a {
+    text-decoration: none;
+}
+
+ul#submenu li a:hover {
+    text-decoration: underline;
+}
+

@@ -1,0 +1,53 @@
+<h2>Technical details</h2>
+
+<h3>Message encoding</h3>
+
+<p>
+In order to be able to distinguish a message from a legitimate SSID access point name,
+a message is prepended with a backtick: <tt>&#96;</tt>. 
+Every SSID starting with a backtick is assumed to be a message.
+</p>
+
+<!--
+<p>
+In order to be able to distinguish a message from a legitimate SSID access point name,
+the following encoding is used:
+</p>
+
+<ul>
+<li>The maximum SSID length is assumed to be 31 characters to allow for 
+null-termination of the string.</li>
+<li>The maximum length of a message is 30 characters which allows for prepending the 
+message with a backtick (<tt>&#96;</tt>).</li>
+<li>If there is still characters left in the SSID (if the message length is 29 
+characters or less), the remaining space gets filled up with the following:</li>
+<ul>
+<li>a closing backtick,</li>
+<li>if there is still space, up to three checksum characters (resulting in a lower 
+false discovery rate for messages).</li>
+</ul>
+</ul>
+
+<p>
+The checksum is calculated as follows:
+</p>
+
+<ul>
+<li>From the raw ASCII character seqeuence, a 
+<a href='http://en.wikipedia.org/wiki/CRC32'>CRC32 checksum</a> is calculated 
+according to <a href='http://www.ietf.org/rfc/rfc1952.txt'>RFC 1952</a> and 
+<a href='http://www.itu.int/rec/T-REC-V.42-200203-I/en'>ITU-T recommendation V.42</a>.
+The App uses the <tt>java.util.zip.CRC32</tt> class.
+</li>
+<li>
+The result of this calculation is a 32 bit number which is then converted to a 
+big-endian string representation using the alphanumeric characters <tt>0</tt>-<tt>9</tt>, 
+<tt>A</tt>-<tt>Z</tt>, and <tt>a</tt>-<tt>z</tt> (62 characters in total).
+</li>
+<li>
+From the resulting string, up to three characters are appended as the checksum, 
+resulting in a false discovery rate of 1.6%, 0.03%, and 0.0004% for checksum lengths of 
+1, 2, and 3, respecitvely (among all SSIDs which are enclosed in backticks).
+</li>
+</ul>
+-->
