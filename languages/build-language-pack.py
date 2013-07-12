@@ -17,6 +17,7 @@ import math
 import os
 import re
 import struct
+import subprocess
 import sys
 import unicodedata
 import yaml
@@ -136,18 +137,18 @@ def huffman_keys(ci1, ci2, word_offset, extra_slots, alphabet):
         # add position-independent bigram prefix keys
         if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']) and ci2 in range(alphabet['prefix_start'], alphabet['prefix_end']):
             result.append(alphabet['huffman_key_bigrams'] + (ci2 - alphabet['prefix_start']) * (alphabet['prefix_end'] - alphabet['prefix_start']) + (ci1 - alphabet['prefix_start']))
-            huffman_key_label[result[-1]] = "%s%s>" % (alphabet['charset'][ci2], alphabet['charset'][ci1])
+            huffman_key_label[result[-1]] = "%s%s" % (alphabet['charset'][ci2], alphabet['charset'][ci1])
         
     if not 'use_monograms' in languages[lang] or (languages[lang]['use_monograms'] == True):
         # add position-independent monogram prefix keys
         if ci1 in range(alphabet['prefix_start'], alphabet['prefix_end']):
             result.append(alphabet['huffman_key_monograms'] + (ci1 - alphabet['prefix_start']))
-            huffman_key_label[result[-1]] = "%s>" % alphabet['charset'][ci1]
+            huffman_key_label[result[-1]] = "%s" % alphabet['charset'][ci1]
     
     # add word offset keys
     if word_offset >= 0 and word_offset < extra_slots:
         result.append(alphabet['huffman_key_word_offsets'] + word_offset)
-        huffman_key_label[result[-1]] = "#%d" % word_offset
+        huffman_key_label[result[-1]] = "%d" % word_offset
 
     # add default key
     result.append(alphabet['huffman_key_default'])
@@ -862,15 +863,28 @@ def build(lang, languages, extra_slots):
         length_50 = lengths[int((len(lengths) - 1) * 50 / 100)]
         length_90 = lengths[int((len(lengths) - 1) * 90 / 100)]
         performance = float(length_50) * 100.0 / (float(TOTAL_BITS) / original_bit_length_per_char)
+        
+        p1 = subprocess.Popen(['gzip', '-c', 
+                               "_huffman/ahoy-language-pack-%s-summary.alp" % lang,
+                               "_huffman/ahoy-language-pack-%s-links.alp" % lang], stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(["wc", "-c"], stdin=p1.stdout, stdout=subprocess.PIPE)
+        p1.stdout.close()
+        pack_size = int(p2.communicate()[0])
+        
         if 'trees' in languages[lang]:
             with open("_huffman/ahoy-language-pack-%s-stats.yaml" % lang, 'w') as f:
                 stats = dict()
                 stats['length_10'] = length_10
                 stats['length_50'] = length_50
                 stats['length_90'] = length_90
+                stats['pack_size'] = pack_size
                 stats['original_bit_length_per_char'] = original_bit_length_per_char
                 stats['performance'] = performance
                 stats['alphabet'] = alphabet
+                used_huffman_key_labels = dict()
+                for key in huffman_tables.keys():
+                    used_huffman_key_labels[key] = huffman_key_label[key]
+                stats['huffman_keys'] = used_huffman_key_labels
                 f.write(yaml.dump(stats, default_flow_style = False))
         if clip_count == None:
             original_length_10 = length_10
