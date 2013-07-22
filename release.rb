@@ -2,6 +2,8 @@
 
 require 'fileutils'
 
+system("./collect-languages.py")
+
 commitCount = `git rev-list --count HEAD`.to_i
 versionTag = `git describe --dirty`.strip
 puts "Version code: #{commitCount}, version name: #{versionTag}"

@@ -18,40 +18,21 @@
         android:background="@drawable/header"
         />
         
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/entry"
         android:paddingTop="2dp"
         android:paddingLeft="2dp"
-        android:paddingRight="2dp">
+        android:paddingRight="2dp"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/currentBroadcast"
             android:layout_width="wrap_content"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="(nothing)"
-            android:layout_centerVertical="true" 
-            />
-            
-        <ImageButton 
-            android:layout_width="42sp"
-            android:layout_height="42sp" 
-            android:id="@+id/buttonBroadcastMessage"
-            android:scaleType="fitCenter"
-            android:src="@drawable/content_edit" 
-            android:layout_alignParentRight="true" 
-            android:layout_centerVertical="true" 
-            />
-                
-        <ImageButton 
-            android:layout_width="42sp"
-            android:layout_height="42sp" 
-            android:id="@+id/buttonStopBroadcast"
-            android:scaleType="fitCenter"
-            android:src="@drawable/navigation_cancel" 
-            android:layout_toLeftOf="@+id/buttonBroadcastMessage"
-            android:layout_centerVertical="true" 
             />
             
         <ProgressBar
@@ -60,12 +41,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@android:style/Widget.ProgressBar.Small"
-            android:layout_toLeftOf="@id/buttonStopBroadcast"
-            android:layout_alignBottom="@id/currentBroadcast" 
-            android:layout_centerVertical="true" 
             />
 
-    </RelativeLayout>
+        <ImageButton 
+            android:layout_width="42sp"
+            android:layout_height="42sp" 
+            android:id="@+id/buttonStopBroadcast"
+            android:scaleType="fitCenter"
+            android:src="@drawable/navigation_cancel" 
+            />
+            
+        <ImageButton 
+            android:layout_width="42sp"
+            android:layout_height="42sp" 
+            android:id="@+id/buttonBroadcastMessage"
+            android:scaleType="fitCenter"
+            android:src="@drawable/content_edit" 
+            />
+                
+    </LinearLayout>
     
     <ScrollView 
         android:layout_width="fill_parent" 
@@ -119,6 +113,7 @@
                 android:paddingRight="2dp"
                 android:background="@drawable/header"
                 android:id="@+id/previouslySeenHeader"
+                android:visibility="gone"
                 />
             
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

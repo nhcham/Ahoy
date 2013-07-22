@@ -35,7 +35,7 @@ public class ApMessageFilter
                     continue;
                 String languageTag = line.substring(spaceOffset + 1, spaceOffset2);
                 String languageMarker = line.substring(spaceOffset2 + 1);
-                Log.d(TAG, String.format("Now loading [%d] [%s]...", languageId, languageTag));
+//                 Log.d(TAG, String.format("Now loading [%d] [%s]...", languageId, languageTag));
                 LanguagePack pack = new LanguagePack(context, languageId, languageTag, languageMarker);
                 languagePacks.put(languageId, pack);
             }
@@ -91,9 +91,9 @@ public class ApMessageFilter
                 languagePackId |= (bits[i + 1] << (6 - i));
             if (languagePacks.containsKey(languagePackId))
             {
-                Log.d(TAG, String.format("Language pack id is [%d].", languagePackId));
+//                 Log.d(TAG, String.format("Language pack id is [%d].", languagePackId));
                 final String message = languagePacks.get(languagePackId).decodeMessage(bits, 8);
-                Log.d(TAG, String.format("Message is [%s].", message));
+//                 Log.d(TAG, String.format("Message is [%s].", message));
                 return message;
             }
         }
@@ -101,8 +101,9 @@ public class ApMessageFilter
         return s;
     }
     
-    public String messageToSsid(final String s)
+    public String messageToSsid(final String _message)
     {
+        String s = compactMessage(_message);
         int[] _result = this.encodeMessage(s);
         int bitLength = _result[0];
         int languageId = _result[1];
@@ -139,14 +140,15 @@ public class ApMessageFilter
         while (ssid.length() < 31)
             ssid += SSID_ALPHABET.charAt(0);
         
-        Log.d(TAG, String.format("SSID is %s.", ssid));
+//         Log.d(TAG, String.format("SSID is %s.", ssid));
         
         return ssid;
     }
     
-    public int[] encodeMessage(final String message)
+    public int[] encodeMessage(String _message)
     {
-        Log.d(TAG, String.format("Encoding message: [%s]", message));
+        String message = compactMessage(_message);
+//         Log.d(TAG, String.format("Encoding message: [%s]", message));
         int minimumBitLength = -1;
         int minimumBitLengthLang = -1;
         for (int languageId : languagePacks.keySet())
@@ -162,10 +164,16 @@ public class ApMessageFilter
                 }
             }
         }
-        Log.d(TAG, String.format("Message is probably [%s], length is %3d bits: [%s]", minimumBitLengthLang, minimumBitLength, message));
+//         Log.d(TAG, String.format("Message is probably [%s], length is %3d bits: [%s]", minimumBitLengthLang, minimumBitLength, message));
         int[] result = new int[2];
         result[0] = minimumBitLength;
         result[1] = minimumBitLengthLang;
         return result;
+    }
+    
+    private String compactMessage(final String message)
+    {
+        // remove leading and trailing spaces, replace spans of multiple spaces with a single space
+        return message.trim().replaceAll(" +", " ");
     }
 };

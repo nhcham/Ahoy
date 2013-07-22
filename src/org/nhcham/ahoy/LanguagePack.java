@@ -258,7 +258,7 @@ public class LanguagePack
         int wordOffset = 0;
         int resultOffset = 0;
         
-        String log = new String();
+//         String log = new String();
         
         for (int i = 0; i < languageMarker.length; i++)
             result[resultOffset++] = languageMarker[i];
@@ -295,16 +295,16 @@ public class LanguagePack
                     while (code >= 2)
                     {
                         result[resultOffset++] = (byte)(code & 1);
-                        log += (code & 1) == 0 ? "0" : "1";
+//                         log += (code & 1) == 0 ? "0" : "1";
                         if (resultOffset >= result.length)
                         {
                             this.unloadLinks();
-                            Log.d(TAG, log);
+//                             Log.d(TAG, log);
                             return;
                         }
                         code >>= 1;
                     }
-                    log += String.format("[%x,%d] ", codePoint, huffmanKey);
+//                     log += String.format("[%x,%d] ", codePoint, huffmanKey);
                 }
                 else
                 {
@@ -312,30 +312,30 @@ public class LanguagePack
                     while (code >= 2)
                     {
                         result[resultOffset++] = (byte)(code & 1);
-                        log += (code & 1) == 0 ? "0" : "1";
+//                         log += (code & 1) == 0 ? "0" : "1";
                         if (resultOffset >= result.length)
                         {
                             this.unloadLinks();
-                            Log.d(TAG, log);
+//                             Log.d(TAG, log);
                             return;
                         }
                         code >>= 1;
                     }
-                    log += String.format("[ESC] ");
+//                     log += String.format("[ESC] ");
                     code = huffmanTrees.get(huffmanKeyEscape).encode(ci);
                     while (code >= 2)
                     {
                         result[resultOffset++] = (byte)(code & 1);
-                        log += (code & 1) == 0 ? "0" : "1";
+//                         log += (code & 1) == 0 ? "0" : "1";
                         if (resultOffset >= result.length)
                         {
                             this.unloadLinks();
-                            Log.d(TAG, log);
+//                             Log.d(TAG, log);
                             return;
                         }
                         code >>= 1;
                     }
-                    log += String.format("[%x] ", codePoint);
+//                     log += String.format("[%x] ", codePoint);
                 }
                 if (ci == 0)
                 {
