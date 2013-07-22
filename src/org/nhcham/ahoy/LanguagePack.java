@@ -1,6 +1,5 @@
 package org.nhcham.ahoy;
 
-import java.util.zip.CRC32;
 import java.util.*;
 import java.io.*;
 import android.content.*;
@@ -11,9 +10,12 @@ public class LanguagePack
 {
     final static String TAG = "LanguagePack";
     
+    Context context;
+    
     public int languageId;
     public String languageTag;
-    public String languageNativeName;
+    
+    public byte[] languageMarker;
     
     public int extraSlots;
     public int prefixStart;
@@ -64,11 +66,14 @@ public class LanguagePack
         return (byte)(buffer[0] & 0xff);
     }
 
-    public LanguagePack(Context context, final int languageId, final String languageTag, final String languageNativeName)
+    public LanguagePack(Context context, final int languageId, final String languageTag, final String languageMarker)
     {
+        this.context = context;
         this.languageId = languageId;
         this.languageTag = languageTag;
-        this.languageNativeName = languageNativeName;
+        this.languageMarker = new byte[languageMarker.length()];
+        for (int i = 0; i < languageMarker.length(); i++)
+            this.languageMarker[i] = (byte)(languageMarker.charAt(i) == '0' ? 0 : 1);
         
         try
         {
@@ -134,37 +139,63 @@ public class LanguagePack
                 stream.read(numbers, 0, numbers.length);
                 huffmanTrees.get(huffmanKey).setLengthInfo(numbers);
             }
-            
-            // now read the code lengths
-            /*
-            while (true)
-            {
-                line = reader.readLine();
-                if (line.equals("EOF"))
-                    break;
-                int huffmanKey = Integer.parseInt(line, 16);
-                short codePointCount = (short)(escapeOffset + 1);
-                if (huffmanKey == huffmanKeyEscape)
-                    codePointCount = (short)(alphabetLength - escapeOffset - 1);
-                huffmanTrees.put(huffmanKey, new HuffmanTree(codePointCount, 
-                    (short)((huffmanKey == huffmanKeyEscape) ? (escapeOffset + 1) : 0)));
-                    
-                byte[] numbers = new byte[codePointCount];
-                lengthStream.read(numbers, 0, numbers.length);
-//                 Log.d(TAG, String.format("Read %d bytes and got %d.", numbers.length, bytesRead));
-                huffmanTrees.get(huffmanKey).setLengthInfo(numbers);
-                
-            }
-            */
         } catch (IOException e) {
             // TODO: what do we do with this?
             Log.e(TAG, "exception", e);
         }
     }
     
+    public void loadLinks()
+    {
+        try
+        {
+            BufferedInputStream stream = new BufferedInputStream(context.getAssets().open(String.format("ahoy-language-pack-%s-links.alp", languageTag)));
+            for (int i = 0; i < huffmanKeyCount; i++)
+            {
+                int huffmanKey = huffmanKeys[i];
+                
+                int count = huffmanTrees.get(huffmanKey).symbolCount - 1;
+                    
+                short[] numbers = new short[count * 2];
+                byte[] buffer = new byte[2];
+                for (int k = 0; k < count * 2; k++)
+                {
+                    stream.read(buffer, 0, 2);
+                    numbers[k] = (short)(((buffer[0] & 0xff)) |
+                       ((buffer[1] & 0xff) << 8));
+                }
+                /*
+                if (i == huffmanKeyWordOffset)
+                {
+                    for (int k = 0; k < count; k++)
+                    {
+                        short left = numbers[k << 1];
+                        short right = numbers[(k << 1) + 1];
+                        Log.d(TAG, String.format("%d,%d,%d", k + huffmanTrees.get(huffmanKey).symbolCount, left, right));
+                    }
+                }
+                */
+                huffmanTrees.get(huffmanKey).setLinksInfo(numbers);
+            }
+        } catch (IOException e) {
+            // TODO: what do we do with this?
+            Log.e(TAG, "exception", e);
+        }
+    }
+    
+    public void unloadLinks()
+    {
+        for (int i = 0; i < huffmanKeyCount; i++)
+        {
+            int huffmanKey = huffmanKeys[i];
+            huffmanTrees.get(huffmanKey).unsetLinksInfo();
+        }
+    }
+    
     public short getEncodedMessageLength(String s)
     {
         short bitLength = 0;
+        bitLength += languageMarker.length;
         int ci2 = -1;
         int ci1 = -1;
         int wordOffset = 0;
@@ -198,18 +229,6 @@ public class LanguagePack
                     bitLength += huffmanTrees.get(huffmanKey).getCodeLength(ci);
                 else
                     bitLength += huffmanTrees.get(huffmanKey).getCodeLength(escapeOffset) + huffmanTrees.get(huffmanKeyEscape).getCodeLength(ci);
-//                 int code = huffmanTrees.get(huffmanKey).encode(ci);
-/*
-                int codeLength = 0;
-                int temp = code;
-                while (temp > 1)
-                {
-                    codeLength++;
-                    temp >>= 1;
-                }
-                bitLength += codeLength;
-                */
-//                 Log.d(TAG, String.format("%4x (tree %4d) / %4d => %8d (%2d)", codePoint, huffmanKey, ci, code, codeLength));
                 if (ci == 0)
                 {
                     ci2 = -1;
@@ -227,11 +246,187 @@ public class LanguagePack
         return bitLength;
     }
     
+    public void encodeMessage(String s, byte[] result)
+    {
+        this.loadLinks();
+        for (int i = 0; i < result.length; i++)
+            // TODO: this is slow
+            s += new String(alphabet, 0, 1);
+            
+        int ci2 = -1;
+        int ci1 = -1;
+        int wordOffset = 0;
+        int resultOffset = 0;
+        
+        String log = new String();
+        
+        for (int i = 0; i < languageMarker.length; i++)
+            result[resultOffset++] = languageMarker[i];
+            
+        for (int i = 0; i < s.length(); i++)
+        {
+            int codePoint = s.codePointAt(i);
+            if (alphabetLookup.containsKey(codePoint))
+            {
+                int huffmanKey = huffmanKeyDefault;
+                if (wordOffset >= 0 && wordOffset < extraSlots)
+                {
+                    int testKey = huffmanKeyWordOffset + wordOffset;
+                    if (huffmanTrees.containsKey(testKey))
+                        huffmanKey = testKey;
+                }
+                if (ci1 >= prefixStart && ci1 < prefixEnd)
+                {
+                    int testKey = huffmanKeyMonograms + (ci1 - prefixStart);
+                    if (huffmanTrees.containsKey(testKey))
+                        huffmanKey = testKey;
+                }
+                if (ci1 >= prefixStart && ci1 < prefixEnd && ci2 >= prefixStart && ci2 < prefixEnd)
+                {
+                    int testKey = huffmanKeyBigrams + (ci2 - prefixStart) * (prefixEnd - prefixStart) + (ci1 - prefixStart);
+                    if (huffmanTrees.containsKey(testKey))
+                        huffmanKey = testKey;
+                }
+                
+                int ci = alphabetLookup.get(codePoint);
+                if (ci < escapeOffset)
+                {
+                    int code = huffmanTrees.get(huffmanKey).encode(ci);
+                    while (code >= 2)
+                    {
+                        result[resultOffset++] = (byte)(code & 1);
+                        log += (code & 1) == 0 ? "0" : "1";
+                        if (resultOffset >= result.length)
+                        {
+                            this.unloadLinks();
+                            Log.d(TAG, log);
+                            return;
+                        }
+                        code >>= 1;
+                    }
+                    log += String.format("[%x,%d] ", codePoint, huffmanKey);
+                }
+                else
+                {
+                    int code = huffmanTrees.get(huffmanKey).encode(escapeOffset);
+                    while (code >= 2)
+                    {
+                        result[resultOffset++] = (byte)(code & 1);
+                        log += (code & 1) == 0 ? "0" : "1";
+                        if (resultOffset >= result.length)
+                        {
+                            this.unloadLinks();
+                            Log.d(TAG, log);
+                            return;
+                        }
+                        code >>= 1;
+                    }
+                    log += String.format("[ESC] ");
+                    code = huffmanTrees.get(huffmanKeyEscape).encode(ci);
+                    while (code >= 2)
+                    {
+                        result[resultOffset++] = (byte)(code & 1);
+                        log += (code & 1) == 0 ? "0" : "1";
+                        if (resultOffset >= result.length)
+                        {
+                            this.unloadLinks();
+                            Log.d(TAG, log);
+                            return;
+                        }
+                        code >>= 1;
+                    }
+                    log += String.format("[%x] ", codePoint);
+                }
+                if (ci == 0)
+                {
+                    ci2 = -1;
+                    ci1 = -1;
+                    wordOffset = 0;
+                } else {
+                    ci2 = ci1;
+                    ci1 = ci;
+                    if (ci1 >= prefixEnd && ci < escapeOffset)
+                        ci1 = lowercase[ci1 - prefixEnd];
+                    wordOffset++;
+                }
+            }
+        }
+        
+        this.unloadLinks();
+    }
+    
     public boolean canEncodeMessage(String s)
     {
         for (int i = 0; i < s.length(); i++)
             if (!alphabetLookup.containsKey(s.codePointAt(i)))
                 return false;
         return true;
+    }
+    
+    public String decodeMessage(final byte[] bits, int offset)
+    {
+        this.loadLinks();
+        String result = new String();
+        int ci2 = -1;
+        int ci1 = -1;
+        int wordOffset = 0;
+        int lastNonSpaceLength = 0;
+        while (true)
+        {
+            int huffmanKey = huffmanKeyDefault;
+            if (wordOffset >= 0 && wordOffset < extraSlots)
+            {
+                int testKey = huffmanKeyWordOffset + wordOffset;
+                if (huffmanTrees.containsKey(testKey))
+                    huffmanKey = testKey;
+            }
+            if (ci1 >= prefixStart && ci1 < prefixEnd)
+            {
+                int testKey = huffmanKeyMonograms + (ci1 - prefixStart);
+                if (huffmanTrees.containsKey(testKey))
+                    huffmanKey = testKey;
+            }
+            if (ci1 >= prefixStart && ci1 < prefixEnd && ci2 >= prefixStart && ci2 < prefixEnd)
+            {
+                int testKey = huffmanKeyBigrams + (ci2 - prefixStart) * (prefixEnd - prefixStart) + (ci1 - prefixStart);
+                if (huffmanTrees.containsKey(testKey))
+                    huffmanKey = testKey;
+            }
+            
+            int[] symbol_and_offset = huffmanTrees.get(huffmanKey).decode(bits, offset);
+            offset = symbol_and_offset[1];
+            int symbol = symbol_and_offset[0];
+            if (symbol == -1)
+                break;
+            int ci = symbol;
+            if (ci == escapeOffset)
+            {
+                symbol_and_offset = huffmanTrees.get(huffmanKeyEscape).decode(bits, offset);
+                offset = symbol_and_offset[1];
+                symbol = symbol_and_offset[0];
+                if (symbol == -1)
+                    break;
+                ci = symbol;
+            }
+            // TODO: this is slow
+            result += new String(alphabet, ci, 1);
+            if (ci != 0)
+                lastNonSpaceLength = result.length();
+            if (ci == 0)
+            {
+                ci2 = -1;
+                ci1 = -1;
+                wordOffset = 0;
+            } else {
+                ci2 = ci1;
+                ci1 = ci;
+                if (ci1 >= prefixEnd && ci < escapeOffset)
+                    ci1 = lowercase[ci1 - prefixEnd];
+                wordOffset++;
+            }
+        }
+        this.unloadLinks();
+        // now strip trailing SPACE characters...
+        return result.substring(0, lastNonSpaceLength);
     }
 };

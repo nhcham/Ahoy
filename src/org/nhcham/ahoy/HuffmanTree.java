@@ -11,7 +11,7 @@ public class HuffmanTree
 {
     final static String TAG = "HuffmanTree";
     
-    private int symbolCount;
+    public int symbolCount;
     private int symbolOffset;
     private int downstreamSlots;
     private int upstreamSlots;
@@ -41,8 +41,8 @@ public class HuffmanTree
         upstreamLinks = new short[upstreamSlots << 1];
         for (int i = 0; i < symbolCount - 1; i++)
         {
-            short left = (short)((symbolCount + i) - numbers[i << 1]);
-            short right = (short)((symbolCount + i) - numbers[(i << 1) + 1]);
+            short left = numbers[i << 1];
+            short right = numbers[(i << 1) + 1];
             downstreamLinks[i << 1] = left;
             downstreamLinks[(i << 1) + 1] = right;
             upstreamLinks[left << 1] = (short)(i + symbolCount);
@@ -52,8 +52,20 @@ public class HuffmanTree
         }
     }
     
+    public void unsetLinksInfo()
+    {
+        downstreamLinks = null;
+        upstreamLinks = null;
+    }
+    
     public int encode(final int symbol)
     {
+        /*
+        encodes a symbol into a bit pattern:
+        000001xxxxxxx
+        the most significant 1 describes the length of the code,
+        the least significant bit represents the path taken from the root node, etc.
+        */
         int p = symbol - symbolOffset;
         // assert(0 >= p < symbolCount)
         int length = 0;
@@ -71,15 +83,27 @@ public class HuffmanTree
         return result;
     }
     
-    public int decode(int code)
+    public int[] decode(final byte[] bits, int offset)
     {
+        /*
+        decodes bit pattern to symbol and new offset
+        returns symbol -1 if incomplete
+        */
         int p = upstreamSlots;
+        int[] result = new int[2];
         while (p >= symbolCount)
         {
-            p = downstreamLinks[((p - symbolCount) << 1) | (code & 1)];
-            code >>= 1;
+            p = downstreamLinks[((p - symbolCount) << 1) | (int)(bits[offset++])];
+            if (offset >= bits.length)
+            {
+                result[0] = -1;
+                result[1] = offset;
+                return result;
+            }
         }
-        return p + symbolOffset;
+        result[0] = p + symbolOffset;
+        result[1] = offset;
+        return result;
     }
     
     public byte getCodeLength(final int symbol)

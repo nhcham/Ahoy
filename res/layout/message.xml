@@ -7,8 +7,8 @@
     android:paddingLeft="2dp"
     android:paddingRight="2dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/poster"
         >
@@ -17,8 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/poster_sub"
-            android:layout_centerVertical="true"
             android:paddingRight="3sp"
+            android:paddingTop="6sp"
             >
 
             <ImageView
@@ -50,12 +50,21 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_centerVertical="true" 
             android:paddingTop="5dp"
-            android:paddingBottom="5dp" 
-            android:layout_toRightOf="@id/poster_sub" />
+            android:paddingBottom="5dp" />
             
-    </RelativeLayout>
+        <ImageButton 
+            android:layout_width="42sp"
+            android:layout_height="42sp" 
+            android:id="@+id/buttonShareMessage"
+            android:scaleType="fitCenter"
+            android:src="@drawable/social_share" 
+            android:visibility="gone"
+            />
+            
+    </LinearLayout>
 
     <TextView
         android:id="@+id/details"
@@ -64,16 +73,5 @@
         android:layout_below="@id/poster" 
         android:visibility="gone" 
         android:textColor="#80ffffff"/>
-        
-    <ImageButton 
-        android:layout_width="42sp"
-        android:layout_height="42sp" 
-        android:id="@+id/buttonShareMessage"
-        android:scaleType="fitCenter"
-        android:src="@drawable/social_share" 
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true" 
-        android:visibility="gone"
-        />
         
 </RelativeLayout>

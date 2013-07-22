@@ -34,7 +34,6 @@ public class AhoyActivity extends Activity implements OnClickListener
     
     EditText editText;
     ProgressBar capacity;
-    TextView language;
     
     AhoyService ahoyService;
     boolean boundService;
@@ -236,7 +235,6 @@ public class AhoyActivity extends Activity implements OnClickListener
                 
             View t = inflater.inflate(R.layout.enter_message, null);
             capacity = (ProgressBar)t.findViewById(R.id.capacity);
-            language = (TextView)t.findViewById(R.id.language);
             capacity.setMax(172);
             capacity.setProgress(0);
 
@@ -255,14 +253,10 @@ public class AhoyActivity extends Activity implements OnClickListener
                     int languageId = result[1];
                     if (bitLength >= 0)
                     {
-                        language.setText(String.format("Detected language: [%s] (%s)", 
-                            ahoyService.messageFilter.languagePacks.get(languageId).languageTag,
-                            ahoyService.messageFilter.languagePacks.get(languageId).languageNativeName));
                         capacity.setProgress(bitLength);
                     }
                     else
                     {
-                        language.setText(String.format("Cannot send this message."));
                         capacity.setProgress(capacity.getMax());
                     }
                     

@@ -163,7 +163,8 @@ public class AhoyService extends Service {
                     Intent intent = new Intent("AhoyActivityUpdate");
                     for (ScanResult result: results) 
                     {
-                        final String message = messageFilter.ssidToMessage(result.SSID);
+//                         final String message = messageFilter.ssidToMessage(result.SSID);
+                        final String message = "Whoohoo! Das ist ja eine super Sache. Und es klappt ja auch ganz gut.";
                         if (message != null)
                         {
                             Log.d(TAG, String.format("Caught a message: %s", message));
@@ -232,7 +233,7 @@ public class AhoyService extends Service {
                 Log.d(TAG, "USING RANDOM KEY: " + randomKey);
                 config.preSharedKey = randomKey;
                 config.SSID = messageFilter.messageToSsid(desiredBroadcastMessage);
-                Log.d(TAG, config.toString());
+//                 Log.d(TAG, config.toString());
                 wifiManagerEx.setWifiApConfiguration(config);
                 wifiManagerEx.setWifiApEnabled(config, true);
             }

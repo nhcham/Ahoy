@@ -16,9 +16,9 @@
    version="1.1"
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="icon.svg"
-   inkscape:export-filename="/home/michael/programming/android/Ahoy/craft/icon.png"
-   inkscape:export-xdpi="16.875"
-   inkscape:export-ydpi="16.875">
+   inkscape:export-filename="/home/michael/programming/android/Ahoy/craft/icon-frame-512.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs4">
     <linearGradient
@@ -230,9 +230,9 @@
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1366"
-     inkscape:window-height="719"
+     inkscape:window-height="716"
      inkscape:window-x="0"
-     inkscape:window-y="22"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -546,7 +546,7 @@
        style="fill:#0067f2;fill-opacity:0.1254902;stroke:#406daa;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1" />
     <path
        transform="matrix(1.1894291,0,0,0.73510762,1284.7773,957.41939)"
-       d="m 322,86.090172 a 5,8.0901699 0 1 1 -10,0 5,8.0901699 0 1 1 10,0 z"
+       d="m 322,86.090172 c 0,4.468077 -2.23858,8.09017 -5,8.09017 -2.76142,0 -5,-3.622093 -5,-8.09017 0,-4.468078 2.23858,-8.09017 5,-8.09017 2.76142,0 5,3.622092 5,8.09017 z"
        sodipodi:ry="8.0901699"
        sodipodi:rx="5"
        sodipodi:cy="86.090172"
@@ -562,11 +562,11 @@
        sodipodi:cy="86.090172"
        sodipodi:rx="5"
        sodipodi:ry="8.0901699"
-       d="m 322,86.090172 a 5,8.0901699 0 1 1 -10,0 5,8.0901699 0 1 1 10,0 z"
+       d="m 322,86.090172 c 0,4.468077 -2.23858,8.09017 -5,8.09017 -2.76142,0 -5,-3.622093 -5,-8.09017 0,-4.468078 2.23858,-8.09017 5,-8.09017 2.76142,0 5,3.622092 5,8.09017 z"
        transform="matrix(1.1894291,0,0,0.73510762,1111.1207,869.40164)" />
     <path
        transform="matrix(1.1894291,0,0,0.73510762,1046.8915,843.2342)"
-       d="m 322,86.090172 a 5,8.0901699 0 1 1 -10,0 5,8.0901699 0 1 1 10,0 z"
+       d="m 322,86.090172 c 0,4.468077 -2.23858,8.09017 -5,8.09017 -2.76142,0 -5,-3.622093 -5,-8.09017 0,-4.468078 2.23858,-8.09017 5,-8.09017 2.76142,0 5,3.622092 5,8.09017 z"
        sodipodi:ry="8.0901699"
        sodipodi:rx="5"
        sodipodi:cy="86.090172"
@@ -582,7 +582,7 @@
        sodipodi:cy="86.090172"
        sodipodi:rx="5"
        sodipodi:ry="8.0901699"
-       d="m 322,86.090172 a 5,8.0901699 0 1 1 -10,0 5,8.0901699 0 1 1 10,0 z"
+       d="m 322,86.090172 c 0,4.468077 -2.23858,8.09017 -5,8.09017 -2.76142,0 -5,-3.622093 -5,-8.09017 0,-4.468078 2.23858,-8.09017 5,-8.09017 2.76142,0 5,3.622092 5,8.09017 z"
        transform="matrix(1.1894291,0,0,0.73510762,1039.7549,897.94794)" />
     <g
        transform="matrix(2.3788582,0,0,2.3788582,1460.6491,-1343.9813)"
@@ -624,7 +624,7 @@
     </g>
     <path
        transform="matrix(1.1894291,0,0,0.73510762,1248.7188,804.97864)"
-       d="m 322,86.090172 a 5,8.0901699 0 1 1 -10,0 5,8.0901699 0 1 1 10,0 z"
+       d="m 322,86.090172 c 0,4.468077 -2.23858,8.09017 -5,8.09017 -2.76142,0 -5,-3.622093 -5,-8.09017 0,-4.468078 2.23858,-8.09017 5,-8.09017 2.76142,0 5,3.622092 5,8.09017 z"
        sodipodi:ry="8.0901699"
        sodipodi:rx="5"
        sodipodi:cy="86.090172"
