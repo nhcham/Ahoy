@@ -4,3 +4,4 @@ gen
 _release_build
 languages/_downloads
 languages/html/*.html
+website/src/template/include/ahoy-language-packs.zip
