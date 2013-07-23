@@ -1,3 +1,3 @@
 #!/bin/bash
-adb logcat -s Ahoy -s AhoyService -s AhoyActivity -s WifiManagerExtended -s AhoyServiceThread -s ApMessageFilter -s LanguagePack -s HuffmanTree
+adb logcat -s Ahoy -s AhoyService -s AhoyActivity -s WifiManagerExtended -s AhoyServiceThread -s ApMessageFilter -s LanguagePack -s HuffmanTree -s LanguagePackUtf
 

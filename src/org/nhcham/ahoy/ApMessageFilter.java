@@ -13,12 +13,12 @@ public class ApMessageFilter
     final static String AHOY_PREFIX_CHAR = "a";
     final static int MAX_BITS = 178;
     final static String TAG = "ApMessageFilter";
-    public HashMap<Integer, LanguagePack> languagePacks;
+    public HashMap<Integer, ILanguagePack> languagePacks;
     BigInteger radix = new BigInteger("62");
     
     public ApMessageFilter(Context context)
     {
-        languagePacks = new HashMap<Integer, LanguagePack>();
+        languagePacks = new HashMap<Integer, ILanguagePack>();
         try
         {
             BufferedReader r = new BufferedReader(new InputStreamReader(context.getAssets().open("languages.txt")));
@@ -36,7 +36,11 @@ public class ApMessageFilter
                 String languageTag = line.substring(spaceOffset + 1, spaceOffset2);
                 String languageMarker = line.substring(spaceOffset2 + 1);
 //                 Log.d(TAG, String.format("Now loading [%d] [%s]...", languageId, languageTag));
-                LanguagePack pack = new LanguagePack(context, languageId, languageTag, languageMarker);
+                ILanguagePack pack = null;
+                if (languageTag.equals("utf8") || languageTag.equals("utf16"))
+                    pack = new LanguagePackUtf(context, languageId, languageTag, languageMarker);
+                else
+                    pack = new LanguagePack(context, languageId, languageTag, languageMarker);
                 languagePacks.put(languageId, pack);
             }
         } catch (IOException e) {
@@ -153,7 +157,7 @@ public class ApMessageFilter
         int minimumBitLengthLang = -1;
         for (int languageId : languagePacks.keySet())
         {
-            LanguagePack pack = languagePacks.get(languageId);
+            ILanguagePack pack = languagePacks.get(languageId);
             if (pack.canEncodeMessage(message))
             {
                 short bitLength = pack.getEncodedMessageLength(message);
@@ -164,7 +168,7 @@ public class ApMessageFilter
                 }
             }
         }
-//         Log.d(TAG, String.format("Message is probably [%s], length is %3d bits: [%s]", minimumBitLengthLang, minimumBitLength, message));
+        Log.d(TAG, String.format("Message is probably [%s], length is %3d bits: [%s]", minimumBitLengthLang, minimumBitLength, message));
         int[] result = new int[2];
         result[0] = minimumBitLength;
         result[1] = minimumBitLengthLang;

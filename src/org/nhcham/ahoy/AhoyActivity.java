@@ -60,7 +60,7 @@ public class AhoyActivity extends Activity implements OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
-        Log.d(TAG, "onCreate()");
+//         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
@@ -85,7 +85,7 @@ public class AhoyActivity extends Activity implements OnClickListener
     @Override
     public void onStart()
     {
-        Log.d(TAG, "onStart()");
+//         Log.d(TAG, "onStart()");
         super.onStart();
         Intent intent = new Intent(this, AhoyService.class);
         bindService(intent, serviceConnection, BIND_AUTO_CREATE);
@@ -94,7 +94,7 @@ public class AhoyActivity extends Activity implements OnClickListener
     @Override
     public void onResume()
     {
-        Log.d(TAG, "onResume()");
+//         Log.d(TAG, "onResume()");
         super.onResume();
         registerReceiver(updateReceiver, new IntentFilter("AhoyActivityUpdate"));
         if (ahoyService != null)
@@ -107,7 +107,7 @@ public class AhoyActivity extends Activity implements OnClickListener
     @Override
     public void onPause()
     {
-        Log.d(TAG, "onPause()");
+//         Log.d(TAG, "onPause()");
         super.onPause();
         unregisterReceiver(updateReceiver);
     }
@@ -131,7 +131,7 @@ public class AhoyActivity extends Activity implements OnClickListener
     @Override
     public void onStop() 
     {
-        Log.d(TAG, "onStop()");
+//         Log.d(TAG, "onStop()");
         super.onStop();
         if (boundService)
         {
@@ -155,7 +155,7 @@ public class AhoyActivity extends Activity implements OnClickListener
         switch (item.getItemId()) 
         {
             case R.id.menu_shutdown:
-                showDialog(this, "Are you sure you want to shut down? You will no more receive new broadcasts.", null, "Shut down", new DialogInterface.OnClickListener() {
+                showDialog(this, this.getString(R.string.are_you_sure_you_want_to_shut_down), null, this.getString(R.string.shut_down), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which)
                     {
                         stopService(new Intent(AhoyActivity.this, AhoyService.class));
@@ -173,7 +173,7 @@ public class AhoyActivity extends Activity implements OnClickListener
             .setCancelable(true)
             .setView(view)
             .setPositiveButton(positiveLabel, positiveListener) 
-            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            .setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.cancel();
                 }
@@ -201,7 +201,8 @@ public class AhoyActivity extends Activity implements OnClickListener
             {
                 TextView messageView = (TextView)parent.findViewById(R.id.message);
                 final String message = messageView.getText().toString();
-                showDialog(this, String.format("Are you sure you want to repeat \"%s\"?", message), null, "Repeat message", new DialogInterface.OnClickListener() {
+                showDialog(this, String.format(this.getString(R.string.are_you_sure_you_want_to_repeat_message), message), 
+                null, this.getString(R.string.repeat_message), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which)
                     {
                         ahoyService.broadcastMessage(message);
@@ -245,7 +246,7 @@ public class AhoyActivity extends Activity implements OnClickListener
                                 result = ahoyService.messageFilter.encodeMessage(s2);
                                 
                                 bitLength = result[0];
-                                Log.d(TAG, String.format("Trying [%s]: %d bits", s2, bitLength));
+//                                 Log.d(TAG, String.format("Trying [%s]: %d bits", s2, bitLength));
                                 // if this exceeds the maximum capacity, return
                                 // the last thing that worked
                                 if (bitLength > ApMessageFilter.MAX_BITS)
@@ -276,13 +277,13 @@ public class AhoyActivity extends Activity implements OnClickListener
 //             editText.setFilters(new InputFilter[]{ bitLengthFilter });
             editText.setText("");
             
-            final AlertDialog enterMessageDialog = showDialog(this, "Enter a message:", t, "Broadcast", new DialogInterface.OnClickListener() {
+            final AlertDialog enterMessageDialog = showDialog(this, this.getString(R.string.enter_a_message_colon), t, this.getString(R.string.broadcast), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which)
                 {
                     final String message = editText.getText().toString().trim();
                     if (message.length() > 0)
                     {
-                        Log.d(TAG, String.format("Broadcasting a new message: %s", message));
+//                         Log.d(TAG, String.format("Broadcasting a new message: %s", message));
                         ahoyService.broadcastMessage(message);
                     }
                 }
@@ -315,7 +316,8 @@ public class AhoyActivity extends Activity implements OnClickListener
         }
         else if (view.getId() == R.id.buttonStopBroadcast)
         {
-            showDialog(this, "Are you sure you want to stop broadcasting?", null, "Stop broadcast", new DialogInterface.OnClickListener() {
+            showDialog(this, this.getString(R.string.are_you_sure_you_want_to_stop_broadcasting), null, 
+            this.getString(R.string.stop_broadcast), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which)
                 {
                     ahoyService.stopBroadcast();
@@ -326,7 +328,7 @@ public class AhoyActivity extends Activity implements OnClickListener
 
     public void handleUpdate(Intent intent)
     {
-        Log.d(TAG, "handleUpdate()");
+//         Log.d(TAG, "handleUpdate()");
         
         if (intent.getAction().equals("AhoyActivityUpdate"))
             refresh(intent);
@@ -340,22 +342,22 @@ public class AhoyActivity extends Activity implements OnClickListener
         long weeks = days / 7;
         long years = days / 365;
         if (minutes < 1)
-            return String.format("less than a minute ago");
+            return String.format(this.getString(R.string.duration_lt_1m));
         else if (hours < 1)
-            return String.format("%d minute%s ago", minutes, minutes == 1 ? "" : "s");
+            return minutes == 1 ? this.getString(R.string.duration_1m_ago) : String.format(this.getString(R.string.duration_nm_ago), minutes);
         else if (days < 1)
-            return String.format("%d hour%s ago", hours, hours == 1 ? "" : "s");
+            return hours == 1 ? this.getString(R.string.duration_1h_ago) : String.format(this.getString(R.string.duration_nh_ago), hours);
         else if (weeks < 1)
-            return String.format("%d day%s ago", hours, hours == 1 ? "" : "s");
+            return days == 1 ? this.getString(R.string.duration_1d_ago) : String.format(this.getString(R.string.duration_nd_ago), days);
         else if (years < 1)
-            return String.format("%d week%s ago", weeks, weeks == 1 ? "" : "s");
+            return weeks == 1 ? this.getString(R.string.duration_1w_ago) : String.format(this.getString(R.string.duration_nw_ago), weeks);
         else
-            return String.format("%d year%s ago", years, years == 1 ? "" : "s");
+            return years == 1 ? this.getString(R.string.duration_1y_ago) : String.format(this.getString(R.string.duration_ny_ago), weeks);
     }
     
     public void refresh(Intent intent)
     {
-        Log.d(TAG, "refresh()");
+//         Log.d(TAG, "refresh()");
 
         if (intent.hasExtra("currentlyBroadcasting"))
         {
@@ -363,7 +365,7 @@ public class AhoyActivity extends Activity implements OnClickListener
             
             if (currentlyBroadcasting == null)
             {
-                currentBroadcast.setText("(nothing)");
+                currentBroadcast.setText(this.getString(R.string.paren_nothing_paren));
                 findViewById(R.id.buttonStopBroadcast).setVisibility(View.GONE);
             }
             else
@@ -483,13 +485,13 @@ public class AhoyActivity extends Activity implements OnClickListener
                     if (messageHash.get(message).get("active") == 0)
                     {
                         seenSomethingInactive = true;
-                        ((TextView)t.findViewById(R.id.details)).setText("last seen " + formatDuration((currentTime - messageHash.get(message).get("lastSeen")) / 1000));
+                        ((TextView)t.findViewById(R.id.details)).setText(this.getString(R.string.last_seen) + " " + formatDuration((currentTime - messageHash.get(message).get("lastSeen")) / 1000));
                         messagesLayoutInactive.addView(t);
                     }
                     else
                     {
                         seenSomethingActive = true;
-                        ((TextView)t.findViewById(R.id.details)).setText("first seen " + formatDuration((currentTime - messageHash.get(message).get("firstSeen")) / 1000));
+                        ((TextView)t.findViewById(R.id.details)).setText(this.getString(R.string.first_seen) + " " + formatDuration((currentTime - messageHash.get(message).get("firstSeen")) / 1000));
                         messagesLayout.addView(t);
                     }
                     messageViews.add(t);

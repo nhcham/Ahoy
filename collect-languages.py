@@ -15,12 +15,23 @@ count = 0
 
 os.system("rm assets/*")
 
+seen_ids = set()
+
 with open('assets/languages.txt', 'w') as fout:
+    fout.write("1 utf8 10000001\n")
+    seen_ids.add(1)
+    fout.write("2 utf16 10000010\n")
+    seen_ids.add(2)
     for lang in sorted(languages.keys()):
         if 'language_id' in languages[lang]:
             lang_id = languages[lang]['language_id']
             if lang_id >= 128:
                 print("Error")
+                exit(1)
+            if lang_id in seen_ids:
+                print("Error")
+                exit(1)
+            seen_ids.add(lang_id)
             path1 = 'languages/_huffman/ahoy-language-pack-%s-summary.alp' % lang
             path2 = 'languages/_huffman/ahoy-language-pack-%s-links.alp' % lang
             if os.path.exists(path1) and os.path.exists(path2):

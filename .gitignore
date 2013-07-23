@@ -1,6 +1,10 @@
+assets
 local.properties
 bin
 gen
 _release_build
 languages/_downloads
 languages/html/*.html
+languages.json
+website/src/template/include/ahoy-language-packs.zip
+website/out

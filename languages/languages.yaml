@@ -238,7 +238,7 @@ deu:
         - script:Cyrillic
     trees: 200
     status: draft
-    language_id: 1
+    language_id: 3
 # commented out for now because link yields no content
 # ell:
 #     names:

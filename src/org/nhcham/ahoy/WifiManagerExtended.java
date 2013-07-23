@@ -77,16 +77,16 @@ public class WifiManagerExtended
 
     public boolean setWifiEnabled(boolean enabled)
     {
-        Log.d(TAG, String.format("setWifiEnabled(%b)", enabled));
+//         Log.d(TAG, String.format("setWifiEnabled(%b)", enabled));
         wifiManager.setWifiEnabled(enabled);
         for (int i = 0; i < TIMEOUT; i++)
         {
             if (isWifiEnabled() == enabled)
                 break;
-            Log.d(TAG, "spinning...");
+//             Log.d(TAG, "spinning...");
             try { Thread.sleep(1000); } catch (InterruptedException e) { }
         }
-        Log.d(TAG, String.format("setWifiEnabled: %b", isWifiEnabled() == enabled));
+//         Log.d(TAG, String.format("setWifiEnabled: %b", isWifiEnabled() == enabled));
         return isWifiEnabled() == enabled;
     }
 
@@ -172,7 +172,7 @@ public class WifiManagerExtended
     
     public boolean setWifiApEnabled(WifiConfiguration configuration, boolean enabled)
     {
-        Log.d(TAG, String.format("setWifiApEnabled(%b)", enabled));
+//         Log.d(TAG, String.format("setWifiApEnabled(%b)", enabled));
         boolean result = false;
         int targetWifiApState = enabled ? 3 : 1;
         try {
@@ -188,10 +188,10 @@ public class WifiManagerExtended
         {
             if (getWifiApState() % 10 == targetWifiApState)
                 break;
-            Log.d(TAG, "spinning...");
+//             Log.d(TAG, "spinning...");
             try { Thread.sleep(1000); } catch (InterruptedException e) { }
         }
-        Log.d(TAG, String.format("setWifiApEnabled: %b", getWifiApState() % 10 == targetWifiApState));
+//         Log.d(TAG, String.format("setWifiApEnabled: %b", getWifiApState() % 10 == targetWifiApState));
         return getWifiApState() % 10 == targetWifiApState;
     }
 

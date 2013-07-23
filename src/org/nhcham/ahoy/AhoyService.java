@@ -78,7 +78,7 @@ public class AhoyService extends Service {
     }
     
     public static Thread performOnBackgroundThread(final Runnable runnable) {
-        Log.d(TAG, "Now launching service thread...");
+//         Log.d(TAG, "Now launching service thread...");
         final Thread t = new Thread() {
             @Override
             public void run() {
@@ -144,7 +144,7 @@ public class AhoyService extends Service {
         
         public void _receivedScanResults()
         {
-            Log.d(TAG, "--------------------------GOT NEW SCAN RESULTS------------------------");
+//             Log.d(TAG, "--------------------------GOT NEW SCAN RESULTS------------------------");
             List<ScanResult> results = wifiManagerEx.getScanResults();
             if (results != null)
             {
@@ -166,7 +166,7 @@ public class AhoyService extends Service {
                         final String message = messageFilter.ssidToMessage(result.SSID);
                         if (message != null)
                         {
-                            Log.d(TAG, String.format("Caught a message: %s", message));
+//                             Log.d(TAG, String.format("Caught a message: %s", message));
                             boolean showNotification = false;
                             
                             if (!messageHash.containsKey(message))
@@ -243,7 +243,7 @@ public class AhoyService extends Service {
             sendBroadcast(intent);
             
             WifiConfiguration config = wifiManagerEx.getWifiApConfiguration();
-            Log.d(TAG, String.format("HTC: %b, WiFi enabled: %b, AP state: %d, AP SSID: %s, desired broadcast: %s", wifiManagerEx.isHtc, wifiManagerEx.isWifiEnabled(), wifiManagerEx.getWifiApState(), config.SSID, desiredBroadcastMessage));
+//             Log.d(TAG, String.format("HTC: %b, WiFi enabled: %b, AP state: %d, AP SSID: %s, desired broadcast: %s", wifiManagerEx.isHtc, wifiManagerEx.isWifiEnabled(), wifiManagerEx.getWifiApState(), config.SSID, desiredBroadcastMessage));
 //             Log.d(TAG, config.toString());
             
             Intent intent2 = new Intent("AhoyActivityUpdate");
@@ -256,7 +256,7 @@ public class AhoyService extends Service {
         
         public void _update()
         {
-            Log.d(TAG, "updating state...");
+//             Log.d(TAG, "updating state...");
             
             // switch off AP if it's on
             if (wifiManagerEx.isWifiApEnabled())
@@ -267,7 +267,7 @@ public class AhoyService extends Service {
                 wifiManagerEx.setWifiEnabled(true);
                 
             boolean result = wifiManagerEx.startScan();
-            Log.d(TAG, String.format("startScan() == %b", result));
+//             Log.d(TAG, String.format("startScan() == %b", result));
         }
         
         public void _broadcastMessage(final String message)
@@ -323,7 +323,7 @@ public class AhoyService extends Service {
             wifiLock = wifiManagerEx.wifiManager().createWifiLock(WifiManager.WIFI_MODE_FULL, "AhoyService");
             wifiLock.acquire();
             
-            Log.d(TAG, "Registering scanReceiver");
+//             Log.d(TAG, "Registering scanReceiver");
             registerReceiver(scanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             
             _update();
@@ -335,7 +335,7 @@ public class AhoyService extends Service {
                 if (desiredBroadcastMessage != null)
                     timeoutDuration *= 2;
                     
-                Log.d(TAG, String.format("Now waiting for at most %1.2f seconds...", (float)timeoutDuration / 1000.0));
+//                 Log.d(TAG, String.format("Now waiting for at most %1.2f seconds...", (float)timeoutDuration / 1000.0));
                 boolean shutdown = false;
                 
                 do {
@@ -374,12 +374,12 @@ public class AhoyService extends Service {
                 if (shutdown)
                     break;
             }
-            Log.d(TAG, "Unregistering scanReceiver");
+//             Log.d(TAG, "Unregistering scanReceiver");
             unregisterReceiver(scanReceiver);
             wifiLock.release();
             
             // restore WiFi configuration
-            Log.d(TAG, "Restoring WiFi configuration...");
+//             Log.d(TAG, "Restoring WiFi configuration...");
 //             Log.d(TAG, String.format("WiFi: %b, WiFiAP: %b, AP config: %s", originalWifiEnabled, originalWifiApEnabled, originalWifiConfiguration.toString()));
             wifiManagerEx.setWifiEnabled(originalWifiEnabled);
             wifiManagerEx.setWifiApConfiguration(originalWifiConfiguration);
@@ -396,7 +396,7 @@ public class AhoyService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "service created");
+//         Log.d(TAG, "service created");
         super.onCreate();
         serviceThread = null;
     }
@@ -404,7 +404,7 @@ public class AhoyService extends Service {
     @Override
     public void onStart(Intent intent, int startId)
     {
-        Log.d(TAG, "service started");
+//         Log.d(TAG, "service started");
         super.onStart(intent, startId);
         if (serviceThread == null)
             serviceThread = performOnBackgroundThread(new ServiceThread(this));
@@ -413,7 +413,7 @@ public class AhoyService extends Service {
     
     @Override
     public void onDestroy() {
-        Log.d(TAG, "service destroyed");
+//         Log.d(TAG, "service destroyed");
         if (serviceThread != null)
         {
             try {
@@ -431,7 +431,7 @@ public class AhoyService extends Service {
     
     public void broadcastMessage(final String message)
     {
-        Log.d(TAG, "Broadcasting message: " + message);
+//         Log.d(TAG, "Broadcasting message: " + message);
         try {
             commandQueue.put(new ServiceCommandWithOption(ServiceCommand.NEW_BROADCAST, message));
         } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
@@ -439,7 +439,7 @@ public class AhoyService extends Service {
 
     public void stopBroadcast()
     {
-        Log.d(TAG, "Stopping broadcast");
+//         Log.d(TAG, "Stopping broadcast");
         try {
             commandQueue.put(new ServiceCommandWithOption(ServiceCommand.STOP_BROADCAST));
         } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
@@ -447,7 +447,7 @@ public class AhoyService extends Service {
     
     public void queryState()
     {
-        Log.d(TAG, "Querying state");
+//         Log.d(TAG, "Querying state");
         try {
             commandQueue.put(new ServiceCommandWithOption(ServiceCommand.QUERY_STATE));
         } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
@@ -455,7 +455,7 @@ public class AhoyService extends Service {
     
     public void gotScanResults()
     {
-        Log.d(TAG, "Got scan results");
+//         Log.d(TAG, "Got scan results");
         try {
             commandQueue.put(new ServiceCommandWithOption(ServiceCommand.GOT_SCAN_RESULTS));
         } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
@@ -463,7 +463,7 @@ public class AhoyService extends Service {
     
     public void performScan()
     {
-        Log.d(TAG, "Performing scan");
+//         Log.d(TAG, "Performing scan");
         try {
             commandQueue.put(new ServiceCommandWithOption(ServiceCommand.PERFORM_SCAN));
         } catch (InterruptedException e) { Thread.currentThread().interrupt(); }

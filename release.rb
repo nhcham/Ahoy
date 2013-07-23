@@ -12,6 +12,7 @@ FileUtils::rm_rf('_release_build') if File::exists?('_release_build')
 FileUtils::mkdir('_release_build')
 
 FileUtils::cp_r('src', '_release_build')
+FileUtils::cp_r('assets', '_release_build')
 FileUtils::cp_r('res', '_release_build')
 FileUtils::cp(Dir['*.properties'], '_release_build')
 FileUtils::cp('AndroidManifest.xml', '_release_build')

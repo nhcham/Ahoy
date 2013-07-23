@@ -6,7 +6,7 @@ import android.content.*;
 import android.content.res.*;
 import android.util.*;
 
-public class LanguagePack
+public class LanguagePack implements ILanguagePack
 {
     final static String TAG = "LanguagePack";
     
@@ -145,7 +145,7 @@ public class LanguagePack
         }
     }
     
-    public void loadLinks()
+    private void loadLinks()
     {
         try
         {
@@ -183,7 +183,7 @@ public class LanguagePack
         }
     }
     
-    public void unloadLinks()
+    private void unloadLinks()
     {
         for (int i = 0; i < huffmanKeyCount; i++)
         {
