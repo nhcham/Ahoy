@@ -102,7 +102,7 @@ public class ApMessageFilter
             }
         }
         
-        return s;
+        return null;
     }
     
     public String messageToSsid(final String _message)

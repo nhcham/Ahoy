@@ -14,7 +14,7 @@ apk = Dir['../*.apk'].map { |x| File::basename(x) }.sort.last
 puts "Using #{apk}..."
 FileUtils::cp_r("../#{apk}", "out/download")
 
-apk_link = "<a href='download/#{apk}'>#{apk}</a> (#{sprintf('%1.1f kB', File::size("../#{apk}") / 1024.0)})"
+apk_link = "<a href='download/#{apk}'>#{apk}</a> (#{sprintf('%1.1f MB', File::size("../#{apk}") / 1024.0 / 1024.0)})"
 
 template = File::read('src/template/template.html')
 
@@ -34,6 +34,15 @@ languages.keys.sort.each do |tag|
     lang_menu += "<li><a title='#{languages[tag]['names'].first}' href='lang-#{tag}.html'>#{languages[tag]['native']}</a></li>\n"
 end
 lang_menu += "</ul>\n"
+
+lang_hash = {}
+languages_list = []
+languages.keys.sort.each do |tag|
+    if languages[tag]['status'] == 'published'
+        lang_hash[languages[tag]['names'].first] = "<a href='lang-#{tag}.html'>#{languages[tag]['names'].first}</a>"
+    end
+end
+languages_list = lang_hash.keys.sort.map { |x| lang_hash[x] }.join(', ')
 
 lang_rows = ""
 languages.keys.sort.each do |tag|
@@ -228,7 +237,8 @@ menu.each do |item|
         scripts = "<script src='include/ahoy.js' type='text/javascript'></script>"
     end
     content.sub!('#{SCRIPTS_HERE}', scripts)
-    content.sub!('#{LANG_ROWS_HERE}', lang_rows);
+    content.sub!('#{LANG_ROWS_HERE}', lang_rows)
+    content.sub!('#{LANGUAGES}', languages_list)
     
     menu_html = menu.map do |x|
         "<li#{(item[1] == x[1]) ? ' class=\'menu_current\'' : ''}><a href='#{x[1]}'>#{x[0]}</a></li>"
