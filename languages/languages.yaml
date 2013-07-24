@@ -8,6 +8,7 @@ afr:
     trees: 200
     status: published
     language_id: 16
+    sha1: c2a18828dca7e5b2ca83340544f640be786fb538
 als:
     names:
         - Tosk
@@ -46,6 +47,7 @@ ara:
     trees: 300
     status: published
     language_id: 10
+    sha1: c1364829fb5b35459f536757787cfa5bdbe8a813
 azj:
     names:
         - Azerbaijani
@@ -241,6 +243,7 @@ deu:
     trees: 200
     status: published
     language_id: 3
+    sha1: fe4430faa391cb6df6abdc114b840ebdcd89739a
 # commented out for now because link yields no content
 # ell:
 #     names:
@@ -258,6 +261,7 @@ eng:
     trees: 200
     status: published
     language_id: 4
+    sha1: 5262f669e1e77393f3c72f4f21f215f7a979e047
 epo:
     names:
         - Esperanto
@@ -324,6 +328,7 @@ fas:
     trees: 400
     status: published
     language_id: 12
+    sha1: 3278154b1789282c203af7ff21800081591e07ef
 fin:
     names:
         - Finnish
@@ -364,6 +369,7 @@ fra:
     trees: 200
     status: published
     language_id: 5
+    sha1: b53f8aba4f285bd37e26c8916029a5d6fe5928f6
 gom:
     names:
         - Konkani
@@ -425,6 +431,7 @@ hin:
     trees: 400
     status: published
     language_id: 9
+    sha1: ddebbad58da3cc64630791ae10fbcc7f2dc070a6
 hrv:
     names:
         - Croatian
@@ -496,6 +503,7 @@ ita:
     trees: 200
     status: published
     language_id: 15
+    sha1: 4b107a14dd0e0655f67714a3bf3ea8df445686f2
 jpn:
     names:
         - Japanese
@@ -822,6 +830,7 @@ msa:
     trees: 200
     status: published
     language_id: 11
+    sha1: 2117100659dcc6f5977878c09a85c0b5961d7594
 nep:
     names:
         - Nepali
@@ -921,6 +930,7 @@ pol:
     trees: 300
     status: published
     language_id: 18
+    sha1: 9e21dcf140d0265e7a42c53f62107f401d827b7b
 por:
     names:
         - Portuguese
@@ -934,6 +944,7 @@ por:
     trees: 200
     status: published
     language_id: 8
+    sha1: 6c481b8216ebd98b2e91a6cb31f216eef76a4918
 rus:
     names:
         - Russian
@@ -949,6 +960,7 @@ rus:
     trees: 300
     status: published
     language_id: 7
+    sha1: 5eb288c7bb0c0ba81aa86a16245ccc8b9659d9b2
 slk:
     names:
         - Slovak
@@ -1001,6 +1013,7 @@ spa:
     trees: 200
     status: published
     language_id: 6
+    sha1: 3096681156ee39737fb58586208f7dfaa443cf9c
 srp:
     names:
         - Standard Serbian
@@ -1037,6 +1050,7 @@ swa:
     trees: 200
     status: published
     language_id: 13
+    sha1: edaf453d0c5e17a2ba23ff1f79a29bc43c30b852
 swe:
     names:
         - Swedish
@@ -1064,6 +1078,7 @@ tam:
     trees: 400
     status: published
     language_id: 14
+    sha1: 03eb48a2bcf1091125f7e04d23a9baba21d3681e
 tat:
     names:
         - Tatar
@@ -1144,6 +1159,7 @@ tur:
     trees: 300
     status: published
     language_id: 17
+    sha1: b14d32a20e38e5088f3f7ad453a35f286f8df00f
 ukr:
     names:
         - Ukrainian

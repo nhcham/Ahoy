@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import hashlib
 import glob
 import os
 import shutil
@@ -24,6 +25,9 @@ with open('assets/languages.txt', 'w') as fout:
     seen_ids.add(2)
     for lang in sorted(languages.keys()):
         if 'language_id' in languages[lang]:
+            if languages[lang]['status'] != 'published':
+                print("Error")
+                exit(1)
             lang_id = languages[lang]['language_id']
             if lang_id >= 128:
                 print("Error")
@@ -34,12 +38,22 @@ with open('assets/languages.txt', 'w') as fout:
             seen_ids.add(lang_id)
             path1 = 'languages/_huffman/ahoy-language-pack-%s-summary.alp' % lang
             path2 = 'languages/_huffman/ahoy-language-pack-%s-links.alp' % lang
+            sha1 = hashlib.sha1()
+            sha1.update(open(path1, 'rb').read() + open(path2, 'rb').read())
+            sha1 = sha1.hexdigest()
+            if not 'sha1' in languages[lang] or (sha1 != languages[lang]['sha1']):
+                print("SHA1 mismatch: [%s] %s" % (lang, sha1))
+                exit(1)
             if os.path.exists(path1) and os.path.exists(path2):
                 shutil.copy(path1, 'assets')
                 shutil.copy(path2, 'assets')
                 fout.write("%d %s %s\n" % (lang_id, lang, "{0:b}".format(128 + lang_id)))
             else:
                 print("Error")
+        else:
+            if languages[lang]['status'] == 'published':
+                print("Error")
+                exit(1)
                 
 os.chdir('languages/_huffman')
 
