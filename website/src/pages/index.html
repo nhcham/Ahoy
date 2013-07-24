@@ -40,21 +40,15 @@ recent incidents where a government decided to disable communication.
 <h2>Local, broadcast-style communication</h2>
 
 <p>
-<b>Ahoy</b> is an Android App which allows for local, broadcast-style communication 
-using WiFi access point names (more specifically: 
-<a href='http://en.wikipedia.org/wiki/SSID#Service_set_identification_.28SSID.29'>
-SSIDs</a>). 
-The App runs in the background, keeps looking for nearby WiFi access points, filters out 
-messages and notifies the user whenever a new message is found.
-In addition to that, the user may specify a message for broadcasting and the App will 
-take care of setting up a WiFi hotspot with a corresponding SSID representing the message.
+<b>Ahoy</b> is an Android App which allows for local, broadcast-style communication.
+You can broadcast a message using your phone and people around you will be able to see 
+the message on their phones. They, too, can broadcast messages or choose to repeat your
+message to extend its range.
 </p>
 
 <p>
-Because people around the world speak many different languages and SSIDs can only
-contain a handful of ASCII characters, Ahoy uses
-<a href='http://en.wikipedia.org/wiki/Huffman_coding'>Huffman coding</a>
-to support a variety of languages and increase message lengths to 45&ndash;55 characters.
+Messages are compressed and encoded as WiFi access point names 
+(<a href='http://en.wikipedia.org/wiki/SSID#Service_set_identification_.28SSID.29'>SSIDs</a>). 
 While this approach allows for very short messages only &ndash; so short, in fact, 
 that it makes Tweets look verbose in comparison &ndash; it has a number of 
 interesting properties:
@@ -78,5 +72,19 @@ However, broadcasting can be inhibited locally using a WiFi jammer.</li>
 <li>It even works <b>without a SIM card</b>.</li>
 <li>There are <b>no accounts</b> or personal information.</li>
 <li>Messages are <b>volatile</b>.</li>
-<li>The entire idea is probably <b>non-marketable</b>.</li>
 </ul>
+
+<h2>Message lengths</h2>
+
+<p>
+Although in practice, SSID may only contain a handful of ASCII characters, Ahoy can be
+used to send messages in any language, using any script defined by 
+<a href='http://en.wikipedia.org/wiki/Unicode'>Unicode</a>. 
+However, message lengths vary depending on the language a message is written in. 
+Specialized language packs which employ 
+<a href='http://en.wikipedia.org/wiki/Huffman_coding'>Huffman coding</a> are used to
+maximize message lengths for most languages, resulting in message lengths of 45 to 55 
+characters on average. 
+Ahoy chooses the most compact encoding automatically, falling back to UTF-8 or UTF-16 
+if no appropriate language pack is available.
+</p>

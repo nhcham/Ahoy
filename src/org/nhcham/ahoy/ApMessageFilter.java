@@ -161,6 +161,8 @@ public class ApMessageFilter
             if (pack.canEncodeMessage(message))
             {
                 short bitLength = pack.getEncodedMessageLength(message);
+//                 Log.d(TAG, String.format("[%s]: %4d bits", pack.languageTag(), bitLength));
+                
                 if (minimumBitLength == -1 || bitLength < minimumBitLength)
                 {
                     minimumBitLength = bitLength;
@@ -168,7 +170,7 @@ public class ApMessageFilter
                 }
             }
         }
-        Log.d(TAG, String.format("Message is probably [%s], length is %3d bits: [%s]", minimumBitLengthLang, minimumBitLength, message));
+        Log.d(TAG, String.format("Message is probably [%s], length is %3d bits: [%s]", languagePacks.get(minimumBitLengthLang).languageTag(), minimumBitLength, message));
         int[] result = new int[2];
         result[0] = minimumBitLength;
         result[1] = minimumBitLengthLang;

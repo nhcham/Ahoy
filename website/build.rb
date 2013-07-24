@@ -6,13 +6,21 @@ require 'yaml'
 puts "Building website..."
 FileUtils::rm_rf('out') if File::exists?('out')
 FileUtils::mkdir('out')
+FileUtils::mkdir('out/download')
 FileUtils::cp_r('src/template/include', 'out/')
+FileUtils::cp_r('src/template/favicon.ico', 'out/')
+
+apk = Dir['../*.apk'].map { |x| File::basename(x) }.sort.last
+puts "Using #{apk}..."
+FileUtils::cp_r("../#{apk}", "out/download")
+
+apk_link = "<a href='download/#{apk}'>#{apk}</a> (#{sprintf('%1.1f kB', File::size("../#{apk}") / 1024.0)})"
 
 template = File::read('src/template/template.html')
 
 menu = []
 menu.push(['Ahoy!', 'index.html'])
-menu.push(['Try it out', 'try.html'])
+# menu.push(['Try it out', 'try.html'])
 menu.push(['Download', 'download.html'])
 menu.push(['Questions and answers', 'faq.html'])
 menu.push(['Languages', 'languages.html'])
@@ -95,7 +103,7 @@ languages.keys.sort.each do |tag|
     insert += "<div class='box'>\n"
     insert += "<p>\n"
     if languages[tag]['status'] == 'published'
-        insert += "<img src='include/dialog-ok.png' style='float: left; margin-right: 0.7em;' />\n"
+        insert += "<img src='include/dialog-ok.png' style='height: 24px; float: left; margin-right: 0.7em;' />\n"
         insert += "<b>Status: published</b>. This language pack has already been finalized and published.\n"
     elsif languages[tag]['status'] == 'draft'
         insert += "<img src='include/emblem-important.png' style='float: left; margin-right: 0.7em;' />\n"
@@ -213,6 +221,7 @@ menu.each do |item|
     
     content = template.dup
     content.sub!('#{CONTENT}', File::read("src/pages/#{page}"))
+    content.sub!('#{APK_LINK}', apk_link)
     
     scripts = ''
     if page == 'try.html'

@@ -49,14 +49,14 @@ public class LanguagePackUtf implements ILanguagePack
         this.languageMarker = new byte[languageMarker.length()];
         for (int i = 0; i < languageMarker.length(); i++)
             this.languageMarker[i] = (byte)(languageMarker.charAt(i) == '0' ? 0 : 1);
-        Log.d(TAG, String.format("Intializing %s", languageTag));
-        this.encoding = languageTag == "utf8" ? "UTF-8" : "UTF-16BE";
+        this.encoding = languageTag.equals("utf8") ? "UTF-8" : "UTF-16BE";
     }
     
     public short getEncodedMessageLength(String s)
     {
         byte[] result = null;
         try {
+//             Log.d(TAG, encoding);
             result = s.getBytes(encoding);
         } catch (UnsupportedEncodingException e) {}
         int length = languageMarker.length + result.length * 8;
@@ -115,5 +115,10 @@ public class LanguagePackUtf implements ILanguagePack
         } catch (CharacterCodingException e) {}
         String result = out_buffer.toString();
         return result.trim();
+    }
+    
+    public String languageTag()
+    {
+        return languageTag;
     }
 };

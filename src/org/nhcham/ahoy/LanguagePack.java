@@ -429,4 +429,9 @@ public class LanguagePack implements ILanguagePack
         // now strip trailing SPACE characters...
         return result.substring(0, lastNonSpaceLength);
     }
+    
+    public String languageTag()
+    {
+        return languageTag;
+    }
 };

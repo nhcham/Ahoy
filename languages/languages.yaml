@@ -6,7 +6,8 @@ afr:
     important:
         - probable:Latin
     trees: 200
-    status: sketch
+    status: published
+    language_id: 16
 als:
     names:
         - Tosk
@@ -43,7 +44,8 @@ ara:
     supplement:
         - script:Arabic
     trees: 300
-    status: sketch
+    status: published
+    language_id: 10
 azj:
     names:
         - Azerbaijani
@@ -237,7 +239,7 @@ deu:
         - script:Greek
         - script:Cyrillic
     trees: 200
-    status: draft
+    status: published
     language_id: 3
 # commented out for now because link yields no content
 # ell:
@@ -254,7 +256,8 @@ eng:
     important:
         - probable:Latin
     trees: 200
-    status: sketch
+    status: published
+    language_id: 4
 epo:
     names:
         - Esperanto
@@ -319,7 +322,8 @@ fas:
         - script:Latin
         - script:Han
     trees: 400
-    status: sketch
+    status: published
+    language_id: 12
 fin:
     names:
         - Finnish
@@ -358,7 +362,8 @@ fra:
     important:
         - probable:Latin
     trees: 200
-    status: sketch
+    status: published
+    language_id: 5
 gom:
     names:
         - Konkani
@@ -418,7 +423,8 @@ hin:
         - script:Gujarati
         - script:Latin
     trees: 400
-    status: sketch
+    status: published
+    language_id: 9
 hrv:
     names:
         - Croatian
@@ -488,7 +494,8 @@ ita:
     important:
         - probable:Latin
     trees: 200
-    status: sketch
+    status: published
+    language_id: 15
 jpn:
     names:
         - Japanese
@@ -813,7 +820,8 @@ msa:
     important:
         - probable:Latin
     trees: 200
-    status: sketch
+    status: published
+    language_id: 11
 nep:
     names:
         - Nepali
@@ -911,7 +919,8 @@ pol:
     ignore:
         - script:Greek
     trees: 300
-    status: sketch
+    status: published
+    language_id: 18
 por:
     names:
         - Portuguese
@@ -923,7 +932,8 @@ por:
     ignore:
         - script:Katakana
     trees: 200
-    status: sketch
+    status: published
+    language_id: 8
 rus:
     names:
         - Russian
@@ -937,7 +947,8 @@ rus:
     ignore:
         - script:Latin
     trees: 300
-    status: sketch
+    status: published
+    language_id: 7
 slk:
     names:
         - Slovak
@@ -988,7 +999,8 @@ spa:
         - script:Arabic
         - script:Cyrillic
     trees: 200
-    status: sketch
+    status: published
+    language_id: 6
 srp:
     names:
         - Standard Serbian
@@ -1023,7 +1035,8 @@ swa:
     important:
         - probable:Latin
     trees: 200
-    status: sketch
+    status: published
+    language_id: 13
 swe:
     names:
         - Swedish
@@ -1049,7 +1062,8 @@ tam:
         - script:Devanagari
         - script:Greek
     trees: 400
-    status: sketch
+    status: published
+    language_id: 14
 tat:
     names:
         - Tatar
@@ -1128,7 +1142,8 @@ tur:
     important:
         - probable:Latin
     trees: 300
-    status: sketch
+    status: published
+    language_id: 17
 ukr:
     names:
         - Ukrainian

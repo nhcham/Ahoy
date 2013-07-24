@@ -5,4 +5,5 @@ public interface ILanguagePack {
     public void encodeMessage(String s, byte[] result);
     public boolean canEncodeMessage(String s);
     public String decodeMessage(final byte[] bits, int offset);
+    public String languageTag();
 }
