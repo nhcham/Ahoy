@@ -4,11 +4,11 @@ h2. Building instructions
 
 Before building the project, copy the finalized language packs to the assets directory:
 
-<pre><code><notextile>$ ./collect-languages.py
-</notextile></code></pre>
+<code>$ ./collect-languages.py
+</code>
 
 Now you can build the project using ant:
 
-<pre><code><notextile>$ ant compile
+<code>$ ant compile
 $ ant install
-</notextile></code></pre>
+</code>
