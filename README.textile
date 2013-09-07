@@ -1,1 +1,14 @@
 More information can be found at "http://ahoy.nhcham.org":http://ahoy.nhcham.org.
+
+h2. Building instructions
+
+Before building the project, copy the finalized language packs to the assets directory:
+
+<pre><code><notextile>$ ./collect-languages.py
+</notextile></code></pre>
+
+Now you can build the project using ant:
+
+<pre><code><notextile>$ ant compile
+$ ant install
+</notextile></code></pre>

@@ -18,6 +18,8 @@ os.system("rm assets/*")
 
 seen_ids = set()
 
+print("Collecting finalized language packs for Android App...")
+
 with open('assets/languages.txt', 'w') as fout:
     fout.write("1 utf8 10000001\n")
     seen_ids.add(1)
@@ -36,8 +38,8 @@ with open('assets/languages.txt', 'w') as fout:
                 print("Error")
                 exit(1)
             seen_ids.add(lang_id)
-            path1 = 'languages/_huffman/ahoy-language-pack-%s-summary.alp' % lang
-            path2 = 'languages/_huffman/ahoy-language-pack-%s-links.alp' % lang
+            path1 = 'languages/finalized/ahoy-language-pack-%s-summary.alp' % lang
+            path2 = 'languages/finalized/ahoy-language-pack-%s-links.alp' % lang
             sha1 = hashlib.sha1()
             sha1.update(open(path1, 'rb').read() + open(path2, 'rb').read())
             sha1 = sha1.hexdigest()
@@ -55,11 +57,12 @@ with open('assets/languages.txt', 'w') as fout:
                 print("Error")
                 exit(1)
                 
+print("Collecting draft and finalized language packs for website...")
 os.chdir('languages/_huffman')
 
 lang_index = 1
 for lang in sorted(languages.keys()):
-    path = 'languages/_huffman/ahoy-language-pack-%s-summary.alp' % lang
+    path = 'languages/finalized/ahoy-language-pack-%s-summary.alp' % lang
     if os.path.exists(path):
         sys.stdout.write("%d %s %s\n" % (lang_index, lang, languages[lang]['native']))
         lang_index += 1

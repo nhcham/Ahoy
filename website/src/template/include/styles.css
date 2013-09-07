@@ -353,3 +353,22 @@ ul#submenu li a:hover {
     text-decoration: underline;
 }
 
+#best_markup
+{
+    background-image: url(grid.png);
+    background-repeat: repeat;
+    padding-top: 8px;
+    padding-bottom: 5px;
+    padding-left: 3px;
+}
+
+#best_markup span {
+    display: inline-block;
+    text-align: center;
+    margin-right: 3px;
+/*     background-color: rgba(0,0,0,0.3); */
+    background-color: #b8cfe7;
+    border: 1px solid #2f6f91;
+    margin-bottom: 3px;
+    border-radius: 5px;
+}

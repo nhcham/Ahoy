@@ -174,6 +174,10 @@ function loadLanguagePack(data)
         cell.html('&ndash;');
         row.append(cell);
 
+        cell = $("<td style='text-align: right;' id='ml-bpc-" + pack.languageTag + "'>");
+        cell.html('&ndash;');
+        row.append(cell);
+
         cell = $('<td>');
         cell.css('vertical-align', 'middle');
         var note = $("<span style='display: none;' id='cannot-" + pack.languageTag + "'>Cannot use this language pack to encode your message.</span>");
@@ -213,10 +217,12 @@ function encode(message)
     var clippedMessages = {};
     var bestLanguageLength = null;
     var bestLanguageTag = null;
+    var bestLanguageMarkup = null;
     jQuery.each(languages, function(index, lang) {
         var _ = getEncodedMessageLength(languagePacks[lang], message);
         var length = _[0];
         var clippedMessage = jQuery.trim(_[1]);
+        var markup = _[2];
         if (length > 0 && (
             (bestLanguageLength == null) || 
             (length < bestLanguageLength) ||
@@ -224,6 +230,7 @@ function encode(message)
         {
             bestLanguageLength = length;
             bestLanguageTag = lang;
+            bestLanguageMarkup = markup;
         }
         
         lengthForLanguage[lang] = length;
@@ -232,6 +239,7 @@ function encode(message)
         if (length < 0)
         {
             $('#ml-' + lang).html('&ndash;');
+            $('#ml-bpc-' + lang).html('&ndash;');
             $('#bar-' + lang).toggleClass('over', false);
             $('#bar-' + lang).css('width', '0%');
             $('#bar-' + lang).parent().hide();
@@ -241,6 +249,7 @@ function encode(message)
         else
         {
             $('#ml-' + lang).html('' + length + ' bits');
+            $('#ml-bpc-' + lang).html('' + (length / message.length).toFixed(1));
             $('#bar-' + lang).toggleClass('over', length > 172);
             $('#bar-' + lang).css('width', '' + ((length > 172 ? 172 : length) * 100.0 / 172) + '%');
             $('#bar-' + lang).parent().show();
@@ -269,6 +278,7 @@ function encode(message)
         $('#top_lang_is_sketch').toggle(languagesDef[bestLanguageTag]['status'] == 'sketch');
         $('#will_could').html(languagesDef[bestLanguageTag]['status'] == 'published' ? 'will' : 'could')
         $('#too_long').toggle(bestLanguageLength > 172);
+        $('#best_markup').html(bestLanguageMarkup);
     }
     else
     {
@@ -315,6 +325,7 @@ function getEncodedMessageLength(pack, s)
 {
     var canEncode = true;
     var clippedMessage = '';
+    var markup = '';
     var bitLength = 0;
     var ci2 = -1;
     var ci1 = -1;
@@ -352,6 +363,11 @@ function getEncodedMessageLength(pack, s)
             else
                 delta = pack.huffmanTrees[huffmanKey][pack.escapeOffset] + pack.huffmanTrees[pack.huffmanKeyEscape][ci - pack.escapeOffset - 1];
             bitLength += delta;
+            var safechar = s.charAt(i);
+            if (safechar === ' ')
+                markup += "<span style='border:0!important; width: " + (delta * 8 + (delta - 1) * 3) + "px;'></span>";
+            else
+                markup += "<span style='width: " + (delta * 8 + (delta - 1) * 3 - 2) + "px;'>" + safechar + "</span>";
             if (ci == 0)
             {
                 ci2 = -1;
@@ -369,9 +385,9 @@ function getEncodedMessageLength(pack, s)
             canEncode = false;
     }
     if (canEncode)
-        return [bitLength, clippedMessage];
+        return [bitLength, clippedMessage, markup];
     else
-        return [-1, clippedMessage];
+        return [-1, clippedMessage, markup];
 }
 
 // yanked from http://james.padolsey.com/javascript/sorting-elements-with-jquery/

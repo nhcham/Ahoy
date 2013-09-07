@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby1.9.1
 
+require 'rubygems'
+require 'RedCloth'
 require 'fileutils'
 require 'yaml'
 
@@ -20,12 +22,13 @@ template = File::read('src/template/template.html')
 
 menu = []
 menu.push(['Ahoy!', 'index.html'])
-# menu.push(['Try it out', 'try.html'])
 menu.push(['Download', 'download.html'])
 menu.push(['Questions and answers', 'faq.html'])
 menu.push(['Languages', 'languages.html'])
 menu.push(['Contribute', 'contribute.html'])
-# menu.push(['Technical details', 'documentation.html'])
+menu.push(['Try it out', 'try.html'])
+menu.push(['Hack of the month', 'bhnt.html'])
+# menu.push(['Technical details', 'documentation.textile'])
 
 languages = YAML::load(open('../languages/languages.yaml'))
 
@@ -229,7 +232,12 @@ menu.each do |item|
     page = item[1]
     
     content = template.dup
-    content.sub!('#{CONTENT}', File::read("src/pages/#{page}"))
+    page_content = File::read("src/pages/#{page}")
+    if page[-8, 8] == '.textile'
+        page_content = RedCloth.new(page_content).to_html
+        page.sub!('.textile', '.html')
+    end
+    content.sub!('#{CONTENT}', page_content)
     content.sub!('#{APK_LINK}', apk_link)
     
     scripts = ''
@@ -241,7 +249,7 @@ menu.each do |item|
     content.sub!('#{LANGUAGES}', languages_list)
     
     menu_html = menu.map do |x|
-        "<li#{(item[1] == x[1]) ? ' class=\'menu_current\'' : ''}><a href='#{x[1]}'>#{x[0]}</a></li>"
+        "<li#{(item[1] == x[1]) ? ' class=\'menu_current\'' : ''}><a href='#{x[1].sub('.textile', '.html')}'>#{x[0]}</a></li>"
     end
     content.sub!('#{MENU}', menu_html.join("\n"))
     
