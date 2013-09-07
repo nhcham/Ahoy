@@ -14,6 +14,8 @@ languages = yaml.load(open('languages/languages.yaml'))
 max_number = 0
 count = 0
 
+if not os.path.exists('assets'):
+    os.mkdir("assets")
 os.system("rm assets/*")
 
 seen_ids = set()
@@ -57,27 +59,28 @@ with open('assets/languages.txt', 'w') as fout:
                 print("Error")
                 exit(1)
                 
-print("Collecting draft and finalized language packs for website...")
-os.chdir('languages/_huffman')
+if os.path.exists('languages/_huffman'):
+    print("Collecting draft and finalized language packs for website...")
+    os.chdir('languages/_huffman')
 
-lang_index = 1
-for lang in sorted(languages.keys()):
-    path = 'languages/finalized/ahoy-language-pack-%s-summary.alp' % lang
-    if os.path.exists(path):
-        sys.stdout.write("%d %s %s\n" % (lang_index, lang, languages[lang]['native']))
-        lang_index += 1
+    lang_index = 1
+    for lang in sorted(languages.keys()):
+        path = 'languages/finalized/ahoy-language-pack-%s-summary.alp' % lang
+        if os.path.exists(path):
+            sys.stdout.write("%d %s %s\n" % (lang_index, lang, languages[lang]['native']))
+            lang_index += 1
 
-with open('../../languages.json', 'w') as f:
-    f.write(json.dumps(languages, sort_keys = True, 
-            indent = 4, separators = (',', ': ')))
-    
-command = list()
-command.append('zip')
-command.append('add')
-command.append('../../website/src/template/include/ahoy-language-packs.zip')
-command.append('../../languages.json')
-for path in glob.glob('*-summary.alp'):
-    command.append('./' + path)
-    
-os.execvp(command[0], command[1:])
+    with open('../../languages.json', 'w') as f:
+        f.write(json.dumps(languages, sort_keys = True, 
+                indent = 4, separators = (',', ': ')))
+        
+    command = list()
+    command.append('zip')
+    command.append('add')
+    command.append('../../website/src/template/include/ahoy-language-packs.zip')
+    command.append('../../languages.json')
+    for path in glob.glob('*-summary.alp'):
+        command.append('./' + path)
+        
+    os.execvp(command[0], command[1:])
 
